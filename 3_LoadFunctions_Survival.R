@@ -1,0 +1,1220 @@
+###### 3. Load NMA functions ######
+
+
+library("meta")
+library("reshape")
+library("coda")
+library("boot")
+library("tcltk")
+library("sqldf")
+library("R2OpenBUGS")
+library("R2WinBUGS")
+#library("R2jags")
+library("e1071")
+library("gplots")
+library("gtools")
+library("grDevices")
+library("sna")
+
+library(network)
+
+#library("Rgraphviz")
+
+
+
+SYS <- "WIN"
+PROG <- "openBugs"
+#RUN <- TRUE
+
+#if(SYS=="MAC") fileSep <- "/"
+#if(SYS=="WIN") fileSep <- "\\"
+
+if (SYS == "MAC") {
+  fileSep <- "/"
+  newSavePlot <-
+    function(file) {
+      return(quartz.save(file = file, type = "pdf"))
+    }
+}
+
+if (SYS == "WIN") {
+  fileSep <- "\\"
+  newSavePlot <-
+    function(file) {
+      return(savePlot(filename = file, type = "pdf"))
+    }
+}
+
+BASEPROB <- NA
+
+
+if (PROG == "openBugs") {
+  newBugs <- function(...) {
+    #return(bugs(OpenBUGS.pgm ="C:\\Program Files\\OpenBUGS\\OpenBUGS322\\OpenBUGS.exe",...))
+    #return(bugs(OpenBUGS.pgm ="C:\\Program Files (x86)\\OpenBUGS\\OpenBUGS322\\OpenBUGS.exe",...))
+    return(bugs(program = "openbugs", ...))
+  }
+}
+
+if (PROG == "winBugs") {
+  newBugs <- function(...) {
+    return(bugs(program = "winbugs", ...))
+  }
+}
+
+
+if (PROG == "JAGS") {
+  newBugs <- function(...) {
+    return(jags(...))
+  }
+}
+
+
+## WinnewBugs Function
+genSamps <- function(bugsData,
+                     n.iter = N.SIMS + N.BURNIN,
+                     inits,
+                     n.burnin = N.BURNIN,
+                     newBugs.file,
+                     parameters.to.save,
+                     winDebug = PAUSE) {
+  
+  bugsData <<- bugsData
+  newBugs.file <<- newBugs.file
+  parameters.to.save <<- parameters.to.save
+  
+  x <- newBugs(
+    data = bugsData,
+    parameters.to.save = parameters.to.save,
+    model.file = newBugs.file,
+    n.chains = N.CHAINS,
+    inits = inits,
+    n.iter = (N.SIMS * N.THIN) + N.BURNIN,
+    n.burnin = N.BURNIN,
+    n.thin = N.THIN,
+    #codaPkg=FALSE
+  )
+  
+  if (PROG == "JAGS") {
+    x <- x$BUGSoutput
+  }
+  
+  x <<- x
+  
+  if (DIAGNOSTICS) {
+    #par(mar=c(4,4,4,4))
+    
+    #plot(as.mcmc.list(x),ask=FALSE)
+    #savePlot(file=traceFileLoc,type="pdf")
+    
+    #autocorr.plot(as.mcmc.list(x),ask=FALSE)
+    #savePlot(file=autocorrFileLoc,type="pdf")
+    
+    #gelman.plot(x,ask=FALSE)
+    #savePlot(file=gelmanFileLoc,type="pdf")
+    
+    createFolders(folder = "diagnostics", folder)
+    
+    ##  ---------  start of new code for pngs  --------------------  ##
+    #
+    # This new code prints the traces/density plots to a single PNG,
+    # with length (and resolution) dependent on the number of variables.
+    #   Cons: can be REALLY long, and resolution may be poor
+    #   Pros: small file size, almost no extra time to run, so can be
+    #         run in addition to the pdfs.
+    
+    curr_mcmc <- as.mcmc.list(x)            # get list to be plotted
+    nc <-
+      ncol(curr_mcmc[[1]])              # find number of columns (variables): [[1]] refers to the first element of the mcmc list
+    
+    if (nc <= 30) {
+      traceFileLocPNG <<-
+        paste("diagnostics",
+              fileSep,
+              folder,
+              fileSep,
+              "trace_",
+              slabel,
+              ".png",
+              sep = "")
+      # create the png name
+      png(
+        filename = traceFileLocPNG,
+        # start png (smaller file size than pdf)
+        width = 4,
+        height = 1.1 * nc,
+        units = "in",
+        # fix size in inches (except length grows with # variables). Can play with this but will give errors if too large.
+        res = ifelse(nc <= 20, 300,          # resolution is 300 dpi unless too many variables for that
+                     round(6000 / nc,-1))      # otherwise pick something lower
+      )
+      par(
+        mfrow = c(nc, 2),
+        # same number of rows as variables in mcmc object; a column each for trace and density
+        mar = c(2, 2, 2, 1) + 0.1)               # small margins around each plot
+      for (ii in 1:nc) {
+        # for each variable:
+        
+        # trace plot. varnames gives e.g. 'baseMean', 'mu[5]'
+        traceplot(curr_mcmc[, ii])
+        title(paste("Trace plot for ", varnames(curr_mcmc)[ii], sep =
+                      ""), cex.main = 0.8)
+        
+        # density plot the same way. cex is scale on title font: 1 = no scale.
+        densplot(curr_mcmc[, ii])
+        title(paste("Density plot for ", varnames(curr_mcmc)[ii], sep =
+                      ""),
+              cex.main = 0.8)
+      }
+      dev.off()
+      
+    } else {
+      # if too many variables for a high resolution
+      
+      traceFileLocPNG1 <<-
+        paste("diagnostics",
+              fileSep,
+              folder,
+              fileSep,
+              "trace_",
+              slabel,
+              "_part1.png",
+              sep = "")
+      traceFileLocPNG2 <<-
+        paste("diagnostics",
+              fileSep,
+              folder,
+              fileSep,
+              "trace_",
+              slabel,
+              "_part2.png",
+              sep = "")
+      
+      # same as above but plot one half at a time
+      
+      nc1 <- ceiling(nc / 2)
+      nc2 <- nc - nc1
+      
+      # first half
+      
+      png(
+        filename = traceFileLocPNG1,
+        # start png (smaller file size than pdf) - PART 1!
+        width = 4,
+        height = 1.1 * nc1,
+        units = "in",
+        # fix size in inches (except length grows with # variables). Can play with this but will give errors if too large.
+        res = ifelse(nc1 <= 20, 300,          # resolution is 300 dpi unless too many variables for that
+                     round(6000 / nc1,-1))      # otherwise pick something lower
+      )
+      
+      par(
+        mfrow = c(nc1, 2),
+        # same number of rows as variables in mcmc object; a column each for trace and density
+        mar = c(2, 2, 2, 1) + 0.1)              # small margins around each plot)
+      for (ii in 1:nc1) {
+        # for each variable:
+        
+        # trace plot. varnames gives e.g. 'baseMean', 'mu[5]'
+        traceplot(curr_mcmc[, ii])
+        title(paste("Trace plot for ", varnames(curr_mcmc)[ii], sep =
+                      ""), cex.main = 0.8)
+        
+        # density plot the same way. cex is scale on title font: 1 = no scale.
+        densplot(curr_mcmc[, ii])
+        title(paste("Density plot for ", varnames(curr_mcmc)[ii], sep =
+                      ""),
+              cex.main = 0.8)
+      }
+      dev.off()
+      
+      # second half
+      
+      png(
+        filename = traceFileLocPNG2,
+        # start png (smaller file size than pdf) - PART 1!
+        width = 4,
+        height = 1.1 * nc2,
+        units = "in",
+        # fix size in inches (except length grows with # variables). Can play with this but will give errors if too large.
+        res = ifelse(nc2 <= 20, 300,          # resolution is 300 dpi unless too many variables for that
+                     round(6000 / nc2,-1)))      # otherwise pick something lower
+      
+      par(
+        mfrow = c(nc2, 2),
+        # same number of rows as variables in mcmc object; a column each for trace and density
+        mar = c(2, 2, 2, 1) + 0.1)               # small margins around each plot
+      
+      for (ii in (nc1 + 1):nc) {
+        # for each variable:
+        
+        # trace plot. varnames gives e.g. 'baseMean', 'mu[5]'
+        traceplot(curr_mcmc[, ii])
+        title(paste("Trace plot for ", varnames(curr_mcmc)[ii], sep =
+                      ""), cex.main = 0.8)
+        
+        # density plot the same way. cex is scale on title font: 1 = no scale.
+        densplot(curr_mcmc[, ii])
+        title(paste("Density plot for ", varnames(curr_mcmc)[ii], sep =
+                      ""),
+              cex.main = 0.8)
+      }
+      dev.off()
+      
+    }
+    
+    ##  ---------  end of new code for pngs  --------------------  ##
+    
+    traceFileLoc <<-
+      paste("diagnostics",
+            fileSep,
+            folder,
+            fileSep,
+            "trace_",
+            slabel,
+            ".pdf",
+            sep = "")
+    pdf(file = traceFileLoc)
+    plot(as.mcmc.list(x), ask = FALSE)
+    dev.off()
+    
+    autocorrFileLoc <<-
+      paste("diagnostics",
+            fileSep,
+            folder,
+            fileSep,
+            "autocorr_",
+            slabel,
+            ".pdf",
+            sep = "")
+    pdf(file = autocorrFileLoc)
+    autocorr.plot(as.mcmc.list(x), ask = FALSE)
+    dev.off()
+    
+    gelmanFileLoc <<-
+      paste("diagnostics",
+            fileSep,
+            folder,
+            fileSep,
+            "gelman_",
+            slabel,
+            ".pdf",
+            sep = "")
+    pdf(file = gelmanFileLoc)
+    gelman.plot(as.mcmc.list(x), ask = FALSE)
+    dev.off()
+    
+    ##pdf(file=paste(folder,fileSep,"diagnostics",fileSep,"gelman_",label,".pdf",sep=""))
+    #testGel <- try(gelman.plot(x,ask=FALSE))
+    #    if (class(testGel)!="try-error") {newSavePlot(file=paste(folder,fileSep,"diagnostics",fileSep,"gelman_",slabel,".pdf",sep=""))}
+    ##dev.off()
+    
+  }
+  
+  return(x)
+  
+}
+
+
+codeVariable <- function(var, codeList) {
+  codedVariable <- match(var, codeList)
+  return(codedVariable)
+}
+
+
+createFolders <- function(folder, ...) {
+  subFolders <- list(...)
+  
+  if (SYS == "WIN") {
+    if (!file.exists(folder))
+      system(paste(
+        Sys.getenv("COMSPEC"),
+        "/c",
+        paste("mkdir ", folder, sep = "")
+      ))
+    for (subFolder in subFolders) {
+      if (!file.exists(paste(folder, fileSep, subFolder, sep = "")))
+        system(paste(
+          Sys.getenv("COMSPEC"),
+          "/c",
+          paste("mkdir ", folder, fileSep, subFolder, sep = "")
+        ))
+    }
+  }
+  
+  if (SYS == "MAC") {
+    if (!file.exists(folder))
+      system(paste("mkdir ", folder, sep = ""))
+    for (subFolder in subFolders) {
+      if (!file.exists(paste(folder, fileSep, subFolder, sep = "")))
+        system(paste("mkdir ", folder, fileSep, subFolder, sep = ""))
+    }
+  }
+  
+}
+
+## Study Network Diagram
+varPlot <-
+  function(xVar,
+           yVar ,
+           showYLab = TRUE,
+           showXLab = TRUE,
+           pointText = NA,
+           joinY = TRUE ,
+           txList = NA,
+           folder,
+           label,
+           cex.axis = 0.2,
+           ...) {
+    xVar <<- xVar
+    yVar <<- yVar
+    showYLab <<- showYLab
+    showXLab <<- showXLab
+    joinY <<- joinY
+    txList <<- txList
+    folder <<- folder
+    label <<- label
+    cex.axis <<- cex.axis
+    pointText <<- pointText
+    
+    xVar <- as.character(xVar)
+    #y <- as.character(y)
+    numX <- as.numeric(factor(xVar))
+    numY <- as.numeric(factor(yVar, levels = unique(yVar)))
+    
+    if (!is.na(txList[1]))
+      numX <- match(xVar, txList)
+    if (is.na(txList[1]))
+      txList <- unique(xVar)
+    
+    byVar <- TRUE
+    
+    plot(
+      numX,
+      numY,
+      type = "n",
+      xlab = " ",
+      ylab = " ",
+      bty = "n",
+      yaxt = "n",
+      xaxt = "n"
+    )
+    for (currY in unique(yVar)) {
+      #  points(x=numX[yVar==currY],y=numY[yVar==currY],cex=0.2,col="black",pch=19)
+      # text(x=numX[yVar==currY],y=numY[yVar==currY],labels=subData$r[yVar==currY],cex=0.7)
+      if (joinY)
+        lines(
+          x = numX[yVar == currY],
+          y = numY[yVar == currY],
+          cex = 0.35,
+          col = "grey",
+          pch = 19,
+          lwd = 3
+        )
+    }
+    
+    abline(v = seq(along = unique(xVar)), col = "light grey")
+    
+    for (currY in unique(yVar)) {
+      if (is.na(pointText)) {
+        points(
+          x = numX[yVar == currY],
+          y = numY[yVar == currY],
+          cex = 0.8,
+          col = "black",
+          pch = 19
+        )
+      } else {
+        text(
+          x = numX[yVar == currY],
+          y = numY[yVar == currY],
+          labels = pointText[yVar == currY],
+          cex = cex.axis
+        )
+      }
+    }
+    
+    
+    if (showXLab)
+      axis(
+        1,
+        at = 1:max(numX),
+        lab = txList,
+        las = 2,
+        lwd = 0.35,
+        cex.axis = 0.5,
+        cex = 2,
+        cex.lab = 2
+      )
+    if (showYLab)
+      axis(
+        2,
+        at = 1:max(numY),
+        lab = levels(factor(yVar, levels = unique(yVar))),
+        lwd = 0.35,
+        las = 1,
+        cex.axis = 0.5,
+        cex = 0.5,
+        cex.lab = 0.5
+      )
+    mtext(
+      text = label,
+      side = 3,
+      cex = 0.8,
+      padj = -1
+    )
+    
+  }
+
+
+#a <- graph.adjacency(networkData/networkData)
+
+## Pairwise Table
+pairwiseTable <- function(sims) {
+  txList <- colnames(sims)
+  nTx <- length(txList)
+  
+  pairwiseTable <- matrix(NA, nTx, nTx)
+  for (tx1 in 1:nTx) {
+    for (tx2 in 1:nTx) {
+      #if (lg==TRUE){
+      #  pairwiseTable[tx1,tx2] <- paste(round(median(sims[,tx2]/sims[,tx1], na.rm = TRUE),2),"(",paste(round(quantile(sims[,tx2]/sims[,tx1],c(0.025,0.975), na.rm = TRUE),2),collapse=",",sep=""),")",collapse="",sep="")
+      #}else{
+      #  pairwiseTable[tx1,tx2] <- paste(round(mean(sims[,tx2]-sims[,tx1], na.rm = TRUE),2),"(",paste(round(quantile(sims[,tx2]-sims[,tx1],c(0.025,0.975), na.rm = TRUE),2),collapse=",",sep=""),")",collapse="",sep="")
+      #}
+      
+      pairwiseTable[tx1, tx2] <-
+        paste(
+          round(exp(median(
+            sims[, tx2] - sims[, tx1], na.rm = TRUE
+          )), 2),
+          " (",
+          paste(round(exp(
+            quantile(sims[, tx2] - sims[, tx1], c(0.025, 0.975), na.rm = TRUE)
+          ), 2), collapse = ",", sep = ""),
+          ")",
+          collapse = "",
+          sep = ""
+        )
+      
+    }
+  }
+  
+  colnames(pairwiseTable) <- txList
+  rownames(pairwiseTable) <- txList
+  
+  pairwiseTable <- t(pairwiseTable)
+  
+  return(pairwiseTable)
+}
+
+
+## Treatment Ranking Plot
+rankProbPlot <- function(sims) {
+  nRanks <- ncol(sims)
+  
+  sims <- sims[, order(apply(sims, 2, mean), decreasing = TRUE)]
+  rankSummary <- numeric()
+  ranks <- apply(sims, 1, rank, ties.method = "random")
+  
+  for (i in 1:ncol(sims)) {
+    rankSummary <- c(rankSummary, apply(ranks == i, 1, mean))
+  }
+  
+  Ranking <- rep(1:ncol(sims), rep(ncol(sims), ncol(sims)))
+  txList <- colnames(sims)
+  Treatment <- rep(txList, ncol(sims))
+  rankSummary <- as.numeric(round(rankSummary, 2))
+  
+  if (length(txList) > 12) {
+    txtSize <- 0.35
+  } else{
+    txtSize <- 0.55
+  }
+  
+  main.txt <-
+    paste(
+      label,
+      "Rank based on treatment effect",
+      "Rank 1: Most effective treatment (Smallest hazard ratio)",
+      sep = "\n"
+    )
+  
+  par(mar = c(2, 2, 3, 2))
+  
+  balloonplot(
+    x = Ranking,
+    y = Treatment,
+    z = rankSummary,
+    rowmar = 4,
+    colmar = 1,
+    label.lines = FALSE,
+    sort = FALSE,
+    show.zeros = TRUE,
+    show.margins = FALSE,
+    cum.margins = FALSE,
+    main = mtext(text = main.txt, cex = 0.6),
+    text.size = txtSize,
+    label.size = txtSize
+  )
+  
+}
+
+summStat <- function(x) {
+  y <- c(mean(x), quantile(x, c(0.5, 0.025, 0.975), na.rm = TRUE))
+  names(y)[1] <- "mean"
+  return(y)
+}
+
+## NMA Forest
+
+txEffectPlot <- function(sims) {
+  plotSims <- sims
+  
+  txListSims <- colnames(plotSims)
+  
+  if ((preRefTx %in% txListSims) == TRUE &
+      (!is.na(preRefTx)) == TRUE) {
+    if (lg == FALSE) {
+      plotSims <- plotSims - plotSims[, preRefTx]
+    } else{
+      plotSims <- plotSims - plotSims[, preRefTx]
+    }
+  }
+  
+  if ((preRefTx %in% txListSims) == FALSE |
+      (!is.na(preRefTx)) == FALSE) {
+    plotSims <- plotSims - plotSims[, refTx]
+  }
+  
+  plotResults <- round(exp(t(apply(
+    plotSims, 2, summStat
+  ))), 2)
+  
+  plotResults <-
+    plotResults[order(plotResults[, 2], decreasing = TRUE),]
+  plotResults[plotResults == 0] <- 0.001
+  
+  txList <- rownames(plotResults)
+  nTx <- length(txList)
+  
+  layout(cbind(1, 2), widths = c(2, 1))
+  par(mar = c(5, 12, 2, 1), cex = 0.8)
+  
+  
+  plot(
+    plotResults[, 2],
+    1:nTx,
+    ylim = c(0.75, nTx + 0.25),
+    xlim = (range(plotResults[, 3], plotResults[, 4])),
+    yaxt = "n",
+    xaxt = "n",
+    main = label,
+    cex.main = 0.6,
+    xlab = c(endpoint, "Median hazard ratio (95% CrI)"),
+    ylab = " ",
+    pch = 19,
+    type = "n",
+    log = "x",
+    cex = 0.8
+  )
+  
+  axis(
+    1,
+    at = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
+    label = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
+    cex.axis = 0.8
+  )
+  abline(v = 1, col = "grey")
+  
+  axis(
+    2,
+    at = 1:nTx,
+    labels = txList,
+    las = 2,
+    cex.axis = 0.8,
+    cex = 0.8
+  )
+  
+  
+  for (ii in 1:nTx) {
+    lines(c(plotResults[ii, 3], plotResults[ii, 4]),
+          c(ii, ii),
+          col = "black",
+          lwd = 2)
+  }
+  
+  for (ii in 1:nTx) {
+    points(
+      plotResults[ii, 2],
+      ii,
+      pch = 21,
+      cex = 2,
+      bg = "black",
+      col = "white",
+      lwd = 2
+    )
+  }
+  
+  par(mar = c(5, 0, 2, 0))
+  plot(
+    rep(0, nTx),
+    1:nTx,
+    xlim = c(0, 1),
+    ylim = c(0.75, nTx + 0.25),
+    yaxt = "n",
+    type = "n",
+    bty = "n",
+    xaxt = "n",
+    ylab = " ",
+    xlab = " "
+  )
+  
+  for (ii in 1:nTx) {
+    if (plotResults[ii, 2] == plotResults[ii, 3] &
+        plotResults[ii, 2] == plotResults[ii, 3]) {
+      text(0,
+           ii,
+           "Reference Treatment",
+           pos = 4,
+           cex = 0.8)
+    } else{
+      text(
+        0,
+        ii,
+        paste(
+          plotResults[ii, 2],
+          " (",
+          plotResults[ii, 3],
+          " to ",
+          plotResults[ii, 4],
+          ")",
+          sep = ""
+        ),
+        pos = 4,
+        cex = 0.8
+      )
+    }
+  }
+  
+}
+
+codeVariable <- function(var, codeList) {
+  codedVariable <- match(var, codeList)
+  return(codedVariable)
+}
+
+codeData <- function(subData, refTx) {
+  subData <<- subData
+  
+  #subData$tx <- sub('[[:space:]]+$', '',subData$tx )
+  
+  txList <<- unique(sort(c(subData$tx, subData$base)))
+  
+  if ((refTx %in% txList) == TRUE & (!is.na(refTx)) == TRUE) {
+    txList <<- unique(c(refTx, sort(c(
+      subData$tx, subData$base
+    ))))
+  } else{
+    refTx <<- txList[1]
+  }
+  
+  
+  ##code treatments
+  subData$Ltx  <- codeVariable(var = subData$tx , codeList = txList)
+  subData$Lbase  <-
+    codeVariable(var = subData$base , codeList = txList)
+  
+  nTx <<- length(txList)
+  subData <- subData[order(subData$study, subData$tx),]
+  
+  ## code studies
+  studyList <- unique(subData$study)
+  subData$Lstudy <-
+    codeVariable(var = subData$study, codeList = studyList)
+  nStudies <<- max(subData$Lstudy , 2)
+  nObs <<- length(subData$Lstudy)
+  
+  return(subData)
+}
+
+codeDataBin <- function(subData, subDataBin, refTx) {
+  subData <<- subData
+  subDataBin <<- subDataBin
+  
+  #subData$tx <- sub('[[:space:]]+$', '',subData$tx )
+  
+  txList <<-
+    unique(sort(c(
+      subData$tx, subData$base, subDataBin$tx, subDataBin$base
+    )))
+  
+  if ((refTx %in% txList) == TRUE & (!is.na(refTx)) == TRUE) {
+    txList <<-
+      unique(c(refTx, sort(
+        c(subData$tx, subData$base, subDataBin$tx, subDataBin$base)
+      )))
+  } else{
+    refTx <<- txList[1]
+  }
+  
+  
+  ##code treatments
+  subData$Ltx  <- codeVariable(var = subData$tx , codeList = txList)
+  subData$Lbase  <-
+    codeVariable(var = subData$base , codeList = txList)
+  subDataBin$Btx  <-
+    codeVariable(var = subDataBin$tx , codeList = txList)
+  subDataBin$Bbase  <-
+    codeVariable(var = subDataBin$base , codeList = txList)
+  
+  nTx <<- length(txList)
+  subData <- subData[order(subData$study, subData$tx),]
+  subDataBin <-
+    subDataBin[order(subDataBin$study, subDataBin$tx),]
+  
+  ## code studies
+  studyList <- unique(sort(c(subData$study, subDataBin$study)))
+  subData$Lstudy <-
+    codeVariable(var = subData$study, codeList = studyList)
+  subDataBin$Bstudy <-
+    codeVariable(var = subDataBin$study, codeList = studyList)
+  nStudies <<- max(c(subData$Lstudy, subDataBin$Bstudy) , 2)
+  LnObs <<- length(subData$Lstudy)
+  BnObs <<- length(subDataBin$Bstudy)
+  
+  return(list(subData, subDataBin))
+}
+
+codeDataMed <- function(subData, subDataMed, refTx) {
+  subData <<- subData
+  subDataMed <<- subDataMed
+  
+  #subData$tx <- sub('[[:space:]]+$', '',subData$tx )
+  
+  txList <<-
+    unique(sort(c(
+      subData$tx, subData$base, subDataMed$tx, subDataMed$base
+    )))
+  
+  if ((refTx %in% txList) == TRUE & (!is.na(refTx)) == TRUE) {
+    txList <<-
+      unique(c(refTx, sort(
+        c(subData$tx, subData$base, subDataMed$tx, subDataMed$base)
+      )))
+  } else{
+    refTx <<- txList[1]
+  }
+  
+  
+  ##code treatments
+  subData$Ltx  <- codeVariable(var = subData$tx , codeList = txList)
+  subData$Lbase  <-
+    codeVariable(var = subData$base , codeList = txList)
+  subDataMed$mediantx  <-
+    codeVariable(var = subDataMed$tx , codeList = txList)
+  subDataMed$medianbase  <-
+    codeVariable(var = subDataMed$base , codeList = txList)
+  
+  nTx <<- length(txList)
+  subData <- subData[order(subData$study, subData$tx),]
+  subDataMed <-
+    subDataMed[order(subDataMed$study, subDataMed$tx),]
+  
+  ## code studies
+  studyList <- unique(sort(c(subData$study, subDataMed$study)))
+  subData$Lstudy <-
+    codeVariable(var = subData$study, codeList = studyList)
+  subDataMed$medianstudy <-
+    codeVariable(var = subDataMed$study, codeList = studyList)
+  nStudies <<- max(c(subData$Lstudy, subDataMed$medianstudy) , 2)
+  LnObs <<- length(subData$Lstudy)
+  medianNObs <<- length(subDataMed$medianstudy)
+  
+  return(list(subData, subDataMed))
+}
+
+codeDataBinMed <- function(subData, subDataBin, subDataMed, refTx) {
+  subData <<- subData
+  subDataMed <<- subDataMed
+  subDataBin <<- subDataBin
+  
+  #subData$tx <- sub('[[:space:]]+$', '',subData$tx )
+  
+  txList <<-
+    unique(sort(
+      c(
+        subData$tx,
+        subData$base,
+        subDataMed$tx,
+        subDataMed$base,
+        subDataBin$tx,
+        subDataBin$base
+      )
+    ))
+  
+  if ((refTx %in% txList) == TRUE & (!is.na(refTx)) == TRUE) {
+    txList <<-
+      unique(c(refTx, sort(
+        c(
+          subData$tx,
+          subData$base,
+          subDataMed$tx,
+          subDataMed$base,
+          subDataBin$tx,
+          subDataBin$base
+        )
+      )))
+  } else{
+    refTx <<- txList[1]
+  }
+  
+  
+  ##code treatments
+  subData$Ltx  <- codeVariable(var = subData$tx , codeList = txList)
+  subData$Lbase  <-
+    codeVariable(var = subData$base , codeList = txList)
+  subDataMed$mediantx  <-
+    codeVariable(var = subDataMed$tx , codeList = txList)
+  subDataMed$medianbase  <-
+    codeVariable(var = subDataMed$base , codeList = txList)
+  subDataBin$Btx  <-
+    codeVariable(var = subDataBin$tx , codeList = txList)
+  subDataBin$Bbase  <-
+    codeVariable(var = subDataBin$base , codeList = txList)
+  
+  nTx <<- length(txList)
+  subData <- subData[order(subData$study, subData$tx),]
+  subDataMed <-
+    subDataMed[order(subDataMed$study, subDataMed$tx),]
+  subDataBin <-
+    subDataBin[order(subDataBin$study, subDataBin$tx),]
+  
+  ## code studies
+  studyList <-
+    unique(sort(c(
+      subData$study, subDataMed$study, subDataBin$study
+    )))
+  subData$Lstudy <-
+    codeVariable(var = subData$study, codeList = studyList)
+  subDataMed$medianstudy <-
+    codeVariable(var = subDataMed$study, codeList = studyList)
+  subDataBin$Bstudy <-
+    codeVariable(var = subDataBin$study, codeList = studyList)
+  nStudies <<- max(c(subData$Lstudy, subDataMed$medianstudy) , 2)
+  LnObs <<- length(subData$Lstudy)
+  medianNObs <<- length(subDataMed$medianstudy)
+  BnObs <<- length(subDataBin$Bstudy)
+  
+  return(list(subData, subDataMed, subDataBin))
+}
+
+
+#'
+setupData <-
+  function(subData,
+           subDataBin,
+           binData,
+           subDataMed,
+           medData,
+           random,
+           refTx) {
+    
+    if (binData == FALSE & medData == FALSE) {
+      subData <- codeData(subData = subData, refTx = refTx)
+      
+      LstudyT <- subData$Lstudy
+      LtxT <- subData$Ltx
+      LbaseT <- subData$Lbase
+      LmeanT <- subData$Lmean
+      LseT <- subData$Lse
+      multiT <- subData$multi
+      
+      LnObsT <- nrow(subData)
+      nTxT <- length(txList)
+      nStudiesT <- max(subData$Lstudy)
+      
+      bugsData <<- list(
+        Lstudy = LstudyT,
+        Ltx = LtxT,
+        Lbase = LbaseT,
+        Lmean = LmeanT,
+        Lse = LseT,
+        multi = multiT,
+        LnObs = LnObsT,
+        nTx = nTxT,
+        nStudies = nStudiesT
+      )
+      
+      if (!random) {
+        inits <-
+          function() {
+            list(beta = c(NA, rnorm(nTx - 1, 0, 2)),
+                 alpha = rnorm(nStudies))
+          }
+      } else {
+        inits <-
+          function() {
+            list(
+              beta = c(NA, rnorm(nTx - 1, 0, 2)),
+              sd = 0.1,
+              alpha = rnorm(nStudies)
+            )
+          }
+      }
+      
+      subData <<- subData
+      inits <<- inits
+    }
+    
+    if (binData & medData) {
+      subDatalist <-
+        codeDataBin(subData = subData,
+                    subDataBin = subDataBin,
+                    refTx = refTx)
+      subData <- as.data.frame(subDatalist[1])
+      subDataBin <- as.data.frame(subDatalist[2])
+      
+      LstudyT <- subData$Lstudy
+      LtxT <- subData$Ltx
+      LbaseT <- subData$Lbase
+      LmeanT <- subData$Lmean
+      LseT <- subData$Lse
+      multiT <- subData$multi
+      
+      BstudyT <- subDataBin$Bstudy
+      BtxT <- subDataBin$Btx
+      BbaseT <- subDataBin$Bbase
+      BrT <- subDataBin$BinR
+      BnT <- subDataBin$BinN
+      
+      LnObsT <- nrow(subData)
+      BnObsT <- nrow(subDataBin)
+      
+      nTxT <- length(txList)
+      nStudiesT <- max(subData$Lstudy, subDataBin$Bstudy)
+      
+      bugsData <<- list(
+        Lstudy = LstudyT,
+        Ltx = LtxT,
+        Lbase = LbaseT,
+        Bstudy = BstudyT,
+        Btx = BtxT,
+        Bbase = BbaseT,
+        Lmean = LmeanT,
+        Lse = LseT,
+        multi = multiT,
+        LnObs = LnObsT,
+        Bn = BnT,
+        Br = BrT,
+        BnObs = BnObsT,
+        nTx = nTxT,
+        nStudies = nStudiesT)
+      
+      if (!random)
+        inits <-
+        function() {
+          list(beta = c(NA, rnorm(nTx - 1, 0, 2)),
+               alpha = rnorm(nStudies))
+        }
+      if (random)
+        inits <-
+        function() {
+          list(
+            beta = c(NA, rnorm(nTx - 1, 0, 2)),
+            sd = 0.1,
+            alpha = rnorm(nStudies))
+        }
+      
+      subData <<- subData
+      subDataBin <<- subDataBin
+      
+      inits <<- inits
+    }
+    
+    if (!binData & medData) {
+      subDatalist <-
+        codeDataMed(subData = subData,
+                    subDataMed = subDataMed,
+                    refTx = refTx)
+      subData <- as.data.frame(subDatalist[1])
+      subDataMed <- as.data.frame(subDatalist[2])
+      
+      LstudyT <- subData$Lstudy
+      LtxT <- subData$Ltx
+      LbaseT <- subData$Lbase
+      LmeanT <- subData$Lmean
+      LseT <- subData$Lse
+      multiT <- subData$multi
+      
+      medianStudyT <- subDataMed$medianstudy
+      medianTxT <- subDataMed$mediantx
+      medianBaseT <- subDataMed$medianbase
+      medianRT <- subDataMed$medR
+      medianNT <- subDataMed$medN
+      medianT <- subDataMed$median
+      
+      LnObsT <- nrow(subData)
+      medianNObsT <- nrow(subDataMed)
+      
+      nTxT <- length(txList)
+      nStudiesT <- max(subData$Lstudy, subDataMed$mediantudy)
+      
+      bugsData <<- list(
+        Lstudy = LstudyT,
+        Ltx = LtxT,
+        Lbase = LbaseT,
+        medianStudy = medianStudyT,
+        medianTx = medianTxT ,
+        medianBase = medianBaseT,
+        Lmean = LmeanT,
+        Lse = LseT,
+        multi = multiT,
+        LnObs = LnObsT,
+        medianN = medianNT,
+        medianR = medianRT,
+        medianNObs = medianNObsT,
+        median = medianT,
+        nTx = nTxT,
+        nStudies = nStudiesT
+      )
+      
+      if (!random)
+        inits <-
+        function() {
+          list(beta = c(NA, rnorm(nTx - 1, 0, 2)),
+               alpha = rnorm(nStudies))
+        }
+      if (random)
+        inits <-
+        function() {
+          list(
+            beta = c(NA, rnorm(nTx - 1, 0, 2)),
+            sd = 0.1,
+            alpha = rnorm(nStudies)
+          )
+        }
+      
+      subData <<- subData
+      subDataMed <<- subDataMed
+      
+      inits <<- inits
+    }
+    
+    if (binData == TRUE & medData == TRUE) {
+      subDatalist <-
+        codeDataBinMed(
+          subData = subData,
+          subDataMed = subDataMed,
+          subDataBin,
+          refTx = refTx
+        )
+      subData <- as.data.frame(subDatalist[1])
+      subDataMed <- as.data.frame(subDatalist[2])
+      subDataBin <- as.data.frame(subDatalist[3])
+      
+      LstudyT <- subData$Lstudy
+      LtxT <- subData$Ltx
+      LbaseT <- subData$Lbase
+      LmeanT <- subData$Lmean
+      LseT <- subData$Lse
+      multiT <- subData$multi
+      
+      medianStudyT <- subDataMed$medianstudy
+      medianTxT <- subDataMed$mediantx
+      medianBaseT <- subDataMed$medianbase
+      medianRT <- subDataMed$medR
+      medianNT <- subDataMed$medN
+      medianT <- subDataMed$median
+      
+      BstudyT <- subDataBin$Bstudy
+      BtxT <- subDataBin$Btx
+      BbaseT <- subDataBin$Bbase
+      BrT <- subDataBin$BinR
+      BnT <- subDataBin$BinN
+      
+      LnObsT <- nrow(subData)
+      medianNObsT <- nrow(subDataMed)
+      BnObsT <- nrow(subDataBin)
+      
+      nTxT <- length(txList)
+      nStudiesT <-
+        max(subData$Lstudy,
+            subDataMed$medianstudy,
+            subDataBin$Bstudy)
+      
+      bugsData <<- list(
+        Lstudy = LstudyT,
+        Ltx = LtxT,
+        Lbase = LbaseT,
+        medianStudy = medianStudyT,
+        medianTx = medianTxT ,
+        medianBase = medianBaseT,
+        Bstudy = BstudyT,
+        Btx = BtxT,
+        Bbase = BbaseT,
+        Lmean = LmeanT,
+        Lse = LseT,
+        multi = multiT,
+        LnObs = LnObsT,
+        medianN = medianNT,
+        medianR = medianRT,
+        medianNObs = medianNObsT,
+        median = medianT,
+        Bn = BnT,
+        Br = BrT,
+        BnObs = BnObsT,
+        nTx = nTxT,
+        nStudies = nStudiesT
+      )
+      
+      if (!random)
+        inits <-
+        function() {
+          list(beta = c(NA, rnorm(nTx - 1, 0, 2)),
+               alpha = rnorm(nStudies))
+        }
+      if (random)
+        inits <-
+        function() {
+          list(
+            beta = c(NA, rnorm(nTx - 1, 0, 2)),
+            sd = 0.1,
+            alpha = rnorm(nStudies)
+          )
+        }
+      
+      subData <<- subData
+      subDataMed <<- subDataMed
+      subDataBin <<- subDataBin
+      
+      inits <<- inits
+    }
+    
+  }
+
+# Function to set up results file for multiple parameters monitored
+resultsFileSetUp <- function(resultsFile,
+                             effectParam,
+                             dummy,
+                             dummyOR,
+                             colEff) {
+  eff <-
+    round(resultsFile[grep(paste("^", effectParam, sep = ""),
+                           rownames(resultsFile)), c(1, 5, 2, 3, 7, 8)], 2)
+  eff <- eff[!grepl(paste("^", "dev", sep = ""), rownames(eff)),]
+  #eff <- eff[!grepl(paste("^","Ldev",sep=""),rownames(eff)),]
+  
+  if (length(txList) != nrow(eff)) {
+    if (effectParam != "hr") {
+      eff <- rbind(dummy, eff)
+    } else{
+      eff <- rbind(dummyOR, eff)
+    }
+  }
+  colnames(eff) <- paste(colEff)
+  rownames(eff)  <- txList
+  return(eff)
+}
+
+
