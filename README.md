@@ -6,6 +6,7 @@ The code works for me by running the following scripts in this order:
 
 * 3_LoadFunction_Survival.R
 * NMA.R
+* genSamps.R
 * plotNetwork.R
 * 4_RunAnalysis_Survival.R
 
