@@ -255,7 +255,7 @@ if (binData == FALSE & medData == TRUE) {
 
 if (binData == TRUE & medData == TRUE) {
   if (!RANDOM) {
-    modelResults <- try(NMA(
+    modelResults <- NMA(
       winSource = "SurvWoodsFEa_med_bin.txt",
       dataFunc = setupData(
         subData = subData,
@@ -265,8 +265,8 @@ if (binData == TRUE & medData == TRUE) {
         refTx = REFTX,
         binData = binData,
         medData = medData),
-      effectParam = c("beta"),
-      modelParams = c("totresdev"),
+      effectParam = "beta",
+      modelParams = "totresdev",
       folder = endpoint,
       label = label,
       endpoint = endpoint,
@@ -276,7 +276,7 @@ if (binData == TRUE & medData == TRUE) {
       refTx = REFTX,
       preRefTx = NA,
       decEff = decEff,
-      lg = FALSE))
+      lg = FALSE)
   } else {
     modelResults <- try(NMA(
       winSource = "SurvWoodsREb_med_bin.txt",

@@ -36,7 +36,8 @@ NMA <- function(winSource,
         newBugs.file = winSource,
         bugsData = bugsData,
         inits = inits,
-        parameters.to.save = params_to_save))
+        parameters.to.save = params_to_save,
+        folder = folder))
   } else {
     load(file = paste0(
       folder,
