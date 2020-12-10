@@ -1,0 +1,133 @@
+
+#'
+txEffectPlot <- function(sims) {
+  plotSims <- sims
+  
+  txListSims <- colnames(plotSims)
+  
+  if ((preRefTx %in% txListSims) == TRUE &
+      (!is.na(preRefTx)) == TRUE) {
+    if (lg == FALSE) {
+      plotSims <- plotSims - plotSims[, preRefTx]
+    } else{
+      plotSims <- plotSims - plotSims[, preRefTx]
+    }
+  }
+  
+  if ((preRefTx %in% txListSims) == FALSE |
+      (!is.na(preRefTx)) == FALSE) {
+    plotSims <- plotSims - plotSims[, refTx]
+  }
+  
+  plotResults <- round(exp(t(apply(
+    plotSims, 2, summStat
+  ))), 2)
+  
+  plotResults <-
+    plotResults[order(plotResults[, 2], decreasing = TRUE),]
+  plotResults[plotResults == 0] <- 0.001
+  
+  txList <- rownames(plotResults)
+  nTx <- length(txList)
+  
+  layout(cbind(1, 2), widths = c(2, 1))
+  par(mar = c(5, 12, 2, 1), cex = 0.8)
+  
+  
+  plot(
+    plotResults[, 2],
+    1:nTx,
+    ylim = c(0.75, nTx + 0.25),
+    xlim = (range(plotResults[, 3], plotResults[, 4])),
+    yaxt = "n",
+    xaxt = "n",
+    main = label,
+    cex.main = 0.6,
+    xlab = c(endpoint, "Median hazard ratio (95% CrI)"),
+    ylab = " ",
+    pch = 19,
+    type = "n",
+    log = "x",
+    cex = 0.8
+  )
+  
+  axis(
+    1,
+    at = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
+    label = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
+    cex.axis = 0.8
+  )
+  abline(v = 1, col = "grey")
+  
+  axis(
+    2,
+    at = 1:nTx,
+    labels = txList,
+    las = 2,
+    cex.axis = 0.8,
+    cex = 0.8
+  )
+  
+  
+  for (ii in 1:nTx) {
+    lines(c(plotResults[ii, 3], plotResults[ii, 4]),
+          c(ii, ii),
+          col = "black",
+          lwd = 2)
+  }
+  
+  for (ii in 1:nTx) {
+    points(
+      plotResults[ii, 2],
+      ii,
+      pch = 21,
+      cex = 2,
+      bg = "black",
+      col = "white",
+      lwd = 2
+    )
+  }
+  
+  par(mar = c(5, 0, 2, 0))
+  plot(
+    rep(0, nTx),
+    1:nTx,
+    xlim = c(0, 1),
+    ylim = c(0.75, nTx + 0.25),
+    yaxt = "n",
+    type = "n",
+    bty = "n",
+    xaxt = "n",
+    ylab = " ",
+    xlab = " "
+  )
+  
+  for (ii in 1:nTx) {
+    if (plotResults[ii, 2] == plotResults[ii, 3] &
+        plotResults[ii, 2] == plotResults[ii, 3]) {
+      text(0,
+           ii,
+           "Reference Treatment",
+           pos = 4,
+           cex = 0.8)
+    } else{
+      text(
+        0,
+        ii,
+        paste(
+          plotResults[ii, 2],
+          " (",
+          plotResults[ii, 3],
+          " to ",
+          plotResults[ii, 4],
+          ")",
+          sep = ""
+        ),
+        pos = 4,
+        cex = 0.8
+      )
+    }
+  }
+  
+}
+
