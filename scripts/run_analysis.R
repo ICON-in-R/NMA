@@ -31,7 +31,7 @@ decEff <- TRUE
 # data
 analysis <-
   read.csv(
-    here::here("AnalysisList.csv"),
+    here::here("raw_data", "AnalysisList.csv"),
     as.is = TRUE,
     na.strings = c("NR", "NA"))
 
@@ -82,14 +82,14 @@ medData <- medDataInd == "YES"
 # Read in dataset
 subData <-
   read.csv(
-    paste(here::here(), "/survdata_", endpoint, "_", analysis_type, ".csv", sep = ""),
+    paste(here::here("raw_data"), "/survdata_", endpoint, "_", analysis_type, ".csv", sep = ""),
     header = TRUE,
     as.is = TRUE)
 
 if (binData) {
   subDataBin <-
     read.csv(
-      paste(here::here(), "/survdata_", endpoint, "_", "bin", ".csv", sep = ""),
+      paste(here::here("raw_data"), "/survdata_", endpoint, "_", "bin", ".csv", sep = ""),
       header = TRUE,
       as.is = TRUE)
 }
@@ -97,7 +97,7 @@ if (binData) {
 if (medData) {
   subDataMed <-
     read.csv(
-      paste(here::here(), "/survdata_", endpoint, "_", "med", ".csv", sep = ""),
+      paste(here::here("raw_data"), "/survdata_", endpoint, "_", "med", ".csv", sep = ""),
       header = TRUE,
       as.is = TRUE)
 }
@@ -253,10 +253,10 @@ if (binData == FALSE & medData == TRUE) {
   }
 }
 
-if (binData == TRUE & medData == TRUE) {
+if (binData & medData) {
   if (!RANDOM) {
     modelResults <- NMA(
-      winSource = "SurvWoodsFEa_med_bin.txt",
+      winSource = here::here("raw_data", "SurvWoodsFEa_med_bin.txt"),
       dataFunc = setupData(
         subData = subData,
         subDataMed = subDataMed,
