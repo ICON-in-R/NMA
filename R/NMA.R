@@ -1,5 +1,10 @@
 
-#'
+#' NMA
+#' 
+#' @param winSource
+#' 
+#' @return
+#' 
 NMA <- function(winSource,
                 dataFunc,
                 effectParam = NA,

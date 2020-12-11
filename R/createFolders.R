@@ -1,10 +1,13 @@
 
+#'
 createFolders <- function(folder, ...) {
   subFolders <- list(...)
   
   ##TODO: why not just use inbuilt R commands?
   
-  if (SYS == "WIN") {
+  SYS <- .Platform$OS.type
+  
+  if (SYS == "windows") {
     if (!file.exists(folder))
       system(paste(
         Sys.getenv("COMSPEC"),
