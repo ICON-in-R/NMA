@@ -20,6 +20,8 @@ NMA <- function(winSource,
                 random = FALSE,
                 lg) {
   
+  SYS <- .Platform$OS.type
+  
   ## Short label without spaces
   slabel <<- sub(" ", "_", label)
   
@@ -54,7 +56,7 @@ NMA <- function(winSource,
   }
   
   if (class(x) != "try-error") {
-    if (SYS == "WIN" & RUN) {
+    if (SYS == "windows" & RUN) {
       for (ii in seq_len(N.CHAINS)) {
         system(paste(
           Sys.getenv("COMSPEC"),
@@ -183,8 +185,13 @@ NMA <- function(winSource,
                "ranking_",
                slabel,
                ".pdf")
+      
       rankProbPlot(sims)
-      newSavePlot(file = rankFileLoc)
+      
+      # newSavePlot(file = rankFileLoc)
+      pdf(file = rankFileLoc)
+      rankProbPlot(sims)
+      dev.off()
       
       # forest plot
       
@@ -196,8 +203,13 @@ NMA <- function(winSource,
                "forest_",
                slabel,
                ".pdf")
-      txEffectPlot(sims)
-      newSavePlot(file = forestFileLoc)
+      
+      txEffectPlot(sims, preRefTx, refTx)
+      
+      # newSavePlot(file = forestFileLoc)
+      pdf(file = forestFileLoc)
+      rankProbPlot(sims)
+      dev.off()
       
       # pairwise table
       
@@ -264,7 +276,11 @@ NMA <- function(winSource,
       pad = 1,
       label.cex = 0.7,
       vertex.cex = 1)
-    newSavePlot(file = networkFileLoc)
+    
+    # newSavePlot(file = networkFileLoc)
+    pdf(file = networkFileLoc)
+    rankProbPlot(sims)
+    dev.off()
     
     # data table
     

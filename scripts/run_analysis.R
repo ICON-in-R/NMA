@@ -4,9 +4,7 @@
 library(dplyr)
 
 
-###### 4. Run NMA ######
-
-## Settings
+## settings
 
 fileSep <- "\\"
 
@@ -23,6 +21,9 @@ DIAGNOSTICS <- TRUE
 
 BASEPROB <- NA
 decEff <- TRUE
+
+newSavePlot <- customSavePlot()
+newBugs <- customBugs()
 
 # run analysis
 
@@ -109,7 +110,7 @@ NMA_partial <-
                      refTx = REFTX,
                      binData = binData,
                      medData = medData),
-                 effectParam = c("beta"),
+                 effectParam = "beta",
                  folder = endpoint,
                  label = label,
                  endpoint = endpoint,
@@ -117,27 +118,25 @@ NMA_partial <-
                  binData = binData,
                  medData = medData,
                  refTx = REFTX,
-                 preRefTx = NA,
                  decEff = decEff,
                  lg = FALSE)
 
 if (!binData & !medData) {
-  if (!RANDOM) {
-    modelResults <-
-      NMA_partial(
-        winSource = "SurvWoodsFEa.txt",
-        modelParams = c("totresdev"))
-  } else {
-    modelResults <-
+  modelResults <-
+    if (RANDOM) {
       NMA_partial(
         winSource = "SurvWoodsREb.txt",
         modelParams = c("sd", "totresdev"))
-  }
+    } else {
+      NMA_partial(
+        winSource = "SurvWoodsFEa.txt",
+        modelParams = "totresdev")
+    }
 }
 
 if (binData & !medData) {
   if (!RANDOM) {
-    modelResults <- try(NMA(
+    modelResults <- NMA(
       winSource = here::here("raw_data", "SurvWoodsFEa_bin.txt"),
       dataFunc = setupData(
         subData = subData,
@@ -147,7 +146,7 @@ if (binData & !medData) {
         refTx = REFTX,
         binData = binData,
         medData = medData),
-      effectParam = c("beta"),
+      effectParam = "beta",
       modelParams = NA,
       folder = endpoint,
       label = label,
@@ -156,11 +155,10 @@ if (binData & !medData) {
       binData = binData,
       medData = medData,
       refTx = REFTX,
-      preRefTx = NA,
       decEff = decEff,
-      lg = FALSE))
+      lg = FALSE)
   } else {
-    modelResults <- try(NMA(
+    modelResults <- NMA(
       winSource = here::here("raw_data", "SurvWoodsREb_bin.txt"),
       dataFunc = setupData(
         subData = subData,
@@ -170,8 +168,8 @@ if (binData & !medData) {
         refTx = REFTX,
         binData = binData,
         medData = medData),
-      effectParam = c("beta"),
-      modelParams = c("sd"),
+      effectParam = "beta",
+      modelParams = "sd",
       folder = endpoint,
       label = label,
       endpoint = endpoint,
@@ -179,15 +177,14 @@ if (binData & !medData) {
       binData = binData,
       medData = medData,
       refTx = REFTX,
-      preRefTx = NA,
       decEff = decEff,
-      lg = FALSE))
+      lg = FALSE)
   }
 }
 
 if (!binData & medData) {
   if (!RANDOM) {
-    modelResults <- try(NMA(
+    modelResults <- NMA(
       winSource = here::here("raw_data", "SurvWoodsFEa_med.txt"),
       dataFunc = setupData(
         subData = subData,
@@ -197,7 +194,7 @@ if (!binData & medData) {
         refTx = REFTX,
         binData = binData,
         medData = medData),
-      effectParam = c("beta"),
+      effectParam = "beta",
       modelParams = NA,
       folder = endpoint,
       label = label,
@@ -206,11 +203,10 @@ if (!binData & medData) {
       binData = binData,
       medData = medData,
       refTx = REFTX,
-      preRefTx = NA,
       decEff = decEff,
-      lg = FALSE))
+      lg = FALSE)
   } else {
-    modelResults <- try(NMA(
+    modelResults <- NMA(
       winSource = here::here("raw_data", "SurvWoodsREb_med.txt"),
       dataFunc = setupData(
         subData = subData,
@@ -220,8 +216,8 @@ if (!binData & medData) {
         refTx = REFTX,
         binData = binData,
         medData = medData),
-      effectParam = c("beta"),
-      modelParams = c("sd"),
+      effectParam = "beta",
+      modelParams = "sd",
       folder = endpoint,
       label = label,
       endpoint = endpoint,
@@ -229,9 +225,8 @@ if (!binData & medData) {
       binData = binData,
       medData = medData,
       refTx = REFTX,
-      preRefTx = NA,
       decEff = decEff,
-      lg = FALSE))
+      lg = FALSE)
   }
 }
 
@@ -256,11 +251,10 @@ if (binData & medData) {
       binData = binData,
       medData = medData,
       refTx = REFTX,
-      preRefTx = NA,
       decEff = decEff,
       lg = FALSE)
   } else {
-    modelResults <- try(NMA(
+    modelResults <- NMA(
       winSource = here::here("raw_data", "SurvWoodsREb_med_bin.txt"),
       dataFunc = setupData(
         subData = subData,
@@ -270,7 +264,7 @@ if (binData & medData) {
         refTx = REFTX,
         binData = binData,
         medData = medData),
-      effectParam = c("beta"),
+      effectParam = "beta",
       modelParams = c("sd", "totresdev"),
       folder = endpoint,
       label = label,
@@ -279,9 +273,8 @@ if (binData & medData) {
       binData = binData,
       medData = medData,
       refTx = REFTX,
-      preRefTx = NA,
       decEff = decEff,
-      lg = FALSE))
+      lg = FALSE)
   }
 }
 

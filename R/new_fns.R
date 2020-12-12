@@ -1,6 +1,6 @@
 
 #'
-newSavePlot <- function() {
+customSavePlot <- function() {
   
   SYS <- .Platform$OS.type
   
@@ -21,7 +21,7 @@ newSavePlot <- function() {
 
 
 #'
-newBugs <- function(PROG = "openBugs", ...) {
+customBugs <- function(PROG = "openBugs", ...) {
   
   if (PROG == "openBugs") {
     return(

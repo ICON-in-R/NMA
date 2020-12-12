@@ -1,30 +1,33 @@
 
 #'
-txEffectPlot <- function(sims) {
+txEffectPlot <- function(sims,
+                         preRefTx,
+                         refTx) {
+  
   plotSims <- sims
   
   txListSims <- colnames(plotSims)
   
-  if ((preRefTx %in% txListSims) == TRUE &
-      (!is.na(preRefTx)) == TRUE) {
-    if (lg == FALSE) {
+  if (preRefTx %in% txListSims &
+      !is.na(preRefTx)) {
+    if (!lg) {
       plotSims <- plotSims - plotSims[, preRefTx]
     } else{
       plotSims <- plotSims - plotSims[, preRefTx]
     }
   }
   
-  if ((preRefTx %in% txListSims) == FALSE |
-      (!is.na(preRefTx)) == FALSE) {
+  if (!(preRefTx %in% txListSims) |
+      is.na(preRefTx)) {
     plotSims <- plotSims - plotSims[, refTx]
   }
   
-  plotResults <- round(exp(t(apply(
-    plotSims, 2, summStat
-  ))), 2)
+  plotResults <-
+    round(exp(t(apply(
+      plotSims, 2, summStat))), 2)
   
   plotResults <-
-    plotResults[order(plotResults[, 2], decreasing = TRUE),]
+    plotResults[order(plotResults[, 2], decreasing = TRUE), ]
   plotResults[plotResults == 0] <- 0.001
   
   txList <- rownames(plotResults)
@@ -48,15 +51,13 @@ txEffectPlot <- function(sims) {
     pch = 19,
     type = "n",
     log = "x",
-    cex = 0.8
-  )
+    cex = 0.8)
   
   axis(
     1,
     at = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
     label = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
-    cex.axis = 0.8
-  )
+    cex.axis = 0.8)
   abline(v = 1, col = "grey")
   
   axis(
@@ -65,11 +66,10 @@ txEffectPlot <- function(sims) {
     labels = txList,
     las = 2,
     cex.axis = 0.8,
-    cex = 0.8
-  )
+    cex = 0.8)
   
   
-  for (ii in 1:nTx) {
+  for (ii in seq_len(nTx)) {
     lines(c(plotResults[ii, 3], plotResults[ii, 4]),
           c(ii, ii),
           col = "black",
@@ -84,8 +84,7 @@ txEffectPlot <- function(sims) {
       cex = 2,
       bg = "black",
       col = "white",
-      lwd = 2
-    )
+      lwd = 2)
   }
   
   par(mar = c(5, 0, 2, 0))
@@ -99,8 +98,7 @@ txEffectPlot <- function(sims) {
     bty = "n",
     xaxt = "n",
     ylab = " ",
-    xlab = " "
-  )
+    xlab = " ")
   
   for (ii in 1:nTx) {
     if (plotResults[ii, 2] == plotResults[ii, 3] &
@@ -110,22 +108,19 @@ txEffectPlot <- function(sims) {
            "Reference Treatment",
            pos = 4,
            cex = 0.8)
-    } else{
+    } else {
       text(
         0,
         ii,
-        paste(
+        paste0(
           plotResults[ii, 2],
           " (",
           plotResults[ii, 3],
           " to ",
           plotResults[ii, 4],
-          ")",
-          sep = ""
-        ),
+          ")"),
         pos = 4,
-        cex = 0.8
-      )
+        cex = 0.8)
     }
   }
   
