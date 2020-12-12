@@ -2,13 +2,10 @@
 
 Its probably easiest to download the zip file by clicking on green `code` button above.
 
-The code works for me by running the following scripts in this order:
+Build and attach the package to use.
+To run the analysis use the `scripts/run_analysis.R` script.
 
-* 3_LoadFunction_Survival.R
-* NMA.R
-* genSamps.R
-* plotNetwork.R
-* 4_RunAnalysis_Survival.R
 
+#### TODO
 I will refactor this code to be much more robust and clear when I get the time.
 
