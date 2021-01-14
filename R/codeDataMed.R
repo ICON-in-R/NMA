@@ -2,37 +2,46 @@
 
 
 codeDataMed <- function(subData, subDataMed, refTx) {
-  subData <<- subData
-  subDataMed <<- subDataMed
   
-  #subData$tx <- sub('[[:space:]]+$', '',subData$tx )
+  txList <-
+    unique(
+      sort(
+        c(subData$tx,
+          subData$base,
+          subDataMed$tx,
+          subDataMed$base)))
   
-  txList <<-
-    unique(sort(c(
-      subData$tx, subData$base, subDataMed$tx, subDataMed$base
-    )))
-  
-  if ((refTx %in% txList) == TRUE & (!is.na(refTx)) == TRUE) {
-    txList <<-
-      unique(c(refTx, sort(
-        c(subData$tx, subData$base, subDataMed$tx, subDataMed$base)
-      )))
-  } else{
-    refTx <<- txList[1]
+  if (refTx %in% txList & !is.na(refTx)) {
+    txList <-
+      unique(c(refTx,
+               sort(c(subData$tx,
+                      subData$base,
+                      subDataMed$tx,
+                      subDataMed$base))))
+  } else {
+    refTx <- txList[1]
   }
   
-  
   ##code treatments
-  subData$Ltx  <- codeVariable(var = subData$tx , codeList = txList)
-  subData$Lbase  <-
-    codeVariable(var = subData$base , codeList = txList)
-  subDataMed$mediantx  <-
-    codeVariable(var = subDataMed$tx , codeList = txList)
-  subDataMed$medianbase  <-
-    codeVariable(var = subDataMed$base , codeList = txList)
+  subData$Ltx <- codeVariable(var = subData$tx,
+                               codeList = txList)
   
-  nTx <<- length(txList)
+  subData$Lbase <-
+    codeVariable(var = subData$base,
+                 codeList = txList)
+  
+  subDataMed$mediantx <-
+    codeVariable(var = subDataMed$tx,
+                 codeList = txList)
+  
+  subDataMed$medianbase <-
+    codeVariable(var = subDataMed$base,
+                 codeList = txList)
+  
+  nTx <- length(txList)
+  
   subData <- subData[order(subData$study, subData$tx),]
+  
   subDataMed <-
     subDataMed[order(subDataMed$study, subDataMed$tx),]
   
@@ -46,6 +55,11 @@ codeDataMed <- function(subData, subDataMed, refTx) {
   LnObs <<- length(subData$Lstudy)
   medianNObs <<- length(subDataMed$medianstudy)
   
-  return(list(subData, subDataMed))
+  return(list(
+    subData = subData,
+    subDataMed = subDataMed,
+    nTx = nTx,
+    refTx = refTx,
+    TxList = TxList))
 }
 

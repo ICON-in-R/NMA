@@ -12,15 +12,25 @@ rinits <-
   }
 
 
+#' setupData
+#' 
 #' TODO: refactor codeData() fns and combine
 #' 
+#' @param subData 
+#' @param refTx 
+#' @param subDataBin 
+#' @param subDataMed 
+#' @param random 
+#' @export
+#' 
 setupData <- function(subData,
-                      subDataBin,
-                      binData,
-                      subDataMed,
-                      medData,
-                      random,
-                      refTx) {
+                      refTx,
+                      subDataBin = NA,
+                      subDataMed = NA,
+                      random = TRUE) {
+  
+  binData <- !is.na(subDataBin)
+  medData <- !is.na(subDataMed)
   
   param_names <-
     if (random) {
@@ -28,9 +38,13 @@ setupData <- function(subData,
     } else {
       c("beta", "alpha")}
   
+  subDatalist <-
+    prep_codeData(subData,
+                  subDataMed,
+                  subDataBin,
+                  refTx)
+  
   if (!binData & !medData) {
-    
-    subData <- codeData(subData, refTx)
     
     bugsData <-
       list(
@@ -44,20 +58,13 @@ setupData <- function(subData,
         nTx = length(txList),
         nStudies = max(subData$Lstudy))
     
-    return(inits = rinits(nTx, param_names),
-           subData = subData,
-           bugsData = bugsData)
+    return(list(
+      inits = rinits(nTx, param_names),
+      subData = subDatalist$subData,
+      bugsData = bugsData))
   }
   
   if (binData & medData) {
-    
-    subDatalist <-
-      codeDataBin(subData = subData,
-                  subDataBin = subDataBin,
-                  refTx = refTx)
-    
-    subData <- as.data.frame(subDatalist[1])
-    subDataBin <- as.data.frame(subDatalist[2])
     
     bugsData <-
       list(
@@ -78,20 +85,14 @@ setupData <- function(subData,
         Br = subDataBin$BinR,
         BnObs = nrow(subDataBin))
     
-    return(inits = rinits(nTx, param_names),
-           subData = subData,
-           subDataBin = subDataBin,
-           bugsData = bugsData)
+    return(list(
+      inits = rinits(nTx, param_names),
+      subData = subDatalist$subData,
+      subDataBin = subDatalist$subDataBin,
+      bugsData = bugsData))
   }
   
   if (!binData & medData) {
-    subDatalist <-
-      codeDataMed(subData = subData,
-                  subDataMed = subDataMed,
-                  refTx = refTx)
-    
-    subData <- as.data.frame(subDatalist[1])
-    subDataMed <- as.data.frame(subDatalist[2])
     
     bugsData <-
       list(
@@ -113,23 +114,14 @@ setupData <- function(subData,
         medianNObs = nrow(subDataMed),
         median = subDataMed$median)
     
-    return(inits = rinits(nTx, param_names),
-           subData = subData,
-           subDataMed = subDataMed,
-           bugsData = bugsData)
+    return(list(
+      inits = rinits(nTx, param_names),
+      subData = subDatalist$subData,
+      subDataMed = subDatalist$subDataMed,
+      bugsData = bugsData))
   }
   
   if (binData & medData) {
-    subDatalist <-
-      codeDataBinMed(
-        subData = subData,
-        subDataMed = subDataMed,
-        subDataBin,
-        refTx = refTx)
-    
-    subData <- as.data.frame(subDatalist[1])
-    subDataMed <- as.data.frame(subDatalist[2])
-    subDataBin <- as.data.frame(subDatalist[3])
     
     bugsData <-
       list(
@@ -158,12 +150,12 @@ setupData <- function(subData,
         Br = subDataBin$BinR,
         BnObs = nrow(subDataBin))
     
-    return(inits = rinits(nTx, param_names),
-           subData = subData,
-           subDataBin = subDataBin,
-           subDataMed = subDataMed,
-           bugsData = bugsData)
+    return(list(
+      inits = rinits(nTx, param_names),
+      subData = subDatalist$subData,
+      subDataBin = subDatalist$subDataBin,
+      subDataMed = subDatalist$subDataMed,
+      bugsData = bugsData))
   }
-  
 }
 

@@ -1,16 +1,25 @@
 
+#' prep_codeData
 #'
-codeDataBinMed <- function(subData,
-                           subDataBin = NA,
-                           subDataMed = NA,
-                           refTx) {
+#' @param subData 
+#' @param subDataBin 
+#' @param subDataMed 
+#' @param refTx 
+#'
+#' @return
+#' @export
+#'
+prep_codeData <- function(subData,
+                          subDataBin = NA,
+                          subDataMed = NA,
+                          refTx) {
   txList <-
     unique(c(subData$tx,
-        subData$base,
-        subDataMed$tx,
-        subDataMed$base,
-        subDataBin$tx,
-        subDataBin$base))
+             subData$base,
+             subDataMed$tx,
+             subDataMed$base,
+             subDataBin$tx,
+             subDataBin$base))
   
   if (refTx %in% txList & !is.na(refTx)) {
     txList <-
@@ -72,6 +81,10 @@ codeDataBinMed <- function(subData,
   
   BnObs <- length(subDataBin$Bstudy)
   
+  subData <- as.data.frame(subDatalist$subData)
+  subDataMed <- as.data.frame(subDatalist$subDataMed)
+  subDataBin <- as.data.frame(subDatalist$subDataBin)
+
   return(list(
     subData = subData,
     subDataMed = subDataMed,
@@ -83,5 +96,5 @@ codeDataBinMed <- function(subData,
     nTx = nTx,
     refTx = refTx,
     TxList = TxList))
-  }
+}
 
