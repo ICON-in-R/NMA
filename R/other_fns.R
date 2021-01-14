@@ -1,32 +1,9 @@
 
-
-codeVariable <- function(var, codeList) {
-  codedVariable <- match(var, codeList)
-  return(codedVariable)
-}
-
-
-
-
-
 summStat <- function(x) {
   y <- c(mean(x), quantile(x, c(0.5, 0.025, 0.975), na.rm = TRUE))
   names(y)[1] <- "mean"
   return(y)
 }
-
-## NMA Forest
-
-
-codeVariable <- function(var, codeList) {
-  codedVariable <- match(var, codeList)
-  return(codedVariable)
-}
-
-
-
-
-
 
 
 # Function to set up results file for multiple parameters monitored

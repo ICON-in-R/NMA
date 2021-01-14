@@ -34,22 +34,17 @@ prep_codeData <- function(subData,
     refTx <- txList[1]
   }
   
-  subData$Ltx  <- codeVariable(var = subData$tx , codeList = txList)
+  subData$Ltx <- match(subData$tx, txList)
   
-  subData$Lbase  <-
-    codeVariable(var = subData$base , codeList = txList)
+  subData$Lbase <- match(subData$base, txList)
   
-  subDataMed$mediantx  <-
-    codeVariable(var = subDataMed$tx , codeList = txList)
+  subDataMed$mediantx <- match(subDataMed$tx, txList)
   
-  subDataMed$medianbase  <-
-    codeVariable(var = subDataMed$base , codeList = txList)
+  subDataMed$medianbase  <- match(subDataMed$base, txList)
   
-  subDataBin$Btx  <-
-    codeVariable(var = subDataBin$tx , codeList = txList)
+  subDataBin$Btx <- match(subDataBin$tx, txList)
   
-  subDataBin$Bbase  <-
-    codeVariable(var = subDataBin$base , codeList = txList)
+  subDataBin$Bbase <- match(subDataBin$base, txList)
   
   nTx <- length(txList)
   
@@ -64,14 +59,11 @@ prep_codeData <- function(subData,
   studyList <-
     unique(c(subData$study, subDataMed$study, subDataBin$study))
   
-  subData$Lstudy <-
-    codeVariable(var = subData$study, codeList = studyList)
+  subData$Lstudy <- match(subData$study, studyList)
   
-  subDataMed$medianstudy <-
-    codeVariable(var = subDataMed$study, codeList = studyList)
+  subDataMed$medianstudy <- match(subDataMed$study, studyList)
   
-  subDataBin$Bstudy <-
-    codeVariable(var = subDataBin$study, codeList = studyList)
+  subDataBin$Bstudy <- match(subDataBin$study, studyList)
   
   nStudies <- max(c(subData$Lstudy, subDataMed$medianstudy), 2)
   
@@ -81,14 +73,10 @@ prep_codeData <- function(subData,
   
   BnObs <- length(subDataBin$Bstudy)
   
-  subData <- as.data.frame(subDatalist$subData)
-  subDataMed <- as.data.frame(subDatalist$subDataMed)
-  subDataBin <- as.data.frame(subDatalist$subDataBin)
-
   return(list(
-    subData = subData,
-    subDataMed = subDataMed,
-    subDataBin = subDataBin,
+    subData = as.data.frame(subData),
+    subDataMed = as.data.frame(subDataMed),
+    subDataBin = as.data,frame(subDataBin),
     nStudies = nStudies,
     LnObs = LnObs,
     BnObs = BnObs,

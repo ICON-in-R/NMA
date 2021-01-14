@@ -1,7 +1,20 @@
 
-#' NMA
+#' Network meta-analysis
 #' 
 #' @param winSource
+#' @param dataFunc 
+#' @param effectParam 
+#' @param modelParams 
+#' @param folder 
+#' @param label 
+#' @param endpoint 
+#' @param binData 
+#' @param medData 
+#' @param refTx 
+#' @param preRefTx 
+#' @param decEff 
+#' @param random 
+#' @param lg 
 #' 
 #' @return
 #' 
@@ -23,10 +36,10 @@ NMA <- function(winSource,
   SYS <- .Platform$OS.type
   
   ## Short label without spaces
-  slabel <<- sub(" ", "_", label)
+  slabel <- sub(" ", "_", label)
   
   ## Short label without spaces and FE/RE for data file
-  sdlabel  <<-
+  sdlabel  <-
     sub(" ", "_", gsub("\\_RE", "", (gsub("\\_FE", "", label))))
   
   ## create folders
@@ -147,7 +160,7 @@ NMA <- function(winSource,
     Deviance <-
       round(x$summary[grep(paste0("^", "deviance"),
                            rownames(x$summary)), c(1, 5, 2, 3, 7, 8)], 2)
-    Dev <<- Deviance
+    Dev <- Deviance
     
     if (random) {
       SD <-
@@ -157,278 +170,31 @@ NMA <- function(winSource,
     
     para <-  
       if (random) {
-        rbind(Deviance , SD)
+        rbind(Deviance, SD)
       } else {
         rbind(Deviance)
       }
+    
     colnames(para) <- paste(colEff)
     
-    resDev <<- x$summary["totresdev", "mean"]
+    resDev <- x$summary["totresdev", "mean"]
     DIC <- x$DIC
     
     results <-
       list(EffectRes_lhr, para, DIC = DIC, resDev = resDev)
     
-    if (!is.na(effectParam)) {
-      simsLHR <-
-        x$sims.matrix[, grep(paste0("^beta"), rownames(x$summary))]
-      simsLHR <- cbind(0, simsLHR)
-      colnames(simsLHR) <- txList
-      sims <<- simsLHR
-      
-      # rank probability plot
-      rankFileLoc <<-
-        paste0(folder,
-               fileSep,
-               "graphs",
-               fileSep,
-               "ranking_",
-               slabel,
-               ".pdf")
-      
-      rankProbPlot(sims)
-      
-      # newSavePlot(file = rankFileLoc)
-      pdf(file = rankFileLoc)
-      rankProbPlot(sims)
-      dev.off()
-      
-      # forest plot
-      
-      forestFileLoc <<-
-        paste0(folder,
-               fileSep,
-               "graphs",
-               fileSep,
-               "forest_",
-               slabel,
-               ".pdf")
-      
-      txEffectPlot(sims, preRefTx, refTx)
-      
-      # newSavePlot(file = forestFileLoc)
-      pdf(file = forestFileLoc)
-      rankProbPlot(sims)
-      dev.off()
-      
-      # pairwise table
-      
-      pairTable <<- pairwiseTable(sims = sims)
-      pairFileLoc <<-
-        paste0(folder,
-               fileSep,
-               "results",
-               fileSep,
-               "Pairwise_results_",
-               slabel,
-               ".csv")
-      
-      write.table(
-        paste(
-          "Pairwise Treatment Co-efficients;",
-          "Median hazard ratio (95% Credible Interval)",
-          sep = " "),
-        file = pairFileLoc ,
-        append = FALSE)
-      
-      write.table(
-        "Row treatment vs. Column treatment (reference)",
-        file = pairFileLoc ,
-        append = TRUE,
-        col.names = NA)
-      
-      write.table(
-        "------------------",
-        file = pairFileLoc ,
-        append = TRUE,
-        col.names = NA)
-      
-      write.table(
-        pairTable,
-        file = pairFileLoc,
-        sep = ",",
-        append = TRUE,
-        col.names = NA)
-    }
-    
-    # network diagramslabel
-    
-    layout(1)
-    networkFileLoc <<-
-      paste0(folder,
-             fileSep,
-             "graphs",
-             fileSep,
-             "netGraph_",
-             slabel,
-             ".pdf")
-    
-    par(mar = c(3, 3, 3, 3))
-    plotNetwork(
-      subData = subData,
-      subDataBin = subDataBin,
-      binData = binData,
-      subDataMed = subDataMed,
-      medData = medData,
-      mode = "fruchtermanreingold",
-      label.pos = 0,
-      vertex.enclose = TRUE,
-      pad = 1,
-      label.cex = 0.7,
-      vertex.cex = 1)
-    
-    # newSavePlot(file = networkFileLoc)
-    pdf(file = networkFileLoc)
-    rankProbPlot(sims)
-    dev.off()
-    
-    # data table
-    
-    dataTableLong <- subData
-    
-    dataFileLoc <<-
-      paste0(folder,
-             fileSep,
-             "data",
-             fileSep,
-             "data_",
-             sdlabel,
-             ".csv")
-    
-    write.table(
-      paste0(
-        "Key: Lmean=mean log hazard ratios; Lse=standard error for log hazard ratios; multi=multi-arm trial indicator"),
-      file = dataFileLoc ,
-      append = FALSE,
-      col.names = NA)
-    
-    write.table(
-      "------------------",
-      file = dataFileLoc,
-      append = TRUE,
-      col.names = NA)
-    
-    write.table(
-      dataTableLong,
-      file = dataFileLoc,
-      sep = ",",
-      append = TRUE,
-      col.names = NA)
-    
-    if (binData) {
-      dataTableLongBin <- subDataBin
-      
-      dataFileLocBin <<-
-        paste0(folder,
-               fileSep,
-               "data",
-               fileSep,
-               "data_",
-               sdlabel,
-               "_bin.csv")
-      
-      write.table(
-        paste0(
-          "Key: Bn=Number of patients in arm; Br=number of events in arm"),
-        file = dataFileLocBin,
-        append = FALSE,
-        col.names = NA)
-      
-      write.table(
-        "------------------",
-        file = dataFileLocBin,
-        append = TRUE,
-        col.names = NA)
-      
-      write.table(
-        dataTableLongBin,
-        file = dataFileLocBin,
-        sep = ",",
-        append = TRUE,
-        col.names = NA)
-    }
-    
-    if (medData) {
-      dataTableLongMed <- subDataMed
-      
-      dataFileLocMed <<-
-        paste0(folder,
-               fileSep,
-               "data",
-               fileSep,
-               "data_",
-               sdlabel,
-               "_med.csv")
-      
-      write.table(
-        paste0("Key: ..."),
-        file = dataFileLocMed,
-        append = FALSE,
-        col.names = NA)
-      
-      write.table(
-        "------------------",
-        file = dataFileLocMed,
-        append = TRUE,
-        col.names = NA)
-      
-      write.table(
-        dataTableLongMed,
-        file = dataFileLocMed,
-        sep = ",",
-        append = TRUE,
-        col.names = NA)
-    }
-    
-    # results table
-    
-    resultsFileLoc <<-
-      paste0(folder,
-             fileSep,
-             "results",
-             fileSep,
-             "nmaResults_",
-             slabel,
-             ".csv")
-    
-    write.table(
-      paste(
-        "Model Co-efficients:",
-        "treatment effects compared to",
-        refTx,
-        sep = " "),
-      file = resultsFileLoc,
-      append = FALSE)
-    
-    write.table(
-      paste0(
-        "Key: SE=standard error; L95CrI/U95CrI=lower/upper 95% credible interval; DIC=deviance information criterion"),
-      file = resultsFileLoc,
-      append = TRUE,
-      col.names = NA)
-    
-    write.table(
-      "------------------",
-      file = resultsFileLoc ,
-      append = TRUE,
-      col.names = NA)
-    
-    for (i in seq_along(results)) {
-      write.table(
-        effectParamName[i],
-        file = resultsFileLoc,
-        sep = ",",
-        append = TRUE,
-        col.names = NA)
-      
-      write.table(
-        results[i],
-        file = resultsFileLoc,
-        sep = ",",
-        append = TRUE,
-        col.names = NA)
-    }
   }
+  
+  ## plots and table ----
+  # plot_and_tables()
+
+  # global variables  
+ #  resDev
+ #  Dev
+ # slabel
+ # sdlabel
+  
+  
   
   return(subData)
 }
