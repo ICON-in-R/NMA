@@ -2,11 +2,9 @@
 codeData <- function(subData, refTx) {
   subData <<- subData
   
-  #subData$tx <- sub('[[:space:]]+$', '',subData$tx )
-  
   txList <<- unique(sort(c(subData$tx, subData$base)))
   
-  if ((refTx %in% txList) == TRUE & (!is.na(refTx)) == TRUE) {
+  if (refTx %in% txList & !is.na(refTx)) {
     txList <<- unique(c(refTx, sort(c(
       subData$tx, subData$base
     ))))
@@ -14,14 +12,13 @@ codeData <- function(subData, refTx) {
     refTx <<- txList[1]
   }
   
-  
   ##code treatments
   subData$Ltx  <- codeVariable(var = subData$tx , codeList = txList)
   subData$Lbase  <-
-    codeVariable(var = subData$base , codeList = txList)
+    codeVariable(var = subData$base, codeList = txList)
   
   nTx <<- length(txList)
-  subData <- subData[order(subData$study, subData$tx),]
+  subData <- subData[order(subData$study, subData$tx), ]
   
   ## code studies
   studyList <- unique(subData$study)

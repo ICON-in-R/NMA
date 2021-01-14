@@ -160,14 +160,15 @@ if (binData & !medData) {
   } else {
     modelResults <- NMA(
       winSource = here::here("inst", "SurvWoodsREb_bin.txt"),
-      dataFunc = setupData(
-        subData = subData,
-        subDataBin = subDataBin,
-        subDataMed = subDataMed,        
-        random = RANDOM,
-        refTx = REFTX,
-        binData = binData,
-        medData = medData),
+      dataFunc =
+        setupData(
+          subData = subData,
+          subDataBin = subDataBin,
+          subDataMed = subDataMed,        
+          random = RANDOM,
+          refTx = REFTX,
+          binData = binData,
+          medData = medData),
       effectParam = "beta",
       modelParams = "sd",
       folder = endpoint,

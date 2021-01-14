@@ -21,13 +21,13 @@ codeDataBin <- function(subData, subDataBin, refTx) {
   
   
   ##code treatments
-  subData$Ltx  <- codeVariable(var = subData$tx , codeList = txList)
-  subData$Lbase  <-
-    codeVariable(var = subData$base , codeList = txList)
-  subDataBin$Btx  <-
-    codeVariable(var = subDataBin$tx , codeList = txList)
-  subDataBin$Bbase  <-
-    codeVariable(var = subDataBin$base , codeList = txList)
+  subData$Ltx  <- codeVariable(var = subData$tx, codeList = txList)
+  subData$Lbase <-
+    codeVariable(var = subData$base, codeList = txList)
+  subDataBin$Btx <-
+    codeVariable(var = subDataBin$tx, codeList = txList)
+  subDataBin$Bbase <-
+    codeVariable(var = subDataBin$base, codeList = txList)
   
   nTx <<- length(txList)
   subData <- subData[order(subData$study, subData$tx),]
