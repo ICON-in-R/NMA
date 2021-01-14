@@ -137,7 +137,7 @@ if (!binData & !medData) {
 if (binData & !medData) {
   if (!RANDOM) {
     modelResults <- NMA(
-      winSource = here::here("raw_data", "SurvWoodsFEa_bin.txt"),
+      winSource = here::here("inst", "SurvWoodsFEa_bin.txt"),
       dataFunc = setupData(
         subData = subData,
         subDataBin = subDataBin,
@@ -159,7 +159,7 @@ if (binData & !medData) {
       lg = FALSE)
   } else {
     modelResults <- NMA(
-      winSource = here::here("raw_data", "SurvWoodsREb_bin.txt"),
+      winSource = here::here("inst", "SurvWoodsREb_bin.txt"),
       dataFunc = setupData(
         subData = subData,
         subDataBin = subDataBin,
@@ -185,7 +185,7 @@ if (binData & !medData) {
 if (!binData & medData) {
   if (!RANDOM) {
     modelResults <- NMA(
-      winSource = here::here("raw_data", "SurvWoodsFEa_med.txt"),
+      winSource = here::here("inst", "SurvWoodsFEa_med.txt"),
       dataFunc = setupData(
         subData = subData,
         subDataBin = subDataBin,
@@ -207,7 +207,7 @@ if (!binData & medData) {
       lg = FALSE)
   } else {
     modelResults <- NMA(
-      winSource = here::here("raw_data", "SurvWoodsREb_med.txt"),
+      winSource = here::here("inst", "SurvWoodsREb_med.txt"),
       dataFunc = setupData(
         subData = subData,
         subDataMed = subDataMed,
@@ -233,7 +233,7 @@ if (!binData & medData) {
 if (binData & medData) {
   if (!RANDOM) {
     modelResults <- NMA(
-      winSource = here::here("raw_data", "SurvWoodsFEa_med_bin.txt"),
+      winSource = here::here("inst", "SurvWoodsFEa_med_bin.txt"),
       dataFunc = setupData(
         subData = subData,
         subDataMed = subDataMed,
@@ -255,7 +255,7 @@ if (binData & medData) {
       lg = FALSE)
   } else {
     modelResults <- NMA(
-      winSource = here::here("raw_data", "SurvWoodsREb_med_bin.txt"),
+      winSource = here::here("inst", "SurvWoodsREb_med_bin.txt"),
       dataFunc = setupData(
         subData = subData,
         subDataMed = subDataMed,
