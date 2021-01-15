@@ -2,6 +2,10 @@
 #'
 rinits <-
   function(nTx, nStudies, param_names) {
+    force(nTx)
+    force(nStudies)
+    force(param_names)
+    
     function() {
       list(
         beta = c(NA, rnorm(nTx - 1, 0, 2)),
@@ -30,8 +34,8 @@ setupData <- function(subData,
                       subDataMed = NA,
                       is_random = TRUE) {
   
-  binData <- all(!is.na(subDataBin))
-  medData <- all(!is.na(subDataMed))
+  is_bin <- all(!is.na(subDataBin))
+  is_med <- all(!is.na(subDataMed))
   
   param_names <-
     if (is_random) {
@@ -45,7 +49,7 @@ setupData <- function(subData,
                   subDataMed,
                   refTx)
   
-  if (!binData & !medData) {
+  if (!is_bin & !is_med) {
     
     bugsData <-
       list(
@@ -65,7 +69,7 @@ setupData <- function(subData,
       bugsData = bugsData))
   }
   
-  if (binData & !medData) {
+  if (is_bin & !is_med) {
     
     bugsData <-
       list(
@@ -92,7 +96,7 @@ setupData <- function(subData,
       bugsData = bugsData))
   }
   
-  if (!binData & medData) {
+  if (!is_bin & is_med) {
     
     bugsData <-
       list(
@@ -120,7 +124,7 @@ setupData <- function(subData,
       bugsData = bugsData))
   }
   
-  if (binData & medData) {
+  if (is_bin & is_med) {
     
     bugsData <-
       list(

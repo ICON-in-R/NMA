@@ -44,6 +44,7 @@ NMA <- function(bugs_filename,
   if (RUN) {
     
     res_bugs <-
+      # bugs_fn(
       R2OpenBUGS::bugs(
         data = dat$bugsData,
         parameters.to.save = params_to_save,
@@ -63,7 +64,8 @@ NMA <- function(bugs_filename,
     load(file = glue("{folder}{fileSep}model{fileSep}bugsObject_{slabel}"))
   }
   
-  ## diagnostic_plot()
+  ## if (DIAGNOSTICS) 
+  ##    diagnostic_plot()
   
   ## file_manip()
   

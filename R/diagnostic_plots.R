@@ -21,37 +21,16 @@ diagnostic_plots <- function(bugs_filename,
                              winDebug = PAUSE,
                              folder) {
   
-  if (DIAGNOSTICS) {
-    #par(mar=c(4,4,4,4))
-    
-    #plot(as.mcmc.list(res_bugs),ask=FALSE)
-    #savePlot(file=traceFileLoc,type="pdf")
-    
-    #autocorr.plot(as.mcmc.list(res_bugs),ask=FALSE)
-    #savePlot(file=autocorrFileLoc,type="pdf")
-    
-    #gelman.plot(res_bugs,ask=FALSE)
-    #savePlot(file=gelmanFileLoc,type="pdf")
-    
     createFolders(folder = "diagnostics", folder)
     
-    ##  ---------  start of new code for pngs  --------------------  ##
-    #
-    # This new code prints the traces/density plots to a single PNG,
-    # with length (and resolution) dependent on the number of variables.
-    #   Cons: can be REALLY long, and resolution may be poor
-    #   Pros: small file size, almost no extra time to run, so can be
-    #         run in addition to the pdfs.
-    
-    curr_mcmc <- as.mcmc.list(res_bugs)            # get list to be plotted
+    curr_mcmc <- as.mcmc.list(res_bugs)
     
     # find number of columns (variables): [[1]] refers to the first element of the mcmc list
     nc <- ncol(curr_mcmc[[1]])
     
     if (nc <= 30) {
-      traceFileLocPNG <<-
+      traceFileLocPNG <-
         paste("diagnostics", fileSep, folder, fileSep, "trace_", slabel, ".png", sep = "")
-      # create the png name
       png(
         filename = traceFileLocPNG,
         # start png (smaller file size than pdf)
@@ -83,9 +62,9 @@ diagnostic_plots <- function(bugs_filename,
     } else {
       # if too many variables for a high resolution
       
-      traceFileLocPNG1 <<-
+      traceFileLocPNG1 <-
         paste("diagnostics", fileSep, folder, fileSep, "trace_", slabel, "_part1.png", sep = "")
-      traceFileLocPNG2 <<-
+      traceFileLocPNG2 <-
         paste("diagnostics", fileSep, folder, fileSep, "trace_", slabel, "_part2.png", sep = "")
       
       # same as above but plot one half at a time
@@ -103,7 +82,7 @@ diagnostic_plots <- function(bugs_filename,
         units = "in",
         # fix size in inches (except length grows with # variables). Can play with this but will give errors if too large.
         res = ifelse(nc1 <= 20, 300,          # resolution is 300 dpi unless too many variables for that
-                     round(6000 / nc1,-1))      # otherwise pick something lower
+                     round(6000 / nc1, -1))      # otherwise pick something lower
       )
       
       par(
@@ -135,7 +114,7 @@ diagnostic_plots <- function(bugs_filename,
         units = "in",
         # fix size in inches (except length grows with # variables). Can play with this but will give errors if too large.
         res = ifelse(nc2 <= 20, 300,          # resolution is 300 dpi unless too many variables for that
-                     round(6000 / nc2,-1)))      # otherwise pick something lower
+                     round(6000 / nc2, -1)))      # otherwise pick something lower
       
       par(
         mfrow = c(nc2, 2),
@@ -157,41 +136,25 @@ diagnostic_plots <- function(bugs_filename,
       
     }
     
-    ##  ---------  end of new code for pngs  --------------------  ##
-    
-    traceFileLoc <<-
+    traceFileLoc <-
       paste("diagnostics", fileSep, folder, fileSep, "trace_", slabel, ".pdf", sep = "")
+
     pdf(file = traceFileLoc)
     plot(as.mcmc.list(res_bugs), ask = FALSE)
     dev.off()
     
-    autocorrFileLoc <<-
+    autocorrFileLoc <-
       paste("diagnostics", fileSep, folder, fileSep, "autocorr_", slabel, ".pdf", sep = "")
     pdf(file = autocorrFileLoc)
     autocorr.plot(as.mcmc.list(res_bugs), ask = FALSE)
     dev.off()
     
-    gelmanFileLoc <<-
-      paste("diagnostics",
-            fileSep,
-            folder,
-            fileSep,
-            "gelman_",
-            slabel,
-            ".pdf",
-            sep = "")
+    gelmanFileLoc <-
+      paste("diagnostics", fileSep, folder, fileSep, "gelman_", slabel, ".pdf", sep = "")
     pdf(file = gelmanFileLoc)
     gelman.plot(as.mcmc.list(res_bugs), ask = FALSE)
     dev.off()
-    
-    ##pdf(file=paste(folder,fileSep,"diagnostics",fileSep,"gelman_",label,".pdf",sep=""))
-    #testGel <- try(gelman.plot(res_bugs,ask=FALSE))
-    #    if (class(testGel)!="try-error") {newSavePlot(file=paste(folder,fileSep,"diagnostics",fileSep,"gelman_",slabel,".pdf",sep=""))}
-    ##dev.off()
-    
-  }
   
   return(res_bugs)
-  
 }
 
