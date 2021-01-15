@@ -1,6 +1,8 @@
 
 #' prep_codeData
-#'
+#' 
+#' Create input data for NMA.
+#' 
 #' @param subData 
 #' @param subDataBin 
 #' @param subDataMed 
@@ -8,7 +10,8 @@
 #' @importFrom purrr map
 #' @importFrom dplyr
 #' 
-#' @return
+#' @return List of data and statistics.
+#'         If no binary of median data empty sub-lists.
 #' @export
 #'
 prep_codeData <- function(subData,
@@ -42,7 +45,7 @@ prep_codeData <- function(subData,
   
   study_names <- unique(unlist(map(dat, "study")))
   
-  dat_list$subData <-
+  dat_list$dat <-
     subData %>%
     mutate(Ltx = match(tx, tx_names),
            Lbase = match(base, tx_names),
@@ -56,7 +59,7 @@ prep_codeData <- function(subData,
   
   if (is_bin) {
     
-    bin_list$subDataBin <- 
+    bin_list$dat <- 
       subDataBin %>% 
       mutate(Btx = match(tx, tx_names),
              Bbase = match(base, tx_names),
@@ -69,7 +72,7 @@ prep_codeData <- function(subData,
   
   if (is_med) {
     
-    med_list$subDataMed <-
+    med_list$dat <-
       subDataMed %>% 
       mutate(mediantx = match(tx, tx_names),
              medianbase = match(base, tx_names),
@@ -84,8 +87,8 @@ prep_codeData <- function(subData,
   
   return(list(
     subData = dat_list,
-    med_list = med_list,
-    bin_list = bin_list,
+    subDataMed = med_list,
+    subDataBin = bin_list,
     nStudies = nStudies,
     nTx = nTx,
     refTx = refTx,

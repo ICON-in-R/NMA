@@ -14,12 +14,15 @@ rinits <-
 
 #' setupData
 #' 
+#' Arrange input data for NMA.
+#' 
 #' @param subData 
-#' @param refTx 
+#' @param refTx Reference treatment name
 #' @param subDataBin 
 #' @param subDataMed 
-#' @param is_random 
+#' @param is_random Is this a random effects model?
 #' @export
+#' @return list
 #' 
 setupData <- function(subData,
                       refTx = NA,
@@ -36,57 +39,56 @@ setupData <- function(subData,
     } else {
       c("beta", "alpha")}
   
-  dat <-
+  input <-
     prep_codeData(subData,
-                  subDataMed,
                   subDataBin,
+                  subDataMed,
                   refTx)
   
   if (!binData & !medData) {
     
     bugsData <-
       list(
-        Lstudy = dat$Lstudy,
-        Ltx = dat$Ltx,
-        Lbase = dat$Lbase,
-        Lmean = dat$Lmean,
-        Lse = dat$Lse,
-        multi = dat$multi,
-        LnObs = nrow(dat),
-        nTx = length(txList),
-        nStudies = max(dat$Lstudy))
+        Lstudy = input$subData$dat$Lstudy,
+        Ltx = input$subData$dat$Ltx,
+        Lbase = input$subData$dat$Lbase,
+        Lmean = input$subData$dat$Lmean,
+        Lse = input$subData$dat$Lse,
+        multi = input$subData$dat$multi_arm,
+        LnObs = input$subData$LnObs,
+        nTx = input$nTx,
+        nStudies = input$nStudies)
     
     return(list(
       inits = rinits(nTx, param_names),
-      subData = dat$subData,
+      subData = input$subData$dat,
       bugsData = bugsData))
   }
   
-  if (binData & medData) {
+  if (binData & !medData) {
     
     bugsData <-
       list(
-        Lstudy = dat$Lstudy,
-        Ltx = dat$Ltx,
-        Lbase = dat$Lbase,
-        Lmean = dat$Lmean,
-        Lse = dat$Lse,
-        multi = dat$multi,
-        LnObs = nrow(dat),
-        nTx = length(txList),
-        nStudies = max(dat$Lstudy,
-                       subDataBin$Bstudy),
-        Bstudy = dat$Bstudy,
-        Btx = subDataBin$Btx,
-        Bbase = subDataBin$Bbase,
-        Bn = subDataBin$BinN,
-        Br = subDataBin$BinR,
-        BnObs = nrow(subDataBin))
+        Lstudy = input$subData$dat$Lstudy,
+        Ltx = input$subData$dat$Ltx,
+        Lbase = input$subData$dat$Lbase,
+        Lmean = input$subData$dat$Lmean,
+        Lse = input$subData$dat$Lse,
+        multi = input$subData$dat$multi,
+        LnObs = input$subData$LnObs,
+        nTx = input$nTx,
+        nStudies = input$nStudies,
+        Bstudy = input$subDataBin$dat$Bstudy,
+        Btx = input$subDataBin$dat$Btx,
+        Bbase = input$subDataBin$dat$Bbase,
+        Bn = input$subDataBin$dat$BinN,
+        Br = input$subDataBin$dat$BinR,
+        BnObs = input$subDataBin$BnObs)
     
     return(list(
       inits = rinits(nTx, param_names),
-      subData = dat$subData,
-      subDataBin = dat$subDataBin,
+      subData = input$subData$dat,
+      subDataBin = input$subDataBin$dat,
       bugsData = bugsData))
   }
   
@@ -94,28 +96,27 @@ setupData <- function(subData,
     
     bugsData <-
       list(
-        Lstudy = dat$Lstudy,
-        Ltx = dat$Ltx,
-        Lbase = dat$Lbase,
-        Lmean = dat$Lmean,
-        Lse = dat$Lse,
-        multi = dat$multi,
-        LnObs = nrow(dat),
-        nTx = length(txList),
-        nStudies = max(dat$Lstudy,
-                       subDataMed$mediantudy),
-        medianStudy = subDataMed$medianstudy,
-        medianTx = subDataMed$mediantx ,
-        medianBase = subDataMed$medianbase,
-        medianN = subDataMed$medN,
-        medianR = subDataMed$medR,
-        medianNObs = nrow(subDataMed),
-        median = subDataMed$median)
+        Lstudy = input$subData$dat$Lstudy,
+        Ltx = input$subData$dat$Ltx,
+        Lbase = input$subData$dat$Lbase,
+        Lmean = input$subData$dat$Lmean,
+        Lse = input$subData$dat$Lse,
+        multi = input$subData$dat$multi_arm,
+        LnObs = input$subData$LnObs,
+        nTx = input$nTx,
+        nStudies = input$nStudies,
+        medianStudy = input$subDataMed$dat$medianstudy,
+        medianTx = input$subDataMed$dat$mediantx ,
+        medianBase = input$subDataMed$dat$medianbase,
+        medianN = input$subDataMed$dat$medN,
+        medianR = input$subDataMed$dat$medR,
+        median = input$subDataMed$dat$median,
+        medianNObs = input$subDataMed$medianNObs)
     
     return(list(
       inits = rinits(nTx, param_names),
-      subData = dat$subData,
-      subDataMed = dat$subDataMed,
+      subData = input$subData$dat,
+      subDataMed = input$subDataMed$dat,
       bugsData = bugsData))
   }
   
@@ -123,36 +124,34 @@ setupData <- function(subData,
     
     bugsData <-
       list(
-        Lstudy = dat$Lstudy,
-        Ltx = dat$Ltx,
-        Lbase = dat$Lbase,
-        Lmean = dat$Lmean,
-        Lse = dat$Lse,
-        multi = dat$multi,
-        nTx = length(txList),
-        nStudies = max(dat$Lstudy,
-                       subDataMed$medianstudy,
-                       subDataBin$Bstudy),
-        medianStudy = subDataMed$medianstudy,
-        medianTx = subDataMed$mediantx ,
-        medianBase = subDataMed$medianbase,
-        Bstudy = subDataBin$Bstudy,
-        Btx = subDataBin$Btx,
-        Bbase = subDataBin$Bbase,
-        LnObs = nrow(subData),
-        medianN = subDataMed$medN,
-        medianR = subDataMed$medR,
-        medianNObs = nrow(subDataMed),
-        median = subDataMed$median,
-        Bn = subDataBin$BinN,
-        Br = subDataBin$BinR,
-        BnObs = nrow(subDataBin))
+        Lstudy = input$subData$dat$Lstudy,
+        Ltx = input$subData$dat$Ltx,
+        Lbase = input$subData$dat$Lbase,
+        Lmean = input$subData$dat$Lmean,
+        Lse = input$subData$dat$Lse,
+        multi = input$subData$dat$multi_arm,
+        LnObs = input$subData$LnObs,
+        nTx = input$nTx,
+        nStudies = input$nStudies,
+        medianStudy = input$subDataMed$dat$medianstudy,
+        medianTx = input$subDataMed$dat$mediantx ,
+        medianBase = input$subDataMed$dat$medianbase,
+        Bstudy = input$subDataMed$dat$Bstudy,
+        Btx = input$subDataMed$dat$Btx,
+        Bbase = input$subDataMed$dat$Bbase,
+        medianN = input$subDataMed$dat$medN,
+        medianR = input$subDataMed$dat$medR,
+        median = input$subDataMed$dat$median,
+        medianNObs = input$subDataMed$medianNObs,
+        Bn = input$subDataBin$dat$BinN,
+        Br = input$subDataBin$dat$BinR,
+        BnObs = input$subDataBin$BnObs)
     
     return(list(
       inits = rinits(nTx, param_names),
-      subData = dat$subData,
-      subDataBin = dat$subDataBin,
-      subDataMed = dat$subDataMed,
+      subData = input$subData$dat,
+      subDataBin = input$subDataBin$dat,
+      subDataMed = input$subDataMed$dat,
       bugsData = bugsData))
   }
 }
