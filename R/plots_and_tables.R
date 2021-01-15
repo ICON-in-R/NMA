@@ -1,5 +1,7 @@
 
+#'
 plots_and_table <- function() {
+  
   if (!is.na(effectParam)) {
     simsLHR <-
       x$sims.matrix[, grep(paste0("^beta"), rownames(x$summary))]
@@ -259,6 +261,6 @@ plots_and_table <- function() {
       append = TRUE,
       col.names = NA)
   }
-}
-
+  
+  
 }

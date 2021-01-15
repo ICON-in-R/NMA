@@ -2,6 +2,7 @@
 # N Green, UCL 7-12-2020 --------------------------------------------------
 
 library(dplyr)
+library(purrr)
 
 
 ## settings
@@ -209,14 +210,13 @@ if (!binData & medData) {
   } else {
     modelResults <- NMA(
       winSource = here::here("inst", "SurvWoodsREb_med.txt"),
-      dataFunc = setupData(
-        subData = subData,
-        subDataMed = subDataMed,
-        subDataBin = subDataBin,
-        random = RANDOM,
-        refTx = REFTX,
-        binData = binData,
-        medData = medData),
+      dataFunc =
+        setupData(
+          subData = subData,
+          subDataMed = subDataMed,
+          subDataBin = subDataBin,
+          random = RANDOM,
+          refTx = REFTX),
       effectParam = "beta",
       modelParams = "sd",
       folder = endpoint,
@@ -235,6 +235,7 @@ if (binData & medData) {
   if (!RANDOM) {
     modelResults <- NMA(
       winSource = here::here("inst", "SurvWoodsFEa_med_bin.txt"),
+      
       dataFunc = setupData(
         subData = subData,
         subDataMed = subDataMed,
@@ -243,6 +244,7 @@ if (binData & medData) {
         refTx = REFTX,
         binData = binData,
         medData = medData),
+      
       effectParam = "beta",
       modelParams = "totresdev",
       folder = endpoint,

@@ -5,84 +5,90 @@
 #' @param subDataBin 
 #' @param subDataMed 
 #' @param refTx 
-#'
+#' @importFrom purrr map
+#' @importFrom dplyr
+#' 
 #' @return
 #' @export
 #'
 prep_codeData <- function(subData,
                           subDataBin = NA,
                           subDataMed = NA,
-                          refTx) {
-  txList <-
-    unique(c(subData$tx,
-             subData$base,
-             subDataMed$tx,
-             subDataMed$base,
-             subDataBin$tx,
-             subDataBin$base))
+                          refTx = NA) {
   
-  if (refTx %in% txList & !is.na(refTx)) {
-    txList <-
-      unique(c(refTx,
-               subData$tx,
-               subData$base,
-               subDataMed$tx,
-               subDataMed$base,
-               subDataBin$tx,
-               subDataBin$base))
-  } else {
-    refTx <- txList[1]
+  is_med <- all(!is.na(subDataMed))
+  is_bin <- all(!is.na(subDataBin))
+  
+  dat_list <- list()
+  bin_list <- list()
+  med_list <- list()
+  
+  dat <- list(subData,
+              subDataMed,
+              subDataBin)
+  
+  # all tx in datasets
+  tx_names <-
+    sort(unlist(
+      map(dat, ~select(., tx, base))))
+  
+  tx_names <- unique(c(refTx, tx_names))
+  
+  tx_names <- tx_names[!is.na(tx_names)]
+  
+  nTx <- length(tx_names)
+  
+  refTx <- tx_names[1]
+  
+  study_names <- unique(unlist(map(dat, "study")))
+  
+  dat_list$subData <-
+    subData %>%
+    mutate(Ltx = match(tx, tx_names),
+           Lbase = match(base, tx_names),
+           Lstudy = match(study, study_names)) %>%
+    arrange(study, tx) %>% 
+    as.data.frame()
+  
+  dat_list$LnObs <- nrow(subData)
+  
+  nStudies <- max(dat_list$subData$Lstudy, 2)
+  
+  if (is_bin) {
+    
+    bin_list$subDataBin <- 
+      subDataBin %>% 
+      mutate(Btx = match(tx, tx_names),
+             Bbase = match(base, tx_names),
+             Bstudy = match(study, study_names)) %>% 
+      arrange(study, tx) %>% 
+      as.data.frame()
+    
+    bin_list$BnObs <- nrow(subDataBin)
   }
   
-  subData$Ltx <- match(subData$tx, txList)
-  
-  subData$Lbase <- match(subData$base, txList)
-  
-  subDataMed$mediantx <- match(subDataMed$tx, txList)
-  
-  subDataMed$medianbase  <- match(subDataMed$base, txList)
-  
-  subDataBin$Btx <- match(subDataBin$tx, txList)
-  
-  subDataBin$Bbase <- match(subDataBin$base, txList)
-  
-  nTx <- length(txList)
-  
-  subData <- subData[order(subData$study, subData$tx), ]
-  
-  subDataMed <-
-    subDataMed[order(subDataMed$study, subDataMed$tx), ]
-  
-  subDataBin <-
-    subDataBin[order(subDataBin$study, subDataBin$tx), ]
-  
-  studyList <-
-    unique(c(subData$study, subDataMed$study, subDataBin$study))
-  
-  subData$Lstudy <- match(subData$study, studyList)
-  
-  subDataMed$medianstudy <- match(subDataMed$study, studyList)
-  
-  subDataBin$Bstudy <- match(subDataBin$study, studyList)
-  
-  nStudies <- max(c(subData$Lstudy, subDataMed$medianstudy), 2)
-  
-  LnObs <- length(subData$Lstudy)
-  
-  medianNObs <- length(subDataMed$medianstudy)
-  
-  BnObs <- length(subDataBin$Bstudy)
+  if (is_med) {
+    
+    med_list$subDataMed <-
+      subDataMed %>% 
+      mutate(mediantx = match(tx, tx_names),
+             medianbase = match(base, tx_names),
+             medianstudy = match(study, study_names)) %>% 
+      arrange(study, tx) %>% 
+      as.data.frame()
+    
+    med_list$medianNObs <- nrow(subDataMed)
+    
+    nStudies <- max(c(nStudies, med_list$subDataMed$medianstudy))
+  }
   
   return(list(
-    subData = as.data.frame(subData),
-    subDataMed = as.data.frame(subDataMed),
-    subDataBin = as.data,frame(subDataBin),
+    subData = dat_list,
+    med_list = med_list,
+    bin_list = bin_list,
     nStudies = nStudies,
-    LnObs = LnObs,
-    BnObs = BnObs,
-    medianNObs = medianNObs,
     nTx = nTx,
     refTx = refTx,
-    TxList = TxList))
+    txList = tx_names))
 }
 

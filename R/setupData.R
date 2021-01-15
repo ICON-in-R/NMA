@@ -14,31 +14,29 @@ rinits <-
 
 #' setupData
 #' 
-#' TODO: refactor codeData() fns and combine
-#' 
 #' @param subData 
 #' @param refTx 
 #' @param subDataBin 
 #' @param subDataMed 
-#' @param random 
+#' @param is_random 
 #' @export
 #' 
 setupData <- function(subData,
-                      refTx,
+                      refTx = NA,
                       subDataBin = NA,
                       subDataMed = NA,
-                      random = TRUE) {
+                      is_random = TRUE) {
   
-  binData <- !is.na(subDataBin)
-  medData <- !is.na(subDataMed)
+  binData <- all(!is.na(subDataBin))
+  medData <- all(!is.na(subDataMed))
   
   param_names <-
-    if (random) {
+    if (is_random) {
       c("beta", "sd", "alpha")
     } else {
       c("beta", "alpha")}
   
-  subDatalist <-
+  dat <-
     prep_codeData(subData,
                   subDataMed,
                   subDataBin,
@@ -48,19 +46,19 @@ setupData <- function(subData,
     
     bugsData <-
       list(
-        Lstudy = subData$Lstudy,
-        Ltx = subData$Ltx,
-        Lbase = subData$Lbase,
-        Lmean = subData$Lmean,
-        Lse = subData$Lse,
-        multi = subData$multi,
-        LnObs = nrow(subData),
+        Lstudy = dat$Lstudy,
+        Ltx = dat$Ltx,
+        Lbase = dat$Lbase,
+        Lmean = dat$Lmean,
+        Lse = dat$Lse,
+        multi = dat$multi,
+        LnObs = nrow(dat),
         nTx = length(txList),
-        nStudies = max(subData$Lstudy))
+        nStudies = max(dat$Lstudy))
     
     return(list(
       inits = rinits(nTx, param_names),
-      subData = subDatalist$subData,
+      subData = dat$subData,
       bugsData = bugsData))
   }
   
@@ -68,17 +66,17 @@ setupData <- function(subData,
     
     bugsData <-
       list(
-        Lstudy = subData$Lstudy,
-        Ltx = subData$Ltx,
-        Lbase = subData$Lbase,
-        Lmean = subData$Lmean,
-        Lse = subData$Lse,
-        multi = subData$multi,
-        LnObs = nrow(subData),
+        Lstudy = dat$Lstudy,
+        Ltx = dat$Ltx,
+        Lbase = dat$Lbase,
+        Lmean = dat$Lmean,
+        Lse = dat$Lse,
+        multi = dat$multi,
+        LnObs = nrow(dat),
         nTx = length(txList),
-        nStudies = max(subData$Lstudy,
+        nStudies = max(dat$Lstudy,
                        subDataBin$Bstudy),
-        Bstudy = BstudyT,
+        Bstudy = dat$Bstudy,
         Btx = subDataBin$Btx,
         Bbase = subDataBin$Bbase,
         Bn = subDataBin$BinN,
@@ -87,8 +85,8 @@ setupData <- function(subData,
     
     return(list(
       inits = rinits(nTx, param_names),
-      subData = subDatalist$subData,
-      subDataBin = subDatalist$subDataBin,
+      subData = dat$subData,
+      subDataBin = dat$subDataBin,
       bugsData = bugsData))
   }
   
@@ -96,15 +94,15 @@ setupData <- function(subData,
     
     bugsData <-
       list(
-        Lstudy = subData$Lstudy,
-        Ltx = subData$Ltx,
-        Lbase = subData$Lbase,
-        Lmean = subData$Lmean,
-        Lse = subData$Lse,
-        multi = subData$multi,
-        LnObs = nrow(subData),
+        Lstudy = dat$Lstudy,
+        Ltx = dat$Ltx,
+        Lbase = dat$Lbase,
+        Lmean = dat$Lmean,
+        Lse = dat$Lse,
+        multi = dat$multi,
+        LnObs = nrow(dat),
         nTx = length(txList),
-        nStudies = max(subData$Lstudy,
+        nStudies = max(dat$Lstudy,
                        subDataMed$mediantudy),
         medianStudy = subDataMed$medianstudy,
         medianTx = subDataMed$mediantx ,
@@ -116,8 +114,8 @@ setupData <- function(subData,
     
     return(list(
       inits = rinits(nTx, param_names),
-      subData = subDatalist$subData,
-      subDataMed = subDatalist$subDataMed,
+      subData = dat$subData,
+      subDataMed = dat$subDataMed,
       bugsData = bugsData))
   }
   
@@ -125,14 +123,14 @@ setupData <- function(subData,
     
     bugsData <-
       list(
-        Lstudy = subData$Lstudy,
-        Ltx = subData$Ltx,
-        Lbase = subData$Lbase,
-        Lmean = subData$Lmean,
-        Lse = subData$Lse,
-        multi = subData$multi,
+        Lstudy = dat$Lstudy,
+        Ltx = dat$Ltx,
+        Lbase = dat$Lbase,
+        Lmean = dat$Lmean,
+        Lse = dat$Lse,
+        multi = dat$multi,
         nTx = length(txList),
-        nStudies = max(subData$Lstudy,
+        nStudies = max(dat$Lstudy,
                        subDataMed$medianstudy,
                        subDataBin$Bstudy),
         medianStudy = subDataMed$medianstudy,
@@ -152,9 +150,9 @@ setupData <- function(subData,
     
     return(list(
       inits = rinits(nTx, param_names),
-      subData = subDatalist$subData,
-      subDataBin = subDatalist$subDataBin,
-      subDataMed = subDatalist$subDataMed,
+      subData = dat$subData,
+      subDataBin = dat$subDataBin,
+      subDataMed = dat$subDataMed,
       bugsData = bugsData))
   }
 }

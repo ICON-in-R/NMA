@@ -14,7 +14,7 @@
 #' @param preRefTx 
 #' @param decEff 
 #' @param random 
-#' @param lg 
+#' @param lg what is this??
 #' 
 #' @return
 #' 
@@ -186,7 +186,7 @@ NMA <- function(winSource,
   }
   
   ## plots and table ----
-  # plot_and_tables()
+  # plots_and_tables()
 
   # global variables  
  #  resDev
