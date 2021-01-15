@@ -7,8 +7,6 @@ library(purrr)
 
 ## settings
 
-fileSep <- "\\"
-
 bugs_params <-
   list(
     PROG = "openBugs",

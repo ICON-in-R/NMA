@@ -55,7 +55,7 @@ prep_codeData <- function(subData,
   
   dat_list$LnObs <- nrow(subData)
   
-  nStudies <- max(dat_list$subData$Lstudy, 2)
+  nStudies <- max(dat_list$dat$Lstudy, 2)
   
   if (is_bin) {
     
@@ -68,6 +68,7 @@ prep_codeData <- function(subData,
       as.data.frame()
     
     bin_list$BnObs <- nrow(subDataBin)
+    nStudies <- max(c(nStudies, bin_list$dat$Bstudy))
   }
   
   if (is_med) {
@@ -81,8 +82,7 @@ prep_codeData <- function(subData,
       as.data.frame()
     
     med_list$medianNObs <- nrow(subDataMed)
-    
-    nStudies <- max(c(nStudies, med_list$subDataMed$medianstudy))
+    nStudies <- max(c(nStudies, med_list$dat$medianstudy))
   }
   
   return(list(

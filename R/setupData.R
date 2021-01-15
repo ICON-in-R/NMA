@@ -1,7 +1,7 @@
 
 #'
 rinits <-
-  function(nTx, param_names) {
+  function(nTx, nStudies, param_names) {
     function() {
       list(
         beta = c(NA, rnorm(nTx - 1, 0, 2)),
@@ -60,7 +60,7 @@ setupData <- function(subData,
         nStudies = input$nStudies)
     
     return(list(
-      inits = rinits(nTx, param_names),
+      inits = rinits(nTx, nStudies, param_names),
       subData = input$subData$dat,
       bugsData = bugsData))
   }
@@ -86,7 +86,7 @@ setupData <- function(subData,
         BnObs = input$subDataBin$BnObs)
     
     return(list(
-      inits = rinits(nTx, param_names),
+      inits = rinits(nTx, nStudies, param_names),
       subData = input$subData$dat,
       subDataBin = input$subDataBin$dat,
       bugsData = bugsData))
@@ -114,7 +114,7 @@ setupData <- function(subData,
         medianNObs = input$subDataMed$medianNObs)
     
     return(list(
-      inits = rinits(nTx, param_names),
+      inits = rinits(nTx, nStudies, param_names),
       subData = input$subData$dat,
       subDataMed = input$subDataMed$dat,
       bugsData = bugsData))
@@ -148,7 +148,7 @@ setupData <- function(subData,
         BnObs = input$subDataBin$BnObs)
     
     return(list(
-      inits = rinits(nTx, param_names),
+      inits = rinits(nTx, nStudies, param_names),
       subData = input$subData$dat,
       subDataBin = input$subDataBin$dat,
       subDataMed = input$subDataMed$dat,

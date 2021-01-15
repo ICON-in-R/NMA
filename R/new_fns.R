@@ -20,6 +20,9 @@ customSavePlot <- function() {
 }
 
 
+#' @importFrom R2OpenBUGS bugs
+#' @importFrom R2WinBUGS bugs
+#' @importFrom R2jags jags
 #'
 customBugs <- function(PROG = "openBugs", ...) {
   
