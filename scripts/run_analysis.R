@@ -9,24 +9,25 @@ library(purrr)
 
 fileSep <- "\\"
 
+bugs_params <-
+  list(
+    PROG = "openBugs",
+    N.BURNIN = 1000,
+    N.SIMS = 1500,
+    N.CHAINS = 2,
+    N.THIN = 1,
+    PAUSE = TRUE)
+
 RUN <- TRUE
-
-N.BURNIN <- 1000
-N.SIMS <- 1500
-N.CHAINS <- 2
-N.THIN <- 1
-PAUSE <- TRUE
-
-PROG <- "openBugs"
 DIAGNOSTICS <- TRUE
-
 BASEPROB <- NA
 decEff <- TRUE
 
-newSavePlot <- customSavePlot()
-newBugs <- customBugs()
+saveplot_fn <- customSavePlot()
+bugs_fn <- customBugs()
 
-# run analysis
+
+## run analysis
 
 analysis <-
   read.csv(
@@ -38,7 +39,6 @@ analysis <- filter(analysis, Endpoint_type == "Surv")
 
 
 # for (a in 1:nrow(analysis)) {
-
 a <- 1
 
 print(analysis$Analysis_name[a])
@@ -64,14 +64,12 @@ decEff <- currAnalysis$Decrease_Effect
 
 REFTX <- currAnalysis$REFTX
 
-# selects indicator for availability of binary endpoint data
-binDataInd <- currAnalysis$BinData
+# indicator for availability of binary endpoint data
+is_bin <- currAnalysis$BinData == "YES"
 
-# selects indicator for availability of median endpoint data
-medDataInd <- currAnalysis$MedData
+# indicator for availability of median endpoint data
+is_med <- currAnalysis$MedData == "YES"
 
-binData <- binDataInd == "YES"
-medData <- medDataInd == "YES"
 
 #}
 
@@ -83,7 +81,7 @@ subData <-
     header = TRUE,
     as.is = TRUE)
 
-if (binData) {
+if (is_bin) {
   subDataBin <-
     read.csv(
       paste0(here::here("raw_data"), "/survdata_", endpoint, "_bin.csv"),
@@ -91,7 +89,7 @@ if (binData) {
       as.is = TRUE)
 }
 
-if (medData) {
+if (is_med) {
   subDataMed <-
     read.csv(
       paste0(here::here("raw_data"), "/survdata_", endpoint, "_med.csv"),
@@ -102,7 +100,7 @@ if (medData) {
 
 NMA_partial <-
   purrr::partial(NMA,
-                 dataFunc =
+                 dat =
                    setupData(
                      subData = subData,
                      subDataBin = subDataBin,
@@ -114,30 +112,27 @@ NMA_partial <-
                  label = label,
                  endpoint = endpoint,
                  random = RANDOM,
-                 binData = binData,
-                 medData = medData,
-                 refTx = REFTX,
                  decEff = decEff,
                  lg = FALSE)
 
-if (!binData & !medData) {
+if (!is_bin & !is_med) {
   modelResults <-
     if (RANDOM) {
       NMA_partial(
-        winSource = "SurvWoodsREb.txt",
+        bugs_filename = "SurvWoodsREb.txt",
         modelParams = c("sd", "totresdev"))
     } else {
       NMA_partial(
-        winSource = "SurvWoodsFEa.txt",
+        bugs_filename = "SurvWoodsFEa.txt",
         modelParams = "totresdev")
     }
 }
 
-if (binData & !medData) {
+if (is_bin & !is_med) {
   if (!RANDOM) {
     modelResults <- NMA(
-      winSource = here::here("inst", "SurvWoodsFEa_bin.txt"),
-      dataFunc = setupData(
+      bugs_filename = here::here("inst", "SurvWoodsFEa_bin.txt"),
+      dat = setupData(
         subData = subData,
         subDataBin = subDataBin,
         subDataMed = subDataMed,        
@@ -149,15 +144,12 @@ if (binData & !medData) {
       label = label,
       endpoint = endpoint,
       random = RANDOM,
-      binData = binData,
-      medData = medData,
-      refTx = REFTX,
       decEff = decEff,
       lg = FALSE)
   } else {
     modelResults <- NMA(
-      winSource = here::here("inst", "SurvWoodsREb_bin.txt"),
-      dataFunc =
+      bugs_filename = here::here("inst", "SurvWoodsREb_bin.txt"),
+      dat =
         setupData(
           subData = subData,
           subDataBin = subDataBin,
@@ -170,19 +162,16 @@ if (binData & !medData) {
       label = label,
       endpoint = endpoint,
       random = TRUE,
-      binData = binData,
-      medData = medData,
-      refTx = REFTX,
       decEff = decEff,
       lg = FALSE)
   }
 }
 
-if (!binData & medData) {
+if (!is_bin & is_med) {
   if (!RANDOM) {
     modelResults <- NMA(
-      winSource = here::here("inst", "SurvWoodsFEa_med.txt"),
-      dataFunc = setupData(
+      bugs_filename = here::here("inst", "SurvWoodsFEa_med.txt"),
+      dat = setupData(
         subData = subData,
         subDataBin = subDataBin,
         subDataMed = subDataMed,
@@ -194,15 +183,12 @@ if (!binData & medData) {
       label = label,
       endpoint = endpoint,
       random = FALSE,
-      binData = binData,
-      medData = medData,
-      refTx = REFTX,
       decEff = decEff,
       lg = FALSE)
   } else {
     modelResults <- NMA(
-      winSource = here::here("inst", "SurvWoodsREb_med.txt"),
-      dataFunc =
+      bugs_filename = here::here("inst", "SurvWoodsREb_med.txt"),
+      dat =
         setupData(
           subData = subData,
           subDataMed = subDataMed,
@@ -215,41 +201,35 @@ if (!binData & medData) {
       label = label,
       endpoint = endpoint,
       random = TRUE,
-      binData = binData,
-      medData = medData,
-      refTx = REFTX,
       decEff = decEff,
       lg = FALSE)
   }
 }
 
-if (binData & medData) {
+if (is_bin & is_med) {
   if (!RANDOM) {
-    modelResults <- NMA(
-      winSource = here::here("inst", "SurvWoodsFEa_med_bin.txt"),
-      
-      dataFunc = setupData(
-        subData = subData,
-        subDataMed = subDataMed,
-        subDataBin = subDataBin,
-        is_random = RANDOM,
-        refTx = REFTX),
-      
-      effectParam = "beta",
-      modelParams = "totresdev",
-      folder = endpoint,
-      label = label,
-      endpoint = endpoint,
-      random = FALSE,
-      binData = binData,
-      medData = medData,
-      refTx = REFTX,
-      decEff = decEff,
-      lg = FALSE)
+    modelResults <-
+      NMA(bugs_filename = here::here("inst", "SurvWoodsFEa_med_bin.txt"),
+          dat = setupData(
+            subData = subData,
+            subDataMed = subDataMed,
+            subDataBin = subDataBin,
+            is_random = RANDOM,
+            refTx = REFTX),
+          bugs_params = bugs_params,
+          bugs_fn = bugs_fn,
+          effectParam = "beta",
+          modelParams = "totresdev",
+          folder = endpoint,
+          label = label,
+          endpoint = endpoint,
+          random = RANDOM,
+          decEff = decEff,
+          lg = FALSE)
   } else {
     modelResults <- NMA(
-      winSource = here::here("inst", "SurvWoodsREb_med_bin.txt"),
-      dataFunc = setupData(
+      bugs_filename = here::here("inst", "SurvWoodsREb_med_bin.txt"),
+      dat = setupData(
         subData = subData,
         subDataMed = subDataMed,
         subDataBin = subDataBin,
@@ -260,10 +240,7 @@ if (binData & medData) {
       folder = endpoint,
       label = label,
       endpoint = endpoint,
-      random = TRUE,
-      binData = binData,
-      medData = medData,
-      refTx = REFTX,
+      random = RANDOM,
       decEff = decEff,
       lg = FALSE)
   }
@@ -276,6 +253,6 @@ if (binData & medData) {
 #########
 
 plotNetwork(subData,
-            subDataBin, binData,
-            subDataMed, medData)
+            subDataBin, is_bin,
+            subDataMed, is_med)
 

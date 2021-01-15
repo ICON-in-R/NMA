@@ -1,198 +1,128 @@
 
 #' Network meta-analysis
 #' 
-#' @param winSource
-#' @param dataFunc 
+#' @param bugs_filename
+#' @param dat result of setupData()
+#' @param bugs_params
+#' @param bugs_fn BUGS function call
 #' @param effectParam 
 #' @param modelParams 
-#' @param folder 
+#' @param folder why is this PFS?
 #' @param label 
 #' @param endpoint 
-#' @param binData 
-#' @param medData 
-#' @param refTx 
-#' @param preRefTx 
+#' @param preRefTx what is this?
 #' @param decEff 
 #' @param random 
 #' @param lg what is this??
+#' @importFrom  glue glue
 #' 
 #' @return
+#' @export
 #' 
-NMA <- function(winSource,
-                dataFunc,
+NMA <- function(bugs_filename,
+                dat,
+                bugs_params,
+                bugs_fn,
                 effectParam = NA,
                 modelParams = NA,
                 folder,
                 label,
                 endpoint,
-                binData,
-                medData,
-                refTx = NA,
                 preRefTx = NA,
                 decEff,
                 random = FALSE,
-                lg) {
-  
-  SYS <- .Platform$OS.type
-  
-  ## Short label without spaces
-  slabel <- sub(" ", "_", label)
-  
-  ## Short label without spaces and FE/RE for data file
-  sdlabel  <-
-    sub(" ", "_", gsub("\\_RE", "", (gsub("\\_FE", "", label))))
-  
-  ## create folders
-  createFolders(folder = folder, "results", "graphs", "model", "sims", "data")
-  
-  z <- dataFunc
+                lg,
+                RUN = TRUE) {
   
   all_params <- c(effectParam, modelParams)
-  params_to_save <- all_params[!is.na(all_params)]
+  all_params <- all_params[!is.na(all_params)]
   
   if (RUN) {
-    x <-
-      try(genSamps(
-        newBugs.file = winSource,
-        bugsData = bugsData,
-        inits = inits,
+    
+    res_bugs <-
+      bugs_fn(
+        data = bugsData,
         parameters.to.save = params_to_save,
-        folder = folder))
+        model.file = bugs_filename,
+        n.chains = bugs_params$N.CHAINS,
+        inits = inits,
+        n.iter =
+          (bugs_params$N.SIMS * bugs_params$N.THIN) + bugs_params$N.BURNIN,
+        n.burnin = bugs_params$N.BURNIN,
+        n.thin = bugs_params$N.THIN
+        #codaPkg=FALSE
+      )
+    
+    if (bugs_params$PROG == "JAGS")
+      res_bugs <- res_bugs$BUGSoutput
   } else {
-    load(file = paste0(
-      folder,
-      fileSep,
-      "model",
-      fileSep,
-      "bugsObject_",
-      slabel))
+    load(file = glue("{folder}{fileSep}model{fileSep}bugsObject_{slabel}"))
   }
   
-  if (class(x) != "try-error") {
-    if (SYS == "windows" & RUN) {
-      for (ii in seq_len(N.CHAINS)) {
-        system(paste(
-          Sys.getenv("COMSPEC"),
-          "/c",
-          paste0(
-            "copy ",
-            tempdir(),
-            fileSep,
-            "inits",
-            ii,
-            ".txt ",
-            folder,
-            fileSep,
-            "model",
-            fileSep,
-            slabel,
-            "_inits",
-            ii,
-            ".txt")
-        ))
-      }
+  # diagnostic_plot()
+  
+  ## file_manip()
+  
+  dummyOR <- c(1, 1, NA, 1, 1, NA)
+  dummy <- c(0, 0, NA, 0, 0, NA)
+  
+  colEff <- c("Mean", "Median", "SE", "L95CrI", "U95CrI", "Rhat")
+  n_effectParam <- length(effectParam)
+  
+  effectParamName <-
+    c("Log Hazard Ratio", "Parameters", "DIC", "Residual Deviance")
+  
+  EffectRes_lhr <-
+    resultsFileSetUp(res_bugs$summary, "beta", dummy, dummyOR, colEff)
+  
+  para <-
+    round(res_bugs$summary[-grep(paste0("^", effectParam[1]),
+                                 rownames(res_bugs$summary)), c(1, 5, 2, 3, 7, 8)], 2)
+  
+  if (n_effectParam > 1) {
+    for (ee in 2:length(effectParam)) {
+      para <-
+        para[-grep(paste0("^", effectParam[ee]), rownames(para)), ]
       
-      system(paste(
-        Sys.getenv("COMSPEC"),
-        "/c",
-        paste0(
-          "copy ",
-          tempdir(),
-          fileSep,
-          "data.txt ",
-          folder,
-          fileSep,
-          "model",
-          fileSep,
-          slabel,
-          "_data.txt")
-      ))
-      system(paste(
-        Sys.getenv("COMSPEC"),
-        "/c",
-        paste0(
-          "copy ",
-          tempdir(),
-          fileSep,
-          winSource,
-          " ",
-          folder,
-          fileSep,
-          "model",
-          fileSep,
-          slabel,
-          "_",
-          winSource)
-      ))
     }
-    
-    save(file = paste0(
-      folder,
-      fileSep,
-      "model",
-      fileSep,
-      "bugsObject_",
-      slabel),
-      x)
-    
-    dummyOR <- c(1, 1, NA, 1, 1, NA)
-    dummy <- c(0, 0, NA, 0, 0, NA)
-    colEff <- c("Mean", "Median", "SE", "L95CrI", "U95CrI", "Rhat")
-    numEffectParam <- length(effectParam)
-    
-    effectParamName <-
-      c("Log Hazard Ratio", "Parameters", "DIC", "Residual Deviance")
-    
-    EffectRes_lhr <-
-      resultsFileSetUp(x$summary, "beta", dummy, dummyOR, colEff)
-    
-    para <-
-      round(x$summary[-grep(paste0("^", effectParam[1]),
-                            rownames(x$summary)), c(1, 5, 2, 3, 7, 8)], 2)
-    
-    if (numEffectParam > 1) {
-      for (ee in 2:length(effectParam)) {
-        para <-
-          para[-grep(paste0("^", effectParam[ee]), rownames(para)),]
-        
-      }
-    }
-    Deviance <-
-      round(x$summary[grep(paste0("^", "deviance"),
-                           rownames(x$summary)), c(1, 5, 2, 3, 7, 8)], 2)
-    Dev <- Deviance
-    
-    if (random) {
-      SD <-
-        round(x$summary[grep(paste0("^", "sd"),
-                             rownames(x$summary)), c(1, 5, 2, 3, 7, 8)], 2)
-    }
-    
-    para <-  
-      if (random) {
-        rbind(Deviance, SD)
-      } else {
-        rbind(Deviance)
-      }
-    
-    colnames(para) <- paste(colEff)
-    
-    resDev <- x$summary["totresdev", "mean"]
-    DIC <- x$DIC
-    
-    results <-
-      list(EffectRes_lhr, para, DIC = DIC, resDev = resDev)
-    
+  }
+  Deviance <-
+    round(res_bugs$summary[grep(paste0("^", "deviance"),
+                                rownames(res_bugs$summary)), c(1, 5, 2, 3, 7, 8)], 2)
+  Dev <- Deviance
+  
+  if (random) {
+    SD <-
+      round(res_bugs$summary[grep(paste0("^", "sd"),
+                                  rownames(res_bugs$summary)), c(1, 5, 2, 3, 7, 8)], 2)
   }
   
-  ## plots and table ----
+  para <-  
+    if (random) {
+      rbind(Deviance, SD)
+    } else {
+      rbind(Deviance)
+    }
+  
+  colnames(para) <- paste(colEff)
+  
+  resDev <- res_bugs$summary["totresdev", "mean"]
+  DIC <- res_bugs$DIC
+  
+  results <-
+    list(EffectRes_lhr,
+         para,
+         DIC = DIC,
+         resDev = resDev)
+  
+  
   # plots_and_tables()
-
+  
   # global variables  
- #  resDev
- #  Dev
- # slabel
- # sdlabel
+  #  resDev
+  #  Dev
+  # slabel
+  # sdlabel
   
   
   
