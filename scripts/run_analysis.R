@@ -45,7 +45,7 @@ currAnalysis <- analysis[a, ]
 
 treatName <- currAnalysis$Comparators
 
-analysis_description <- currAnalysis$Analysis_description
+analysis_desc <- currAnalysis$analysis_desc
 
 analysis_type <- currAnalysis$Analysis_Type
 
@@ -72,7 +72,7 @@ is_med <- currAnalysis$MedData == "YES"
 #}
 
 
-# read in dataset
+# read in datasets
 subData <-
   read.csv(
     paste0(here::here("raw_data"), "/survdata_", endpoint, "_", analysis_type, ".csv"),
@@ -96,153 +96,20 @@ if (is_med) {
 }
 
 
-NMA_partial <-
-  purrr::partial(NMA,
-                 dat =
-                   setupData(
-                     subData = subData,
-                     subDataBin = subDataBin,
-                     subDataMed = subDataMed,
-                     is_random = RANDOM,
-                     refTx = REFTX),
-                 effectParam = "beta",
-                 folder = endpoint,
-                 label = label,
-                 endpoint = endpoint,
-                 random = RANDOM,
-                 decEff = decEff,
-                 lg = FALSE)
-
-if (!is_bin & !is_med) {
-  modelResults <-
-    if (RANDOM) {
-      NMA_partial(
-        bugs_filename = "SurvWoodsREb.txt",
-        modelParams = c("sd", "totresdev"))
-    } else {
-      NMA_partial(
-        bugs_filename = "SurvWoodsFEa.txt",
-        modelParams = "totresdev")
-    }
-}
-
-if (is_bin & !is_med) {
-  if (!RANDOM) {
-    modelResults <- NMA(
-      bugs_filename = here::here("inst", "SurvWoodsFEa_bin.txt"),
-      dat = setupData(
-        subData = subData,
-        subDataBin = subDataBin,
-        subDataMed = subDataMed,        
-        is_random = RANDOM,
-        refTx = REFTX),
-      effectParam = "beta",
-      modelParams = NA,
-      folder = endpoint,
-      label = label,
-      endpoint = endpoint,
-      random = RANDOM,
-      decEff = decEff,
-      lg = FALSE)
-  } else {
-    modelResults <- NMA(
-      bugs_filename = here::here("inst", "SurvWoodsREb_bin.txt"),
-      dat =
-        setupData(
-          subData = subData,
-          subDataBin = subDataBin,
-          subDataMed = subDataMed,        
-          is_random = RANDOM,
-          refTx = REFTX),
-      effectParam = "beta",
-      modelParams = "sd",
-      folder = endpoint,
-      label = label,
-      endpoint = endpoint,
-      random = TRUE,
-      decEff = decEff,
-      lg = FALSE)
-  }
-}
-
-if (!is_bin & is_med) {
-  if (!RANDOM) {
-    modelResults <- NMA(
-      bugs_filename = here::here("inst", "SurvWoodsFEa_med.txt"),
-      dat = setupData(
-        subData = subData,
-        subDataBin = subDataBin,
-        subDataMed = subDataMed,
-        is_random = RANDOM,
-        refTx = REFTX),
-      effectParam = "beta",
-      modelParams = NA,
-      folder = endpoint,
-      label = label,
-      endpoint = endpoint,
-      random = FALSE,
-      decEff = decEff,
-      lg = FALSE)
-  } else {
-    modelResults <- NMA(
-      bugs_filename = here::here("inst", "SurvWoodsREb_med.txt"),
-      dat =
-        setupData(
-          subData = subData,
-          subDataMed = subDataMed,
-          subDataBin = subDataBin,
-          is_random = RANDOM,
-          refTx = REFTX),
-      effectParam = "beta",
-      modelParams = "sd",
-      folder = endpoint,
-      label = label,
-      endpoint = endpoint,
-      random = TRUE,
-      decEff = decEff,
-      lg = FALSE)
-  }
-}
-
-if (is_bin & is_med) {
-  if (!RANDOM) {
-    modelResults <-
-      NMA(bugs_filename = here::here("inst", "SurvWoodsFEa_med_bin.txt"),
-          dat = setupData(
-            subData = subData,
+modelResults <-
+  setupData(subData = subData,
             subDataMed = subDataMed,
             subDataBin = subDataBin,
             is_random = RANDOM,
-            refTx = REFTX),
-          bugs_params = bugs_params,
-          bugs_fn = bugs_fn,
-          effectParam = "beta",
-          modelParams = "totresdev",
-          folder = endpoint,
-          label = label,
-          endpoint = endpoint,
-          random = RANDOM,
-          decEff = decEff,
-          lg = FALSE)
-  } else {
-    modelResults <- NMA(
-      bugs_filename = here::here("inst", "SurvWoodsREb_med_bin.txt"),
-      dat = setupData(
-        subData = subData,
-        subDataMed = subDataMed,
-        subDataBin = subDataBin,
-        is_random = RANDOM,
-        refTx = REFTX),
+            refTx = REFTX) %>% 
+  NMA(dat = .,
+      bugs_params = bugs_params,
+      bugs_fn = bugs_fn,
       effectParam = "beta",
-      modelParams = c("sd", "totresdev"),
-      folder = endpoint,
+      modelParams = "totresdev",
       label = label,
       endpoint = endpoint,
-      random = RANDOM,
-      decEff = decEff,
-      lg = FALSE)
-  }
-}
+      random = RANDOM)
 
 #}
 

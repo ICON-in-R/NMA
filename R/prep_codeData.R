@@ -8,7 +8,7 @@
 #' @param subDataMed 
 #' @param refTx 
 #' @importFrom purrr map
-#' @importFrom dplyr
+#' @import dplyr
 #' 
 #' @return List of data and statistics.
 #'         If no binary of median data empty sub-lists.

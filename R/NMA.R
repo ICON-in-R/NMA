@@ -1,45 +1,42 @@
 
 #' Network meta-analysis
 #' 
-#' @param bugs_filename
 #' @param dat result of setupData()
 #' @param bugs_params
 #' @param bugs_fn BUGS function call
 #' @param effectParam 
 #' @param modelParams 
-#' @param folder why is this PFS?
+#' @param output_dir
 #' @param label 
 #' @param endpoint 
 #' @param preRefTx what is this?
-#' @param decEff 
 #' @param random 
-#' @param lg what is this??
 #' @param fileSep File separator; string
 #' 
-#' @importFrom  glue glue
+#' @importFrom glue glue
+#' @importFrom here here
 #' 
 #' @return
 #' @export
 #' 
-NMA <- function(bugs_filename,
-                dat,
+NMA <- function(dat,
                 bugs_params,
                 bugs_fn,
                 effectParam = NA,
                 modelParams = NA,
-                folder,
+                output_dir = "output",
                 label,
                 endpoint,
                 preRefTx = NA,
-                decEff,
                 random = FALSE,
-                lg,
                 RUN = TRUE,
                 fileSep = "\\") {
   
   browser()
   params_to_save <- c(effectParam, modelParams)
   params_to_save <- params_to_save[!is.na(params_to_save)]
+  
+  bugs_filename <- make_bugs_filename(random, dat)
   
   if (RUN) {
     
@@ -61,7 +58,7 @@ NMA <- function(bugs_filename,
     if (bugs_params$PROG == "JAGS")
       res_bugs <- res_bugs$BUGSoutput
   } else {
-    load(file = glue("{folder}{fileSep}model{fileSep}bugsObject_{slabel}"))
+    load(file = glue("{output_dir}{fileSep}model{fileSep}bugsObject_{slabel}"))
   }
   
   ## if (DIAGNOSTICS) 

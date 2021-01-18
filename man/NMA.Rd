@@ -2,31 +2,45 @@
 % Please edit documentation in R/NMA.R
 \name{NMA}
 \alias{NMA}
-\title{NMA}
+\title{Network meta-analysis}
 \usage{
 NMA(
-  winSource,
-  dataFunc,
+  dat,
+  bugs_params,
+  bugs_fn,
   effectParam = NA,
   modelParams = NA,
-  folder,
+  output_dir = "output",
   label,
   endpoint,
-  binData,
-  medData,
-  refTx = NA,
   preRefTx = NA,
-  decEff,
   random = FALSE,
-  lg
+  RUN = TRUE,
+  fileSep = "\\\\"
 )
 }
 \arguments{
-\item{winSource}{}
+\item{dat}{result of setupData()}
+
+\item{bugs_fn}{BUGS function call}
+
+\item{effectParam}{}
+
+\item{modelParams}{}
+
+\item{label}{}
+
+\item{endpoint}{}
+
+\item{preRefTx}{what is this?}
+
+\item{random}{}
+
+\item{fileSep}{File separator; string}
 }
 \value{
 
 }
 \description{
-NMA
+Network meta-analysis
 }

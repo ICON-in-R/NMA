@@ -10,11 +10,7 @@ txEffectPlot <- function(sims,
   
   if (preRefTx %in% txListSims &
       !is.na(preRefTx)) {
-    if (!lg) {
       plotSims <- plotSims - plotSims[, preRefTx]
-    } else{
-      plotSims <- plotSims - plotSims[, preRefTx]
-    }
   }
   
   if (!(preRefTx %in% txListSims) |
