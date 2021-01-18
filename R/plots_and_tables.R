@@ -1,23 +1,28 @@
 
+#' plots_and_table
 #'
-plots_and_table <- function() {
+#' @param dat 
+#' @param effectParam 
+#' @param labels 
+#' @param fileSep 
+#'
+#' @return
+#' @export
+#'
+plots_and_table <- function(dat,
+                            effectParam,
+                            labels,
+                            fileSep = "/") {
   
   if (!is.na(effectParam)) {
     simsLHR <-
       x$sims.matrix[, grep(paste0("^beta"), rownames(x$summary))]
     simsLHR <- cbind(0, simsLHR)
     colnames(simsLHR) <- txList
-    sims <<- simsLHR
+    sims <- simsLHR
     
     # rank probability plot
-    rankFileLoc <<-
-      paste0(folder,
-             fileSep,
-             "graphs",
-             fileSep,
-             "ranking_",
-             slabel,
-             ".pdf")
+    rankFileLoc <- paste0(folder, fileSep, "graphs", fileSep, "ranking_", labels$short, ".pdf")
     
     rankProbPlot(sims)
     
@@ -28,14 +33,7 @@ plots_and_table <- function() {
     
     # forest plot
     
-    forestFileLoc <<-
-      paste0(folder,
-             fileSep,
-             "graphs",
-             fileSep,
-             "forest_",
-             slabel,
-             ".pdf")
+    forestFileLoc <- paste0(folder, fileSep, "graphs", fileSep, "forest_", labels$short, ".pdf")
     
     txEffectPlot(sims, preRefTx, refTx)
     
@@ -46,21 +44,13 @@ plots_and_table <- function() {
     
     # pairwise table
     
-    pairTable <<- pairwiseTable(sims = sims)
-    pairFileLoc <<-
-      paste0(folder,
-             fileSep,
-             "results",
-             fileSep,
-             "Pairwise_results_",
-             slabel,
-             ".csv")
+    pairTable <- pairwiseTable(sims = sims)
+    pairFileLoc <- paste0(folder, fileSep, "results", fileSep, "Pairwise_results_", labels$short, ".csv")
     
     write.table(
-      paste(
-        "Pairwise Treatment Co-efficients;",
-        "Median hazard ratio (95% Credible Interval)",
-        sep = " "),
+      paste("Pairwise Treatment Co-efficients;",
+            "Median hazard ratio (95% Credible Interval)",
+            sep = " "),
       file = pairFileLoc ,
       append = FALSE)
     
@@ -84,17 +74,11 @@ plots_and_table <- function() {
       col.names = NA)
   }
   
-  # network diagramslabel
+  # network diagramlabels$short
   
   layout(1)
-  networkFileLoc <<-
-    paste0(folder,
-           fileSep,
-           "graphs",
-           fileSep,
-           "netGraph_",
-           slabel,
-           ".pdf")
+  networkFileLoc <-
+    paste0(folder, fileSep, "graphs", fileSep, "netGraph_", labels$short, ".pdf")
   
   par(mar = c(3, 3, 3, 3))
   plotNetwork(
@@ -119,14 +103,8 @@ plots_and_table <- function() {
   
   dataTableLong <- subData
   
-  dataFileLoc <<-
-    paste0(folder,
-           fileSep,
-           "data",
-           fileSep,
-           "data_",
-           sdlabel,
-           ".csv")
+  dataFileLoc <-
+    paste0(folder, fileSep, "data", fileSep, "data_", sdlabel, ".csv")
   
   write.table(
     paste0(
@@ -148,17 +126,9 @@ plots_and_table <- function() {
     append = TRUE,
     col.names = NA)
   
-  if (binData) {
-    dataTableLongBin <- subDataBin
+  if (!is.na(dat$survDatBin)) {
     
-    dataFileLocBin <<-
-      paste0(folder,
-             fileSep,
-             "data",
-             fileSep,
-             "data_",
-             sdlabel,
-             "_bin.csv")
+    dataFileLocBin <- paste0(folder, fileSep, "data", fileSep, "data_", sdlabel, "_bin.csv")
     
     write.table(
       paste0(
@@ -174,24 +144,16 @@ plots_and_table <- function() {
       col.names = NA)
     
     write.table(
-      dataTableLongBin,
+      dat$subDataBin,
       file = dataFileLocBin,
       sep = ",",
       append = TRUE,
       col.names = NA)
   }
   
-  if (medData) {
-    dataTableLongMed <- subDataMed
+  if (!is.na(dat$survDatMed)) {
     
-    dataFileLocMed <<-
-      paste0(folder,
-             fileSep,
-             "data",
-             fileSep,
-             "data_",
-             sdlabel,
-             "_med.csv")
+    dataFileLocMed <- paste0(folder, fileSep, "data", fileSep, "data_", sdlabel, "_med.csv")
     
     write.table(
       paste0("Key: ..."),
@@ -206,7 +168,7 @@ plots_and_table <- function() {
       col.names = NA)
     
     write.table(
-      dataTableLongMed,
+      dat$subDataMed,
       file = dataFileLocMed,
       sep = ",",
       append = TRUE,
@@ -215,14 +177,7 @@ plots_and_table <- function() {
   
   # results table
   
-  resultsFileLoc <<-
-    paste0(folder,
-           fileSep,
-           "results",
-           fileSep,
-           "nmaResults_",
-           slabel,
-           ".csv")
+  resultsFileLoc <- paste0(folder, fileSep, "results", fileSep, "nmaResults_", labels$short, ".csv")
   
   write.table(
     paste(
@@ -262,5 +217,6 @@ plots_and_table <- function() {
       col.names = NA)
   }
   
-  
+  invisible(bugs_res)
 }
+

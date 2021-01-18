@@ -14,6 +14,7 @@
 #' @param fileSep File separator; string
 #' 
 #' @importFrom glue glue
+#' @importFrom purrr map
 #' @importFrom here here
 #' 
 #' @return
@@ -37,17 +38,20 @@ NMA <- function(dat,
   params_to_save <- params_to_save[!is.na(params_to_save)]
   
   bugs_filename <- make_bugs_filename(random, dat)
+  labels <- make_labels(label)
   
   if (RUN) {
+    init_vals <- map(1:bugs_params$N.CHAINS, ~dat$inits())
     
     res_bugs <-
-      # bugs_fn(
-      R2OpenBUGS::bugs(
+      bugs_fn(
+      # R2OpenBUGS::bugs(
+      # R2jags::jags(
         data = dat$bugsData,
         parameters.to.save = params_to_save,
         model.file = bugs_filename,
         n.chains = bugs_params$N.CHAINS,
-        inits = dat$inits(),
+        inits = init_vals,
         n.iter =
           (bugs_params$N.SIMS * bugs_params$N.THIN) + bugs_params$N.BURNIN,
         n.burnin = bugs_params$N.BURNIN,
@@ -58,18 +62,22 @@ NMA <- function(dat,
     if (bugs_params$PROG == "JAGS")
       res_bugs <- res_bugs$BUGSoutput
   } else {
-    load(file = glue("{output_dir}{fileSep}model{fileSep}bugsObject_{slabel}"))
+    load(file = glue("{output_dir}{fileSep}model{fileSep}bugsObject_{labels$short}"))
   }
   
-  ## if (DIAGNOSTICS) 
-  ##    diagnostic_plot()
+  file_manip(labels, folder, fileSep)
   
-  ## file_manip()
+  if (DIAGNOSTICS)
+     diagnostic_plot(res_bugs, labels)
   
-  ## bugs_stats()
+  bugs_stats(res_bugs, effectParam, random)
   
-  ## plots_and_tables()
+  plots_and_tables(dat, effectParam, labels)
+  
+  save(res_bugs,
+       file = paste0(folder, fileSep, "model", fileSep, "bugsObject_", labels$short, ".RData"))
   
   return(res_bugs)
 }
 
+ 

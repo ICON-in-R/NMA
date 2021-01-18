@@ -1,6 +1,10 @@
 
-#'
-createFolders <- function(folder, ...) {
+#' create output folders
+#' 
+createFolders <- function(folder,
+                          fileSep = "\\",
+                          ...) {
+  
   subFolders <- list(...)
   
   ##TODO: why not just use inbuilt R commands?

@@ -1,6 +1,16 @@
 
+#' bugs_stats
 #'
-bugs_stats <- function() {
+#' @param res_bugs output from running bugs
+#' @param effectParam 
+#' @param random RE or FE
+#'
+#' @return
+#' @export
+#'
+bugs_stats <- function(res_bugs,
+                       effectParam,
+                       random) {
   
   dummyOR <- c(1, 1, NA, 1, 1, NA)
   dummy <- c(0, 0, NA, 0, 0, NA)
@@ -14,9 +24,11 @@ bugs_stats <- function() {
   EffectRes_lhr <-
     resultsFileSetUp(res_bugs$summary, "beta", dummy, dummyOR, colEff)
   
+  col_idx <- c(1, 5, 2, 3, 7, 8)
+  
   para <-
     round(res_bugs$summary[-grep(paste0("^", effectParam[1]),
-                                 rownames(res_bugs$summary)), c(1, 5, 2, 3, 7, 8)], 2)
+                                 rownames(res_bugs$summary)), col_idx], 2)
   
   if (n_effectParam > 1) {
     for (ee in 2:length(effectParam)) {
@@ -25,15 +37,14 @@ bugs_stats <- function() {
       
     }
   }
+  
   Deviance <-
     round(res_bugs$summary[grep(paste0("^", "deviance"),
-                                rownames(res_bugs$summary)), c(1, 5, 2, 3, 7, 8)], 2)
-  Dev <- Deviance
-  
+                                rownames(res_bugs$summary)), col_idx], 2)
   if (random) {
     SD <-
       round(res_bugs$summary[grep(paste0("^", "sd"),
-                                  rownames(res_bugs$summary)), c(1, 5, 2, 3, 7, 8)], 2)
+                                  rownames(res_bugs$summary)), col_idx], 2)
   }
   
   para <-  
@@ -48,10 +59,9 @@ bugs_stats <- function() {
   resDev <- res_bugs$summary["totresdev", "mean"]
   DIC <- res_bugs$DIC
   
-  results <-
-    list(EffectRes_lhr,
-         para,
-         DIC = DIC,
-         resDev = resDev)
+  list(EffectRes_lhr,
+       para,
+       DIC = DIC,
+       resDev = resDev)
 }
 

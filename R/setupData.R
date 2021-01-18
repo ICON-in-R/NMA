@@ -1,5 +1,7 @@
 
-#'
+#' randomly generate MCMC initial values
+#' closure
+#' 
 rinits <-
   function(nTx, nStudies, param_names) {
     force(nTx)
@@ -152,7 +154,7 @@ setupData <- function(subData,
         BnObs = input$subDataBin$BnObs)
     
     return(list(
-      inits = rinits(nTx, nStudies, param_names),
+      inits = rinits(input$nTx, input$nStudies, param_names),
       subData = input$subData$dat,
       subDataBin = input$subDataBin$dat,
       subDataMed = input$subDataMed$dat,

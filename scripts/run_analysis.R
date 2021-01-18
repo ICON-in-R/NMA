@@ -10,16 +10,14 @@ library(purrr)
 bugs_params <-
   list(
     PROG = "openBugs",
-    N.BURNIN = 1000,
-    N.SIMS = 1500,
+    N.BURNIN = 10,#00,
+    N.SIMS = 150,#0,
     N.CHAINS = 2,
     N.THIN = 1,
     PAUSE = TRUE)
 
 RUN <- TRUE
 DIAGNOSTICS <- TRUE
-BASEPROB <- NA
-decEff <- TRUE
 
 saveplot_fn <- customSavePlot()
 bugs_fn <- customBugs()
@@ -27,47 +25,30 @@ bugs_fn <- customBugs()
 
 ## run analysis
 
-analysis <-
+analyses_params <-
   read.csv(
     here::here("raw_data", "AnalysisList.csv"),
     as.is = TRUE,
-    na.strings = c("NR", "NA"))
-
-analysis <- filter(analysis, Endpoint_type == "Surv")
-
+    na.strings = c("NR", "NA")) %>% 
+  filter(Endpoint_type == "Surv") %>% 
+  dplyr::rename(name = Analysis_name,
+                type = Analysis_Type)
 
 # for (a in 1:nrow(analysis)) {
 a <- 1
 
-print(analysis$Analysis_name[a])
+analysis <- analyses_params[a, ]
 
-currAnalysis <- analysis[a, ]
+# fixed effects RANDOM=FALSE, random effects RANDOM=TRUE
+RANDOM <- analysis$Model_effects == "RE"
 
-treatName <- currAnalysis$Comparators
-
-analysis_desc <- currAnalysis$analysis_desc
-
-analysis_type <- currAnalysis$Analysis_Type
-
-# for fixed effects RANDOM=FALSE, for random effects RANDOM=TRUE
-RANDOM <- currAnalysis$Model_effects == "RE"
-
-label <- currAnalysis$Analysis_name
-
-endpoint <- currAnalysis$Endpoint
-
-endpoint_type <- currAnalysis$Endpoint_type
-
-decEff <- currAnalysis$Decrease_Effect
-
-REFTX <- currAnalysis$REFTX
+REFTX <- analysis$REFTX
 
 # indicator for availability of binary endpoint data
-is_bin <- currAnalysis$BinData == "YES"
+is_bin <- analysis$BinData == "YES"
 
 # indicator for availability of median endpoint data
-is_med <- currAnalysis$MedData == "YES"
-
+is_med <- analysis$MedData == "YES"
 
 #}
 
@@ -75,14 +56,14 @@ is_med <- currAnalysis$MedData == "YES"
 # read in datasets
 subData <-
   read.csv(
-    paste0(here::here("raw_data"), "/survdata_", endpoint, "_", analysis_type, ".csv"),
+    paste0(here::here("raw_data"), "/survdata_", analysis$Endpoint, "_", analysis$type, ".csv"),
     header = TRUE,
     as.is = TRUE)
 
 if (is_bin) {
   subDataBin <-
     read.csv(
-      paste0(here::here("raw_data"), "/survdata_", endpoint, "_bin.csv"),
+      paste0(here::here("raw_data"), "/survdata_", analysis$Endpoint, "_bin.csv"),
       header = TRUE,
       as.is = TRUE)
 }
@@ -90,13 +71,14 @@ if (is_bin) {
 if (is_med) {
   subDataMed <-
     read.csv(
-      paste0(here::here("raw_data"), "/survdata_", endpoint, "_med.csv"),
+      paste0(here::here("raw_data"), "/survdata_", analysis$Endpoint, "_med.csv"),
       header = TRUE,
-      as.is = TRUE)
+      as.is = TRUE) %>% 
+    mutate(medR = floor(medR))
 }
 
 
-modelResults <-
+nma_res <-
   setupData(subData = subData,
             subDataMed = subDataMed,
             subDataBin = subDataBin,
@@ -107,8 +89,8 @@ modelResults <-
       bugs_fn = bugs_fn,
       effectParam = "beta",
       modelParams = "totresdev",
-      label = label,
-      endpoint = endpoint,
+      label = analysis$name,
+      endpoint = analysis$Endpoint,
       random = RANDOM)
 
 #}
