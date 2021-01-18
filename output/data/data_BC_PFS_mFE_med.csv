@@ -1,0 +1,17 @@
+"" "x"
+"1" "Key: ..."
+"" "x"
+"1" "------------------"
+"","study","base","tx","median","medN","medR","mediantx","medianbase","medianstudy"
+"1","An 2016","ERL/GEF","ERL/GEF",14,45,22,1,1,27
+"2","An 2016","ERL/GEF","GEF+PEM",18,45,22,17,1,27
+"3","CALGB 30406 (NCT00126581) (Janne 2012)","ERL/GEF","ERL/GEF",14.1,33,16,1,1,30
+"4","CALGB 30406 (NCT00126581) (Janne 2012)","ERL/GEF","ERL+PAC+CARBO",17.2,33,16,10,1,30
+"5","GENOA / NCT02319577 (Genova, 2019)","ERL/GEF","ERL/GEF",9.5,21,10,1,1,32
+"6","GENOA / NCT02319577 (Genova, 2019)","ERL/GEF","VIN+GEF",6.2,23,11,24,1,32
+"7","IFCT-1503 ACE-Lung (Cortot 2019)","AFA","AFA",11.1,59,29,2,2,29
+"8","IFCT-1503 ACE-Lung (Cortot 2019)","AFA","AFA+CET",12.8,59,29,3,2,29
+"9","NCT01502202 (Lee 2016)","CIS+PEM+GEF_m","CIS+PEM",7.8,37,18,5,6,31
+"10","NCT01502202 (Lee 2016)","CIS+PEM+GEF_m","CIS+PEM+GEF_m",13.3,39,19,6,6,31
+"11","UMIN000013586 (Kitagawa, 2019)","ERL/GEF","ERL/GEF",15.1,10,5,1,1,28
+"12","UMIN000013586 (Kitagawa, 2019)","ERL/GEF","GEF+BEV",5.4,6,3,11,1,28

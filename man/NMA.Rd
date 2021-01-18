@@ -15,7 +15,8 @@ NMA(
   endpoint,
   preRefTx = NA,
   random = FALSE,
-  RUN = TRUE,
+  run_bugs = TRUE,
+  DIAGNOSTICS = TRUE,
   fileSep = "\\\\"
 )
 }
@@ -28,13 +29,15 @@ NMA(
 
 \item{modelParams}{}
 
-\item{label}{}
-
 \item{endpoint}{}
 
 \item{preRefTx}{what is this?}
 
 \item{random}{}
+
+\item{run_bugs}{}
+
+\item{DIAGNOSTICS}{Produce diagnostic plots; logical}
 
 \item{fileSep}{File separator; string}
 }

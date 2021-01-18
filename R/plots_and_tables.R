@@ -17,7 +17,6 @@ plots_and_tables <- function(dat,
                              folder = "output",
                              fileSep = "/") {
   
-  browser()
   if (all(!is.na(effectParam))) {
     sims <-
       res_bugs$sims.matrix[, grep(paste0("^beta"), rownames(res_bugs$summary))]
@@ -36,14 +35,14 @@ plots_and_tables <- function(dat,
     
     # forest plot
     
-    forestFileLoc <- paste0(folder, fileSep, "graphs", fileSep, "forest_", labels$short, ".pdf")
-    
-    txEffectPlot(sims, preRefTx, refTx)
-    
-    # newSavePlot(file = forestFileLoc)
-    pdf(file = forestFileLoc)
-    rankProbPlot(sims)
-    dev.off()
+    # forestFileLoc <- paste0(folder, fileSep, "graphs", fileSep, "forest_", labels$short, ".pdf")
+    # 
+    # txEffectPlot(sims, preRefTx, refTx)
+    # 
+    # # newSavePlot(file = forestFileLoc)
+    # pdf(file = forestFileLoc)
+    # rankProbPlot(sims)
+    # dev.off()
     
     # pairwise table
     
@@ -77,42 +76,18 @@ plots_and_tables <- function(dat,
       col.names = NA)
   }
   
-  # network diagramlabels$short
-  
-  layout(1)
-  networkFileLoc <-
-    paste0(folder, fileSep, "graphs", fileSep, "netGraph_", labels$short, ".pdf")
-  
-  par(mar = c(3, 3, 3, 3))
-  plotNetwork(
-    subData = subData,
-    subDataBin = subDataBin,
-    binData = binData,
-    subDataMed = subDataMed,
-    medData = medData,
-    mode = "fruchtermanreingold",
-    label.pos = 0,
-    vertex.enclose = TRUE,
-    pad = 1,
-    label.cex = 0.7,
-    vertex.cex = 1)
-  
-  # newSavePlot(file = networkFileLoc)
-  pdf(file = networkFileLoc)
-  rankProbPlot(sims)
-  dev.off()
-  
+
   # data table
   
-  dataTableLong <- subData
-  
   dataFileLoc <-
-    paste0(folder, fileSep, "data", fileSep, "data_", sdlabel, ".csv")
+    paste0(folder, fileSep, "data", fileSep, "data_", labels$refe, ".csv")
   
   write.table(
     paste0(
-      "Key: Lmean=mean log hazard ratios; Lse=standard error for log hazard ratios; multi=multi-arm trial indicator"),
-    file = dataFileLoc ,
+      "Key: Lmean=mean log hazard ratios;
+            Lse=standard error for log hazard ratios;
+            multi=multi-arm trial indicator"),
+    file = dataFileLoc,
     append = FALSE,
     col.names = NA)
   
@@ -123,15 +98,15 @@ plots_and_tables <- function(dat,
     col.names = NA)
   
   write.table(
-    dataTableLong,
+    dat$subData,
     file = dataFileLoc,
     sep = ",",
     append = TRUE,
     col.names = NA)
   
-  if (!is.na(dat$survDatBin)) {
+  if (all(!is.na(dat$subDataBin))) {
     
-    dataFileLocBin <- paste0(folder, fileSep, "data", fileSep, "data_", sdlabel, "_bin.csv")
+    dataFileLocBin <- paste0(folder, fileSep, "data", fileSep, "data_", labels$refe, "_bin.csv")
     
     write.table(
       paste0(
@@ -154,9 +129,9 @@ plots_and_tables <- function(dat,
       col.names = NA)
   }
   
-  if (!is.na(dat$survDatMed)) {
+  if (all(!is.na(dat$subDataMed))) {
     
-    dataFileLocMed <- paste0(folder, fileSep, "data", fileSep, "data_", sdlabel, "_med.csv")
+    dataFileLocMed <- paste0(folder, fileSep, "data", fileSep, "data_", labels$refe, "_med.csv")
     
     write.table(
       paste0("Key: ..."),
@@ -182,18 +157,20 @@ plots_and_tables <- function(dat,
   
   resultsFileLoc <- paste0(folder, fileSep, "results", fileSep, "nmaResults_", labels$short, ".csv")
   
-  write.table(
-    paste(
-      "Model Co-efficients:",
-      "treatment effects compared to",
-      refTx,
-      sep = " "),
-    file = resultsFileLoc,
-    append = FALSE)
+  # write.table(
+  #   paste(
+  #     "Model Co-efficients:",
+  #     "treatment effects compared to",
+  #     refTx,
+  #     sep = " "),
+  #   file = resultsFileLoc,
+  #   append = FALSE)
   
   write.table(
     paste0(
-      "Key: SE=standard error; L95CrI/U95CrI=lower/upper 95% credible interval; DIC=deviance information criterion"),
+      "Key: SE=standard error;
+            L95CrI/U95CrI=lower/upper 95% credible interval;
+            DIC=deviance information criterion"),
     file = resultsFileLoc,
     append = TRUE,
     col.names = NA)
@@ -203,23 +180,24 @@ plots_and_tables <- function(dat,
     file = resultsFileLoc ,
     append = TRUE,
     col.names = NA)
+
+  ##TODO: what is this doing?...  
+  # for (i in seq_along()) {
+  #   write.table(
+  #     effectParamName[i],
+  #     file = resultsFileLoc,
+  #     sep = ",",
+  #     append = TRUE,
+  #     col.names = NA)
+  #   
+  #   write.table(
+  #     results[i],
+  #     file = resultsFileLoc,
+  #     sep = ",",
+  #     append = TRUE,
+  #     col.names = NA)
+  # }
   
-  for (i in seq_along(results)) {
-    write.table(
-      effectParamName[i],
-      file = resultsFileLoc,
-      sep = ",",
-      append = TRUE,
-      col.names = NA)
-    
-    write.table(
-      results[i],
-      file = resultsFileLoc,
-      sep = ",",
-      append = TRUE,
-      col.names = NA)
-  }
-  
-  invisible(bugs_res)
+  invisible(res_bugs)
 }
 

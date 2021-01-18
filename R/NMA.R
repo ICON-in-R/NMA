@@ -8,10 +8,11 @@
 #' @param modelParams 
 #' @param output_dir
 #' @param label
-#' @param run_bugs
 #' @param endpoint 
 #' @param preRefTx what is this?
 #' @param random 
+#' @param run_bugs 
+#' @param DIAGNOSTICS Produce diagnostic plots; logical
 #' @param fileSep File separator; string
 #' 
 #' @importFrom glue glue
@@ -32,6 +33,7 @@ NMA <- function(dat,
                 preRefTx = NA,
                 random = FALSE,
                 run_bugs = TRUE,
+                DIAGNOSTICS = TRUE,
                 fileSep = "\\") {
   
   params_to_save <- c(effectParam, modelParams)
@@ -81,7 +83,7 @@ NMA <- function(dat,
   plots_and_tables(dat, res_bugs, effectParam, labels)
   
   save(res_bugs,
-       file = paste0(output_dir, fileSep, "model", fileSep, "bugsObject_", labels$short, ".RData"))
+       file = glue("{output_dir}{fileSep}model{fileSep}bugsObject_{labels$short}.RData"))
   
   return(res_bugs)
 }

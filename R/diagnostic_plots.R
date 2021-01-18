@@ -4,6 +4,7 @@
 #' @param folder
 #' @importFrom glue glue
 #' @importFrom here here
+#' @importFrom coda as.mcmc.list traceplot varnames densplot autocorr.plot gelman.plot
 #' 
 #' @export
 #' 
@@ -29,7 +30,7 @@ diagnostic_plots <- function(res_bugs,
       # fix size in inches (except length grows with # variables)
       # Can play with this but will give errors if too large
       res = ifelse(nc <= 20,
-                   yes = 300,                     # resolution 300 dpi unless too many variables
+                   yes = 300,                   # resolution 300 dpi unless too many variables
                    no = round(6000/nc, -1)))    # otherwise pick something lower
     
     # same number of rows as variables in mcmc object
@@ -38,8 +39,6 @@ diagnostic_plots <- function(res_bugs,
         mar = c(2, 2, 2, 1) + 0.1)               # small margins around each plot
     
     for (ii in seq_len(nc)) {
-      # for each variable:
-      
       # trace plot. varnames gives e.g. 'baseMean', 'mu[5]'
       traceplot(curr_mcmc[, ii])
       title(paste("Trace plot for ", varnames(curr_mcmc)[ii], sep = ""), cex.main = 0.8)

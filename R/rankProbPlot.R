@@ -6,7 +6,7 @@
 #' @param sims sims.matrix bugs output
 #' @param labels 
 #'
-#' @importFrom gplots ballonplots
+#' @importFrom gplots balloonplot
 #' @return
 #' @export
 #'

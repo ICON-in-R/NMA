@@ -4,12 +4,23 @@
 \alias{save_bugs_files}
 \title{save_bugs_files}
 \usage{
-save_bugs_files(labels, bugs_filename, folder = "output", fileSep = "/")
+save_bugs_files(
+  res_bugs,
+  bugs_params,
+  run_bugs,
+  labels,
+  folder = "output",
+  fileSep = "/"
+)
 }
 \arguments{
-\item{labels}{}
+\item{res_bugs}{}
 
-\item{bugs_filename}{}
+\item{bugs_params}{}
+
+\item{run_bugs}{}
+
+\item{labels}{}
 
 \item{folder}{}
 

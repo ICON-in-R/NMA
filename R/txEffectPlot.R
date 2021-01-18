@@ -63,7 +63,7 @@ txEffectPlot <- function(dat,
   
   axis(
     1,
-    at = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
+    at =    c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
     label = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
     cex.axis = 0.8)
   abline(v = 1, col = "grey")
