@@ -7,7 +7,8 @@
 #' @param effectParam 
 #' @param modelParams 
 #' @param output_dir
-#' @param label 
+#' @param label
+#' @param run_bugs
 #' @param endpoint 
 #' @param preRefTx what is this?
 #' @param random 
@@ -30,17 +31,18 @@ NMA <- function(dat,
                 endpoint,
                 preRefTx = NA,
                 random = FALSE,
-                RUN = TRUE,
+                run_bugs = TRUE,
                 fileSep = "\\") {
   
-  browser()
   params_to_save <- c(effectParam, modelParams)
   params_to_save <- params_to_save[!is.na(params_to_save)]
   
   bugs_filename <- make_bugs_filename(random, dat)
   labels <- make_labels(label)
   
-  if (RUN) {
+  ## run bugs model ----
+  
+  if (run_bugs) {
     init_vals <- map(1:bugs_params$N.CHAINS, ~dat$inits())
     
     res_bugs <-
@@ -65,17 +67,21 @@ NMA <- function(dat,
     load(file = glue("{output_dir}{fileSep}model{fileSep}bugsObject_{labels$short}"))
   }
   
-  file_manip(labels, folder, fileSep)
+  ## process output ----
+  
+  createFolders(folder = output_dir, fileSep,
+                "results", "graphs", "model", "sims", "data", "diagnostics")
+  save_bugs_files(res_bugs, bugs_params, run_bugs, labels, output_dir, fileSep)
   
   if (DIAGNOSTICS)
-     diagnostic_plot(res_bugs, labels)
+     diagnostic_plots(res_bugs, labels)
   
   bugs_stats(res_bugs, effectParam, random)
   
-  plots_and_tables(dat, effectParam, labels)
+  plots_and_tables(dat, res_bugs, effectParam, labels)
   
   save(res_bugs,
-       file = paste0(folder, fileSep, "model", fileSep, "bugsObject_", labels$short, ".RData"))
+       file = paste0(output_dir, fileSep, "model", fileSep, "bugsObject_", labels$short, ".RData"))
   
   return(res_bugs)
 }

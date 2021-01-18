@@ -1,26 +1,37 @@
 
+#' txEffectPlot
 #'
-txEffectPlot <- function(sims,
+#' @param dat input data list
+#' @param sims 
+#' @param labels 
+#' @param preRefTx 
+#' @param refTx reference treatment
+#'
+#' @return
+#' @export
+#'
+txEffectPlot <- function(dat,
+                         sims,
+                         labels,
                          preRefTx,
                          refTx) {
   
-  plotSims <- sims
-  
-  txListSims <- colnames(plotSims)
+  txListSims <- colnames(sims)
+  nTx <- dat$bugsData$nTx
   
   if (preRefTx %in% txListSims &
       !is.na(preRefTx)) {
-      plotSims <- plotSims - plotSims[, preRefTx]
+      sims <- sims - sims[, preRefTx]
   }
   
   if (!(preRefTx %in% txListSims) |
       is.na(preRefTx)) {
-    plotSims <- plotSims - plotSims[, refTx]
+    sims <- sims - sims[, refTx]
   }
   
   plotResults <-
     round(exp(t(apply(
-      plotSims, 2, summStat))), 2)
+      sims, 2, summStat))), 2)
   
   plotResults <-
     plotResults[order(plotResults[, 2], decreasing = TRUE), ]
@@ -29,9 +40,10 @@ txEffectPlot <- function(sims,
   txList <- rownames(plotResults)
   nTx <- length(txList)
   
-  layout(cbind(1, 2), widths = c(2, 1))
-  par(mar = c(5, 12, 2, 1), cex = 0.8)
-  
+  layout(cbind(1, 2),
+         widths = c(2, 1))
+  par(mar = c(5, 12, 2, 1),
+      cex = 0.8)
   
   plot(
     plotResults[, 2],
@@ -40,7 +52,7 @@ txEffectPlot <- function(sims,
     xlim = (range(plotResults[, 3], plotResults[, 4])),
     yaxt = "n",
     xaxt = "n",
-    main = label,
+    main = labels$orig,
     cex.main = 0.6,
     xlab = c(endpoint, "Median hazard ratio (95% CrI)"),
     ylab = " ",
@@ -64,7 +76,6 @@ txEffectPlot <- function(sims,
     cex.axis = 0.8,
     cex = 0.8)
   
-  
   for (ii in seq_len(nTx)) {
     lines(c(plotResults[ii, 3], plotResults[ii, 4]),
           c(ii, ii),
@@ -72,7 +83,7 @@ txEffectPlot <- function(sims,
           lwd = 2)
   }
   
-  for (ii in 1:nTx) {
+  for (ii in seq_len(nTx)) {
     points(
       plotResults[ii, 2],
       ii,
@@ -96,7 +107,7 @@ txEffectPlot <- function(sims,
     ylab = " ",
     xlab = " ")
   
-  for (ii in 1:nTx) {
+  for (ii in seq_len(nTx)) {
     if (plotResults[ii, 2] == plotResults[ii, 3] &
         plotResults[ii, 2] == plotResults[ii, 3]) {
       text(0,
@@ -108,13 +119,8 @@ txEffectPlot <- function(sims,
       text(
         0,
         ii,
-        paste0(
-          plotResults[ii, 2],
-          " (",
-          plotResults[ii, 3],
-          " to ",
-          plotResults[ii, 4],
-          ")"),
+        paste0(plotResults[ii, 2], " (", plotResults[ii, 3],
+          " to ", plotResults[ii, 4], ")"),
         pos = 4,
         cex = 0.8)
     }

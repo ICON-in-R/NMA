@@ -1,7 +1,8 @@
 
-#' plots_and_table
+#' plots_and_tables
 #'
 #' @param dat 
+#' @param res_bugs
 #' @param effectParam 
 #' @param labels 
 #' @param fileSep 
@@ -9,26 +10,28 @@
 #' @return
 #' @export
 #'
-plots_and_table <- function(dat,
-                            effectParam,
-                            labels,
-                            fileSep = "/") {
+plots_and_tables <- function(dat,
+                             res_bugs,
+                             effectParam,
+                             labels,
+                             folder = "output",
+                             fileSep = "/") {
   
-  if (!is.na(effectParam)) {
-    simsLHR <-
-      x$sims.matrix[, grep(paste0("^beta"), rownames(x$summary))]
-    simsLHR <- cbind(0, simsLHR)
-    colnames(simsLHR) <- txList
-    sims <- simsLHR
+  browser()
+  if (all(!is.na(effectParam))) {
+    sims <-
+      res_bugs$sims.matrix[, grep(paste0("^beta"), rownames(res_bugs$summary))]
+    sims <- cbind(0, sims)
+    # colnames(sims) <- txList
     
     # rank probability plot
     rankFileLoc <- paste0(folder, fileSep, "graphs", fileSep, "ranking_", labels$short, ".pdf")
     
-    rankProbPlot(sims)
+    rankProbPlot(sims, labels)
     
     # newSavePlot(file = rankFileLoc)
     pdf(file = rankFileLoc)
-    rankProbPlot(sims)
+    rankProbPlot(sims, labels)
     dev.off()
     
     # forest plot

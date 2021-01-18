@@ -10,7 +10,7 @@ make_labels <- function(label) {
     sub(" ", "_", gsub("\\_RE", "", (gsub("\\_FE", "", label))))
   
   list(orig = label,
-       short = slable,
+       short = slabel,
        refe = sdlabel)
 }
 

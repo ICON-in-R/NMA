@@ -21,8 +21,9 @@ bugs_stats <- function(res_bugs,
   effectParamName <-
     c("Log Hazard Ratio", "Parameters", "DIC", "Residual Deviance")
   
+  ##TODO: include extra arguments...
   EffectRes_lhr <-
-    resultsFileSetUp(res_bugs$summary, "beta", dummy, dummyOR, colEff)
+    my_bugs_summary(res_bugs$summary, "beta") #, dummy, dummyOR, colEff)
   
   col_idx <- c(1, 5, 2, 3, 7, 8)
   

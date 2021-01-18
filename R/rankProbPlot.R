@@ -1,8 +1,18 @@
 
-
-#' Treatment Ranking Plot
+#' rankProbPlot
 #' 
-rankProbPlot <- function(sims) {
+#' Treatment Ranking Plot
+#'
+#' @param sims sims.matrix bugs output
+#' @param labels 
+#'
+#' @importFrom gplots ballonplots
+#' @return
+#' @export
+#'
+rankProbPlot <- function(sims,
+                         labels) {
+  
   nRanks <- ncol(sims)
   
   sims <- sims[, order(apply(sims, 2, mean), decreasing = TRUE)]
@@ -18,19 +28,16 @@ rankProbPlot <- function(sims) {
   Treatment <- rep(txList, ncol(sims))
   rankSummary <- as.numeric(round(rankSummary, 2))
   
-  if (length(txList) > 12) {
-    txtSize <- 0.35
-  } else{
-    txtSize <- 0.55
-  }
+  txtSize <- 
+    if (length(txList) > 12) { 0.35
+    } else{ 0.55 }
   
   main.txt <-
     paste(
-      label,
+      labels$orig,
       "Rank based on treatment effect",
       "Rank 1: Most effective treatment (Smallest hazard ratio)",
-      sep = "\n"
-    )
+      sep = "\n")
   
   par(mar = c(2, 2, 3, 2))
   
@@ -47,8 +54,6 @@ rankProbPlot <- function(sims) {
     cum.margins = FALSE,
     main = mtext(text = main.txt, cex = 0.6),
     text.size = txtSize,
-    label.size = txtSize
-  )
-  
+    label.size = txtSize)
 }
 

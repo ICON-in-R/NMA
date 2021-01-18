@@ -2,9 +2,12 @@
 
 export(.onLoad)
 export(NMA)
+export(bugs_stats)
 export(diagnostic_plots)
-export(name_bugs_filename)
+export(make_bugs_filename)
+export(plots_and_table)
 export(prep_codeData)
+export(save_bugs_files)
 export(setupData)
 import(R2OpenBUGS)
 import(R2WinBUGS)

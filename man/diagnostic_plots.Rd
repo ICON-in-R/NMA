@@ -4,29 +4,7 @@
 \alias{diagnostic_plots}
 \title{WinBugs diagnostic plots}
 \usage{
-diagnostic_plots(
-  bugs_filename,
-  bugsData,
-  bugs_params,
-  bugs_fn,
-  inits,
-  params_to_save,
-  winDebug = PAUSE,
-  folder
-)
-}
-\arguments{
-\item{bugs_filename}{}
-
-\item{bugsData}{}
-
-\item{inits}{}
-
-\item{params_to_save}{}
-
-\item{winDebug}{}
-
-\item{folder}{}
+diagnostic_plots(res_bugs, labels, folder = "output", fileSep = "/")
 }
 \description{
 WinBugs diagnostic plots
