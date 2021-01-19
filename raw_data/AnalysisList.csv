@@ -1,9 +1,0 @@
-Analysis_ID,Analysis_name,Analysis_Type,Analysis_description,Endpoint,IAvIRC,MedData,BinData,Pop_Incl,Comparators,Model_effects,Endpoint_type,Burnin,Sims,Decrease_Effect,REFTX,,Comment
-1,BC_PFS_mFE,BC,Resp,PFS,YES,YES,YES,Total_pop,Intervention,FE,Surv,NA,NA,NO,ERL/GEF,,disconnected network; 8PFSindependent wrong data input
-2,BC_PFS_mRE,BC,Resp,PFS,YES,YES,YES,Total_pop,Intervention,RE,Surv,NA,NA,NO,ERL/GEF,,disconnected network; 8PFSindependent wrong data input
-3,SA_PFSinvestigator_mFE,SA,Resp,PFSinvestigator,YES,YES,YES,Total_pop,Intervention,FE,Surv,NA,NA,NO,ERL,,disconnected network
-4,SA_PFSinvestigator_mRE,SA,Resp,PFSinvestigator,YES,YES,YES,Total_pop,Intervention,RE,Surv,NA,NA,NO,ERL,,disconnected network
-5,SA_PFSExon19_mFE,SA,Resp,PFSExon19,YES,YES,NO,Total_pop,Intervention,FE,Surv,NA,NA,NO,ERL/GEF,,disconnected network
-6,SA_PFSExon19_mRE,SA,Resp,PFSExon19,YES,YES,NO,Total_pop,Intervention,RE,Surv,NA,NA,NO,ERL/GEF,,disconnected network
-7,SA_PFSExon21_mFE,SA,Resp,PFSExon21,YES,YES,NO,Total_pop,Intervention,FE,Surv,NA,NA,NO,ERL/GEF,,
-8,SA_PFSExon21_mRE,SA,Resp,PFSExon21,YES,YES,NO,Total_pop,Intervention,RE,Surv,NA,NA,NO,ERL/GEF,,
