@@ -77,7 +77,7 @@ if (is_med) {
     mutate(medR = floor(medR))
 }
 
-
+  
 nma_res <-
   setupData(subData = subData,
             subDataMed = subDataMed,
@@ -95,11 +95,38 @@ nma_res <-
 
 #}
 
+##TODO: S3 version...
+# ## build model
+# nma_model <-
+#   NMA_new(dat = dat,
+#           bugs_params = bugs_params,
+#           bugs_fn = bugs_fn,
+#           effectParam = "beta",
+#           modelParams = "totresdev",
+#           label = analysis$name,
+#           endpoint = analysis$Endpoint,
+#           random = RANDOM)
+# 
+# ## create output
+# nma_res <- NMA_run(nma_model)
+# 
+# ## reconfigure model
+# nma_model2 <- 
+#   NMA_update(nma_model,
+#              random = TRUE)
+# nma_res2 <- NMA_run(nma_model2)
+
+
 #########
 # plots #
 #########
 
-plotNetwork(subData,
-            subDataBin, is_bin,
-            subDataMed, is_med)
+dat <- 
+  setupData(subData = subData,
+          subDataMed = subDataMed,
+          subDataBin = subDataBin,
+          is_random = RANDOM,
+          refTx = REFTX) 
+
+plotNetwork(dat)
 

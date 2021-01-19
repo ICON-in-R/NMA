@@ -1,26 +1,34 @@
 
+#' plotNetwork
 #'
-plotNetwork <- function(subData,
-                        subDataBin,
-                        binData,
-                        subDataMed,
-                        medData,
+#' @param dat 
+#' @param usecurve 
+#' @param ... 
+#' @importFrom sna gplot
+#' 
+#' @return
+#' @export
+#'
+plotNetwork <- function(dat,
                         usecurve = FALSE,
                         ...) {
+
+  is_bin <- all(!is.na(dat$subDataBin))
+  is_med <- all(!is.na(dat$subDataMed))
   
-  if (!binData & !medData) {
+  if (!is_bin & !is_med) {
     subDataComb <- subData[, c("study", "tx", "base", "Ltx", "Lbase")]
   }
   
-  if (binData & !medData) {
-    subDataBinN <- subDataBin
+  if (is_bin & !is_med) {
+    subDataBinN <- dat$subDataBin
     names(subDataBinN)[c(6, 7)] <- c("Ltx", "Lbase")
     subDataComb <-
       rbind(subData[, c("study", "tx", "base", "Ltx", "Lbase")],
             subDataBinN[, c("study", "tx", "base", "Ltx", "Lbase")])
   }
   
-  if (!binData & medData) {
+  if (!is_bin & is_med) {
     subDataMedN <- subDataMed
     names(subDataMedN)[c(5, 6)] <- c("Ltx", "Lbase")
     subDataComb <-
@@ -28,10 +36,10 @@ plotNetwork <- function(subData,
             subDataMedN[, c("study", "tx", "base", "Ltx", "Lbase")])
   }
   
-  if (binData & medData) {
+  if (is_bin & is_med) {
     
-    subDataBinN <- subDataBin
-    subDataMedN <- subDataMed
+    subDataBinN <- dat$subDataBin
+    subDataMedN <- dat$subDataMed
     
     names(subDataBinN)[names(subDataBinN) == "BinR"] <- "Ltx"
     names(subDataBinN)[names(subDataBinN) == "BinN"] <- "Lbase"
@@ -41,7 +49,7 @@ plotNetwork <- function(subData,
     keep_cols <- c("study", "tx", "base", "Ltx", "Lbase")
     
     subDataComb <-
-      rbind(subData[, keep_cols],
+      rbind(dat$subData[, keep_cols],
             subDataBinN[, keep_cols],
             subDataMedN[, keep_cols])
   }
@@ -57,21 +65,21 @@ plotNetwork <- function(subData,
     subDataCombLng[order(subDataCombLng$study), ]
   
   ##TODO: pass as argument  
-  nTx <- length(txList)
+  nTx <- length(dat$txList)
   
   networkData <- matrix(NA, nTx, nTx,
-                        dimnames = list(txList, txList))
+                        dimnames = list(dat$txList, dat$txList))
   
   for (tx1 in seq_len(nTx)) {
     for (tx2 in tx1:nTx) {
       
       is_tx_from <-
-        subDataCombLng$base == txList[tx2] &
-        subDataCombLng$tx == txList[tx1]
+        subDataCombLng$base == dat$txList[tx2] &
+        subDataCombLng$tx == dat$txList[tx1]
 
       is_tx_to <-
-        subDataCombLng$base == txList[tx1] &
-        subDataCombLng$tx == txList[tx2]
+        subDataCombLng$base == dat$txList[tx1] &
+        subDataCombLng$tx == dat$txList[tx2]
       
       networkData[tx1, tx2] <-
         sum(subDataCombLng[is_tx_from | is_tx_to, "txCode"])
@@ -82,7 +90,7 @@ plotNetwork <- function(subData,
   par(mar = c(2, 2, 2, 2))
   gplot(
     networkData / networkData,
-    label = txList,
+    label = dat$txList,
     edge.lwd = networkData / 200,
     gmode = "graph",
     label.lty = 1)#,
