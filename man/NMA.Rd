@@ -17,7 +17,7 @@ NMA(
   random = FALSE,
   run_bugs = TRUE,
   DIAGNOSTICS = TRUE,
-  fileSep = "\\\\"
+  fileSep = "/"
 )
 }
 \arguments{

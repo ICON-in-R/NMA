@@ -4,7 +4,7 @@
 \alias{bugs_stats}
 \title{bugs_stats}
 \usage{
-bugs_stats(res_bugs, effectParam, random)
+bugs_stats(dat, res_bugs, effectParam, random)
 }
 \arguments{
 \item{res_bugs}{output from running bugs}

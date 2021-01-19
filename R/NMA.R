@@ -34,7 +34,7 @@ NMA <- function(dat,
                 random = FALSE,
                 run_bugs = TRUE,
                 DIAGNOSTICS = TRUE,
-                fileSep = "\\") {
+                fileSep = "/") {
   
   params_to_save <- c(effectParam, modelParams)
   params_to_save <- params_to_save[!is.na(params_to_save)]
@@ -66,11 +66,11 @@ NMA <- function(dat,
     if (bugs_params$PROG == "JAGS")
       res_bugs <- res_bugs$BUGSoutput
   } else {
-    load(file = glue("{output_dir}{fileSep}model{fileSep}bugsObject_{labels$short}"))
+    load(file = here(glue("{output_dir}{fileSep}model{fileSep}bugsObject_{labels$short}")))
   }
   
   ## process output ----
-  
+
   createFolders(folder = output_dir, fileSep,
                 "results", "graphs", "model", "sims", "data", "diagnostics")
   save_bugs_files(res_bugs, bugs_params, run_bugs, labels, output_dir, fileSep)
@@ -78,7 +78,7 @@ NMA <- function(dat,
   if (DIAGNOSTICS)
      diagnostic_plots(res_bugs, labels)
   
-  bugs_stats(res_bugs, effectParam, random)
+  bugs_stats(dat, res_bugs, effectParam, random)
   
   plots_and_tables(dat, res_bugs, effectParam, labels)
   

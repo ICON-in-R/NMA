@@ -2,7 +2,7 @@
 #' create output folders
 #' 
 createFolders <- function(folder,
-                          fileSep = "\\",
+                          fileSep = "/",
                           ...) {
   
   subFolders <- list(...)

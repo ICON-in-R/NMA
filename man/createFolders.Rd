@@ -4,7 +4,7 @@
 \alias{createFolders}
 \title{create output folders}
 \usage{
-createFolders(folder, fileSep = "\\\\", ...)
+createFolders(folder, fileSep = "/", ...)
 }
 \description{
 create output folders

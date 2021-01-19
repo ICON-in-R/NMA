@@ -4,16 +4,12 @@
 \alias{my_bugs_summary}
 \title{my_bugs_summary}
 \usage{
-my_bugs_summary(bugs_summary, params)
+my_bugs_summary(bugs_summary, params, txList)
 }
 \arguments{
 \item{bugs_summary}{}
 
 \item{params}{}
-
-\item{dummy}{}
-
-\item{dummyOR}{}
 
 \item{colEff}{}
 }

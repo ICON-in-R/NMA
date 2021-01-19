@@ -1,7 +1,11 @@
 
 #' WinBugs diagnostic plots
 #' 
+#' @param res_bugs 
+#' @param labels 
 #' @param folder
+#' @param fileSep 
+#'
 #' @importFrom glue glue
 #' @importFrom here here
 #' @importFrom coda as.mcmc.list traceplot varnames densplot autocorr.plot gelman.plot
@@ -94,22 +98,20 @@ diagnostic_plots <- function(res_bugs,
       width = 4,
       height = 1.1 * nc2,
       units = "in",
-      res = ifelse(nc2 <= 20, 300,          # resolution is 300 dpi unless too many variables for that
-                   round(6000/nc2, -1)))    # otherwise pick something lower
+      res = ifelse(nc2 <= 20, 300,
+                   round(6000/nc2, -1)))
     
     par(mfrow = c(nc2, 2),
-        mar = c(2, 2, 2, 1) + 0.1)               # small margins around each plot
+        mar = c(2, 2, 2, 1) + 0.1)
     
     for (ii in (nc1 + 1):nc) {
       traceplot(curr_mcmc[, ii])
       title(paste("Trace plot for ", varnames(curr_mcmc)[ii], sep = ""), cex.main = 0.8)
       
-      # density plot the same way. cex is scale on title font: 1 = no scale.
       densplot(curr_mcmc[, ii])
       title(paste("Density plot for ", varnames(curr_mcmc)[ii], sep = ""), cex.main = 0.8)
     }
     dev.off()
-    
   }
   
   traceFileLoc <-

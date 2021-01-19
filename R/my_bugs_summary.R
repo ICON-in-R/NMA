@@ -14,19 +14,15 @@ summStat <- function(x) {
 #' 
 #' @param bugs_summary 
 #' @param params 
-#' @param dummy 
-#' @param dummyOR 
-#' @param colEff 
+#' @param txList
 #'
 #' @import dplyr
 #' @return
 #' @export
 #'
 my_bugs_summary <- function(bugs_summary,
-                            params) {#,
-  # dummy,
-  # dummyOR,
-  # colEff) {
+                            params,
+                            txList) {
   
   keep_cols <- c("mean", "50%", "sd", "2.5%", "97.5%", "Rhat")
   keep_rows <- grep(paste("^", params, sep = ""), rownames(bugs_summary))
@@ -37,17 +33,17 @@ my_bugs_summary <- function(bugs_summary,
   # remove dev row
   eff <- eff[!grepl(paste("^", "dev", sep = ""), rownames(eff)), ]
   
-  
-  ##TODO: inlcude this information  
-  # if (length(txList) != nrow(eff)) {
-  #   if (params != "hr") {
-  #     eff <- rbind(dummy, eff)
-  #   } else{
-  #     eff <- rbind(dummyOR, eff)
-  #   }
-  # }
-  # colnames(eff) <- paste(colEff)
-  # rownames(eff)  <- txList
+  if (length(txList) != nrow(eff)) {
+    if (params != "hr") {
+      eff <- rbind(c(0, 0, NA, 0, 0, NA),
+                   eff)
+    } else{
+      eff <- rbind(c(1, 1, NA, 1, 1, NA),
+                   eff)
+    }
+  }
+  rownames(eff) <- txList
+  colnames(eff) <- c("Mean", "Median", "SE", "L95CrI", "U95CrI", "Rhat")
   
   return(eff)
 }

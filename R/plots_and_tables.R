@@ -5,6 +5,7 @@
 #' @param res_bugs
 #' @param effectParam 
 #' @param labels 
+#' @param folder 
 #' @param fileSep 
 #'
 #' @return
@@ -16,8 +17,9 @@ plots_and_tables <- function(dat,
                              labels,
                              folder = "output",
                              fileSep = "/") {
-  
+  browser()
   if (all(!is.na(effectParam))) {
+    
     sims <-
       res_bugs$sims.matrix[, grep(paste0("^beta"), rownames(res_bugs$summary))]
     sims <- cbind(0, sims)

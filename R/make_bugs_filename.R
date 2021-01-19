@@ -8,6 +8,7 @@
 #' @export
 #'
 make_bugs_filename <- function(random, dat) {
+  
   effect <- ifelse(random, "RE", "FE")
   med <- ifelse(any(is.na(dat$subDataBin)), NA, "med")
   bin <- ifelse(any(is.na(dat$subDataBin)), NA, "bin")
