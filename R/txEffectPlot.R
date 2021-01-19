@@ -4,8 +4,8 @@
 #' @param dat input data list
 #' @param sims 
 #' @param labels 
+#' @param endpoint
 #' @param preRefTx 
-#' @param refTx reference treatment
 #'
 #' @return
 #' @export
@@ -13,28 +13,28 @@
 txEffectPlot <- function(dat,
                          sims,
                          labels,
-                         preRefTx,
-                         refTx) {
+                         endpoint = NULL,
+                         preRefTx = NA) {
   
   txListSims <- colnames(sims)
   nTx <- dat$bugsData$nTx
   
-  if (preRefTx %in% txListSims &
-      !is.na(preRefTx)) {
-      sims <- sims - sims[, preRefTx]
-  }
-  
-  if (!(preRefTx %in% txListSims) |
-      is.na(preRefTx)) {
-    sims <- sims - sims[, refTx]
-  }
+  sims <- 
+    if (!is.na(preRefTx) &
+        preRefTx %in% txListSims) {
+      sims - sims[, preRefTx]
+    } else {
+      sims - sims[, dat$txList[1]]
+    }
   
   plotResults <-
-    round(exp(t(apply(
-      sims, 2, summStat))), 2)
+    round(digits = 2,
+          exp(t(
+            apply(sims, 2, summStat))))
   
   plotResults <-
     plotResults[order(plotResults[, 2], decreasing = TRUE), ]
+  
   plotResults[plotResults == 0] <- 0.001
   
   txList <- rownames(plotResults)
@@ -61,20 +61,18 @@ txEffectPlot <- function(dat,
     log = "x",
     cex = 0.8)
   
-  axis(
-    1,
-    at =    c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
-    label = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
-    cex.axis = 0.8)
+  axis(1,
+       at =    c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
+       label = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
+       cex.axis = 0.8)
   abline(v = 1, col = "grey")
   
-  axis(
-    2,
-    at = 1:nTx,
-    labels = txList,
-    las = 2,
-    cex.axis = 0.8,
-    cex = 0.8)
+  axis(2,
+       at = 1:nTx,
+       labels = txList,
+       las = 2,
+       cex.axis = 0.8,
+       cex = 0.8)
   
   for (ii in seq_len(nTx)) {
     lines(c(plotResults[ii, 3], plotResults[ii, 4]),
@@ -110,21 +108,19 @@ txEffectPlot <- function(dat,
   for (ii in seq_len(nTx)) {
     if (plotResults[ii, 2] == plotResults[ii, 3] &
         plotResults[ii, 2] == plotResults[ii, 3]) {
-      text(0,
-           ii,
+      text(x = 0, y = ii,
            "Reference Treatment",
            pos = 4,
            cex = 0.8)
     } else {
-      text(
-        0,
-        ii,
+      text(x = 0, y = ii,
         paste0(plotResults[ii, 2], " (", plotResults[ii, 3],
-          " to ", plotResults[ii, 4], ")"),
+               " to ", plotResults[ii, 4], ")"),
         pos = 4,
         cex = 0.8)
     }
   }
   
+  invisible(dat)
 }
 

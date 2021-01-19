@@ -66,9 +66,10 @@ setupData <- function(subData,
         nStudies = input$nStudies)
     
     return(list(
-      inits = rinits(nTx, nStudies, param_names),
+      inits = rinits(input$nTx, input$nStudies, input$param_names),
       subData = input$subData$dat,
-      bugsData = bugsData))
+      bugsData = bugsData,
+      txList = input$txList))
   }
   
   if (is_bin & !is_med) {
@@ -92,10 +93,11 @@ setupData <- function(subData,
         BnObs = input$subDataBin$BnObs)
     
     return(list(
-      inits = rinits(nTx, nStudies, param_names),
+      inits = rinits(input$nTx, input$nStudies, input$param_names),
       subData = input$subData$dat,
       subDataBin = input$subDataBin$dat,
-      bugsData = bugsData))
+      bugsData = bugsData,
+      txList = input$txList))
   }
   
   if (!is_bin & is_med) {
@@ -120,10 +122,11 @@ setupData <- function(subData,
         medianNObs = input$subDataMed$medianNObs)
     
     return(list(
-      inits = rinits(nTx, nStudies, param_names),
+      inits = rinits(input$nTx, input$nStudies, input$param_names),
       subData = input$subData$dat,
       subDataMed = input$subDataMed$dat,
-      bugsData = bugsData))
+      bugsData = bugsData,
+      txList = input$txList))
   }
   
   if (is_bin & is_med) {
@@ -158,7 +161,8 @@ setupData <- function(subData,
       subData = input$subData$dat,
       subDataBin = input$subDataBin$dat,
       subDataMed = input$subDataMed$dat,
-      bugsData = bugsData))
+      bugsData = bugsData,
+      txList = input$txList))
   }
 }
 

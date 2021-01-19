@@ -5,6 +5,7 @@
 #' @param res_bugs
 #' @param effectParam 
 #' @param labels 
+#' @param endpoint
 #' @param folder 
 #' @param fileSep 
 #'
@@ -15,41 +16,43 @@ plots_and_tables <- function(dat,
                              res_bugs,
                              effectParam,
                              labels,
+                             endpoint = NULL,
                              folder = "output",
                              fileSep = "/") {
-  browser()
+
   if (all(!is.na(effectParam))) {
     
     sims <-
       res_bugs$sims.matrix[, grep(paste0("^beta"), rownames(res_bugs$summary))]
     sims <- cbind(0, sims)
-    # colnames(sims) <- txList
+    colnames(sims) <- dat$txList
     
     # rank probability plot
-    rankFileLoc <- paste0(folder, fileSep, "graphs", fileSep, "ranking_", labels$short, ".pdf")
+    rankFileLoc <-
+      paste0(folder, fileSep, "graphs", fileSep, "ranking_", labels$short, ".pdf")
     
     rankProbPlot(sims, labels)
     
-    # newSavePlot(file = rankFileLoc)
     pdf(file = rankFileLoc)
     rankProbPlot(sims, labels)
     dev.off()
     
     # forest plot
     
-    # forestFileLoc <- paste0(folder, fileSep, "graphs", fileSep, "forest_", labels$short, ".pdf")
-    # 
-    # txEffectPlot(sims, preRefTx, refTx)
-    # 
-    # # newSavePlot(file = forestFileLoc)
-    # pdf(file = forestFileLoc)
-    # rankProbPlot(sims)
-    # dev.off()
+    forestFileLoc <-
+      paste0(folder, fileSep, "graphs", fileSep, "forest_", labels$short, ".pdf")
+
+    txEffectPlot(dat, sims, labels, endpoint)
+
+    pdf(file = forestFileLoc)
+    txEffectPlot(dat, sims, label, endpoint)
+    dev.off()
     
     # pairwise table
     
     pairTable <- pairwiseTable(sims = sims)
-    pairFileLoc <- paste0(folder, fileSep, "results", fileSep, "Pairwise_results_", labels$short, ".csv")
+    pairFileLoc <-
+      paste0(folder, fileSep, "results", fileSep, "Pairwise_results_", labels$short, ".csv")
     
     write.table(
       paste("Pairwise Treatment Co-efficients;",
@@ -77,7 +80,6 @@ plots_and_tables <- function(dat,
       append = TRUE,
       col.names = NA)
   }
-  
 
   # data table
   
@@ -108,7 +110,8 @@ plots_and_tables <- function(dat,
   
   if (all(!is.na(dat$subDataBin))) {
     
-    dataFileLocBin <- paste0(folder, fileSep, "data", fileSep, "data_", labels$refe, "_bin.csv")
+    dataFileLocBin <-
+      paste0(folder, fileSep, "data", fileSep, "data_", labels$refe, "_bin.csv")
     
     write.table(
       paste0(
@@ -133,7 +136,8 @@ plots_and_tables <- function(dat,
   
   if (all(!is.na(dat$subDataMed))) {
     
-    dataFileLocMed <- paste0(folder, fileSep, "data", fileSep, "data_", labels$refe, "_med.csv")
+    dataFileLocMed <-
+      paste0(folder, fileSep, "data", fileSep, "data_", labels$refe, "_med.csv")
     
     write.table(
       paste0("Key: ..."),
@@ -157,16 +161,17 @@ plots_and_tables <- function(dat,
   
   # results table
   
-  resultsFileLoc <- paste0(folder, fileSep, "results", fileSep, "nmaResults_", labels$short, ".csv")
+  resultsFileLoc <-
+    paste0(folder, fileSep, "results", fileSep, "nmaResults_", labels$short, ".csv")
   
-  # write.table(
-  #   paste(
-  #     "Model Co-efficients:",
-  #     "treatment effects compared to",
-  #     refTx,
-  #     sep = " "),
-  #   file = resultsFileLoc,
-  #   append = FALSE)
+  write.table(
+    paste(
+      "Model Co-efficients:",
+      "treatment effects compared to",
+      dat$txList[1],
+      sep = " "),
+    file = resultsFileLoc,
+    append = FALSE)
   
   write.table(
     paste0(

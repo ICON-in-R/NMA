@@ -29,7 +29,7 @@ NMA <- function(dat,
                 modelParams = NA,
                 output_dir = "output",
                 label,
-                endpoint,
+                endpoint = NULL,
                 preRefTx = NA,
                 random = FALSE,
                 run_bugs = TRUE,
@@ -80,7 +80,7 @@ NMA <- function(dat,
   
   bugs_stats(dat, res_bugs, effectParam, random)
   
-  plots_and_tables(dat, res_bugs, effectParam, labels)
+  plots_and_tables(dat, res_bugs, effectParam, labels, endpoint)
   
   save(res_bugs,
        file = glue("{output_dir}{fileSep}model{fileSep}bugsObject_{labels$short}.RData"))
