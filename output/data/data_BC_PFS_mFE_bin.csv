@@ -1,7 +1,0 @@
-"" "x"
-"1" "Key: Bn=Number of patients in arm; Br=number of events in arm"
-"" "x"
-"1" "------------------"
-"","study","base","tx","BinR","BinN","Btx","Bbase","Bstudy"
-"1","NCT01039948 (Mok, 2016)","ERL/GEF","ERL/GEF",34,38,1,1,33
-"2","NCT01039948 (Mok, 2016)","ERL/GEF","GEF+FIC",27,33,14,1,33
