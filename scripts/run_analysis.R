@@ -98,22 +98,30 @@ nma_res <-
 ##TODO: S3 version...
 # ## build model
 # nma_model <-
-#   NMA_new(dat = dat,
+#   NMA_new(subData = subData,
+#           subDataMed = subDataMed,
+#           subDataBin = subDataBin,
 #           bugs_params = bugs_params,
 #           bugs_fn = bugs_fn,
+#           is_random = RANDOM,
+#           refTx = REFTX ,
 #           effectParam = "beta",
 #           modelParams = "totresdev",
 #           label = analysis$name,
-#           endpoint = analysis$Endpoint,
-#           random = RANDOM)
+#           endpoint = analysis$Endpoint)
 # 
 # ## create output
 # nma_res <- NMA_run(nma_model)
-# 
+#
+# print(nma_model)
+# plot(nma_model, save = TRUE)
+# output_tables(nma_model, save = TRUE)
+#
 # ## reconfigure model
 # nma_model2 <- 
 #   NMA_update(nma_model,
 #              random = TRUE)
+#
 # nma_res2 <- NMA_run(nma_model2)
 
 
@@ -129,4 +137,5 @@ dat <-
           refTx = REFTX) 
 
 plotNetwork(dat)
+# plotNetwork(nma_model)
 

@@ -198,7 +198,7 @@ plots_and_tables <- function(dat,
   #     col.names = NA)
   #   
   #   write.table(
-  #     results[i],
+  #     res_bugs[i],
   #     file = resultsFileLoc,
   #     sep = ",",
   #     append = TRUE,
