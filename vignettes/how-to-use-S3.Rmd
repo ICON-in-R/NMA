@@ -14,18 +14,23 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+## Introduction
+
+This document describes how to use the main functions of `NMA` to run a network meta-analysis.
+
+## Example
+
+```{r setup, warning=FALSE, message=FALSE}
 library(NMA)
-```
-
-
-```{r}
 library(dplyr)
 library(purrr)
+```
 
+### Settings
 
-## settings
+Define the BUGS parameters for MCMC.
 
+```{r}
 bugs_params <-
   list(
     PROG = "openBugs",
@@ -34,10 +39,12 @@ bugs_params <-
     N.CHAINS = 2,
     N.THIN = 1,
     PAUSE = TRUE)
+```
 
+Define the scenario we will use for the analysis.
+We will load in a dataframe of values.
 
-## run analysis
-
+```{r}
 analyses_params <-
   read.csv(
     here::here("raw_data", "AnalysisList.csv"),
@@ -47,7 +54,11 @@ analyses_params <-
   dplyr::rename(name = Analysis_name,
                 type = Analysis_Type)
 
+```
 
+For demonstration purposes we will select the first scenario to run.
+
+```{r}
 analysis <- analyses_params[1, ]
 
 # fixed effects RANDOM=FALSE, random effects RANDOM=TRUE
@@ -62,7 +73,10 @@ is_bin <- analysis$BinData == "YES"
 is_med <- analysis$MedData == "YES"
 ```
 
-## read in datasets
+### Read in datasets
+
+The trials data consist of upto 3 separate dataframes.
+A main table, `subData`, and optional tables for median event time and binary data, `subDataMed` and `subDataBin` respectively.
 
 ```{r}
 file_name <- paste0(here::here("raw_data"), "/survdata_", analysis$Endpoint, "_")
@@ -88,7 +102,10 @@ subDataMed <-
   } else {NA}
 ```
 
-## build model
+
+### Build model
+
+Now we can create the NMA object to use in the modelling.
 
 ```{r}
 nma_model <-
@@ -106,7 +123,8 @@ nma_model <-
 nma_model
 ```
 
-## create output
+### Run MCMC
+
 ```{r}
 nma_res <- NMA_run(nma_model)
 
@@ -116,14 +134,18 @@ nma_res
 # nma_outputs(nma_res)
 ```
 
-## reconfigure model
+### Reconfigure model
+
+It is simple to modify an existing analysis without repeating the previous steps.
+For example, we can run the NMA for a random effects model version of the same model.
 
 ```{r}
 nma_model2 <-
   NMA_update(nma_model,
              is_random = TRUE)
 
-nma_res2 <- NMA_run(nma_model2)
+nma_res2 <- NMA_run(nma_model2,
+                    output_dir = "RE output")
 
 # diagnostics(nma_res2, save = TRUE)
 # nma_outputs(nma_res2, save = TRUE)

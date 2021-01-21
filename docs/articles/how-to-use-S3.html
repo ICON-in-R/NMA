@@ -83,30 +83,23 @@
 
     
     
+<div id="introduction" class="section level2">
+<h2 class="hasAnchor">
+<a href="#introduction" class="anchor"></a>Introduction</h2>
+<p>This document describes how to use the main functions of <code>NMA</code> to run a network meta-analysis.</p>
+</div>
+<div id="example" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example" class="anchor"></a>Example</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">NMA</span><span class="op">)</span>
-<span class="co">#&gt; Registered S3 methods overwritten by 'R2WinBUGS':</span>
-<span class="co">#&gt;   method            from      </span>
-<span class="co">#&gt;   print.bugs        R2OpenBUGS</span>
-<span class="co">#&gt;   plot.bugs         R2OpenBUGS</span>
-<span class="co">#&gt;   as.mcmc.list.bugs R2OpenBUGS</span>
-<span class="co">#&gt; Warning: replacing previous import 'R2OpenBUGS::bugs' by 'R2WinBUGS::bugs' when</span>
-<span class="co">#&gt; loading 'NMA'</span></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'dplyr'</span>
-<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     filter, lag</span>
-<span class="co">#&gt; The following objects are masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span>
-
-
-<span class="co">## settings</span>
-
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span></pre></div>
+<div id="settings" class="section level3">
+<h3 class="hasAnchor">
+<a href="#settings" class="anchor"></a>Settings</h3>
+<p>Define the BUGS parameters for MCMC.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="va">bugs_params</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
     PROG <span class="op">=</span> <span class="st">"openBugs"</span>,
@@ -114,11 +107,9 @@
     N.SIMS <span class="op">=</span> <span class="fl">150</span>,<span class="co">#0,</span>
     N.CHAINS <span class="op">=</span> <span class="fl">2</span>,
     N.THIN <span class="op">=</span> <span class="fl">1</span>,
-    PAUSE <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-
-<span class="co">## run analysis</span>
-
+    PAUSE <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></pre></div>
+<p>Define the scenario we will use for the analysis. We will load in a dataframe of values.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="va">analyses_params</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span>
     <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="st">"AnalysisList.csv"</span><span class="op">)</span>,
@@ -126,9 +117,9 @@
     na.strings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"NR"</span>, <span class="st">"NA"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Endpoint_type</span> <span class="op">==</span> <span class="st">"Surv"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">Analysis_name</span>,
-                type <span class="op">=</span> <span class="va">Analysis_Type</span><span class="op">)</span>
-
-
+                type <span class="op">=</span> <span class="va">Analysis_Type</span><span class="op">)</span></pre></div>
+<p>For demonstration purposes we will select the first scenario to run.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="va">analysis</span> <span class="op">&lt;-</span> <span class="va">analyses_params</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>
 
 <span class="co"># fixed effects RANDOM=FALSE, random effects RANDOM=TRUE</span>
@@ -141,10 +132,12 @@
 
 <span class="co"># indicator for availability of median endpoint data</span>
 <span class="va">is_med</span> <span class="op">&lt;-</span> <span class="va">analysis</span><span class="op">$</span><span class="va">MedData</span> <span class="op">==</span> <span class="st">"YES"</span></pre></div>
-<div id="read-in-datasets" class="section level2">
-<h2 class="hasAnchor">
-<a href="#read-in-datasets" class="anchor"></a>read in datasets</h2>
-<div class="sourceCode" id="cb3"><pre class="downlit">
+</div>
+<div id="read-in-datasets" class="section level3">
+<h3 class="hasAnchor">
+<a href="#read-in-datasets" class="anchor"></a>Read in datasets</h3>
+<p>The trials data consist of upto 3 separate dataframes. A main table, <code>subData</code>, and optional tables for median event time and binary data, <code>subDataMed</code> and <code>subDataBin</code> respectively.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="va">file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"raw_data"</span><span class="op">)</span>, <span class="st">"/survdata_"</span>, <span class="va">analysis</span><span class="op">$</span><span class="va">Endpoint</span>, <span class="st">"_"</span><span class="op">)</span>
 
 <span class="va">subData</span> <span class="op">&lt;-</span>
@@ -167,10 +160,11 @@
       <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>medR <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">floor</a></span><span class="op">(</span><span class="va">medR</span><span class="op">)</span><span class="op">)</span>
   <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="cn">NA</span><span class="op">}</span></pre></div>
 </div>
-<div id="build-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#build-model" class="anchor"></a>build model</h2>
-<div class="sourceCode" id="cb4"><pre class="downlit">
+<div id="build-model" class="section level3">
+<h3 class="hasAnchor">
+<a href="#build-model" class="anchor"></a>Build model</h3>
+<p>Now we can create the NMA object to use in the modelling.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="va">nma_model</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../reference/new_NMA.html">new_NMA</a></span><span class="op">(</span>subData <span class="op">=</span> <span class="va">subData</span>,
           subDataMed <span class="op">=</span> <span class="va">subDataMed</span>,
@@ -193,8 +187,8 @@
 <span class="co">#&gt;         alpha = rnorm(nStudies)) %&gt;% </span>
 <span class="co">#&gt;         .[param_names]</span>
 <span class="co">#&gt;     }</span>
-<span class="co">#&gt; &lt;bytecode: 0x000000001cc1ffd0&gt;</span>
-<span class="co">#&gt; &lt;environment: 0x000000001cc23c18&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x000000001f9ff2e0&gt;</span>
+<span class="co">#&gt; &lt;environment: 0x000000001fa03460&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $dat$subData</span>
 <span class="co">#&gt;     X                                 study                  base            tx</span>
@@ -410,8 +404,8 @@
 <span class="co">#&gt; $bugs_fn</span>
 <span class="co">#&gt; function(...)</span>
 <span class="co">#&gt;         bugs(program = "openbugs", ...)</span>
-<span class="co">#&gt; &lt;bytecode: 0x000000001eef5468&gt;</span>
-<span class="co">#&gt; &lt;environment: 0x000000001eef9628&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x000000001e83a060&gt;</span>
+<span class="co">#&gt; &lt;environment: 0x000000001e83e258&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $is_random</span>
 <span class="co">#&gt; [1] FALSE</span>
@@ -464,10 +458,10 @@
 <span class="co">#&gt; attr(,"CALL")$endpoint</span>
 <span class="co">#&gt; analysis$Endpoint</span></pre></div>
 </div>
-<div id="create-output" class="section level2">
-<h2 class="hasAnchor">
-<a href="#create-output" class="anchor"></a>create output</h2>
-<div class="sourceCode" id="cb5"><pre class="downlit">
+<div id="run-mcmc" class="section level3">
+<h3 class="hasAnchor">
+<a href="#run-mcmc" class="anchor"></a>Run MCMC</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="va">nma_res</span> <span class="op">&lt;-</span> <span class="fu">NMA_run</span><span class="op">(</span><span class="va">nma_model</span><span class="op">)</span>
 <span class="co">#&gt; Loading required namespace: BRugs</span>
 <span class="co">#&gt; Welcome to BRugs connected to OpenBUGS version 3.2.3</span>
@@ -493,52 +487,54 @@
 <span class="co">#&gt; Inference for Bugs model at "C:/Users/Nathan/Documents/ICON/NMA/inst/FE_med_bin.txt", fit using OpenBUGS,</span>
 <span class="co">#&gt;  2 chains, each with 160 iterations (first 10 discarded)</span>
 <span class="co">#&gt;  n.sims = 300 iterations saved</span>
-<span class="co">#&gt;            mean    sd  2.5%   25%   50%    75%  97.5% Rhat n.eff</span>
-<span class="co">#&gt; beta[2]    -0.3   1.1  -1.9  -1.5  -0.1    0.9    1.2  6.1     2</span>
-<span class="co">#&gt; beta[3]    -0.9   1.2  -2.4  -2.2  -0.6    0.1    0.9  4.0     2</span>
-<span class="co">#&gt; beta[4]     0.5   0.1   0.2   0.4   0.5    0.5    0.7  1.0   300</span>
-<span class="co">#&gt; beta[5]     0.2   0.9  -1.3  -0.4  -0.1    1.4    1.8  3.3     3</span>
-<span class="co">#&gt; beta[6]     0.6   0.2   0.0   0.4   0.5    0.7    1.1  1.2    27</span>
-<span class="co">#&gt; beta[7]    -0.5   0.1  -0.7  -0.6  -0.5   -0.4   -0.3  1.0   300</span>
-<span class="co">#&gt; beta[8]    -0.1   0.2  -0.4  -0.2  -0.1    0.0    0.2  1.0   300</span>
-<span class="co">#&gt; beta[9]    -0.5   0.1  -0.7  -0.5  -0.5   -0.4   -0.2  1.0   220</span>
-<span class="co">#&gt; beta[10]   -0.3   0.4  -1.0  -0.7  -0.2    0.0    0.3  1.5     6</span>
-<span class="co">#&gt; beta[11]    1.1   0.8  -0.6   0.5   1.2    1.6    2.5  1.0   150</span>
-<span class="co">#&gt; beta[12]   -0.7   0.1  -0.8  -0.8  -0.7   -0.6   -0.5  1.0   300</span>
-<span class="co">#&gt; beta[13]   -0.4   0.3  -0.9  -0.5  -0.4   -0.2    0.2  1.0   300</span>
-<span class="co">#&gt; beta[14]   -0.4   0.3  -0.9  -0.6  -0.3   -0.2    0.2  1.3    10</span>
-<span class="co">#&gt; beta[15]    0.0   0.2  -0.3  -0.1   0.0    0.1    0.4  1.0   300</span>
-<span class="co">#&gt; beta[16]   -0.3   0.2  -0.6  -0.4  -0.3   -0.1    0.1  1.0   300</span>
-<span class="co">#&gt; beta[17]    0.1   0.8  -0.5  -0.4  -0.3   -0.1    1.8  1.8     5</span>
-<span class="co">#&gt; beta[18]    1.0   0.6   0.0   0.4   1.1    1.6    1.9  5.6     2</span>
-<span class="co">#&gt; beta[19]   -0.2   0.9  -1.6  -0.8  -0.5    0.8    1.4  3.3     3</span>
-<span class="co">#&gt; beta[20]   -0.5   0.9  -2.0  -1.2  -0.8    0.4    1.1  3.2     3</span>
-<span class="co">#&gt; beta[21]    0.3   0.3  -0.3   0.1   0.3    0.5    0.9  1.0   300</span>
-<span class="co">#&gt; beta[22]   -0.8   0.1  -1.0  -0.9  -0.8   -0.7   -0.6  1.0   300</span>
-<span class="co">#&gt; beta[23]   -0.5   0.1  -0.7  -0.6  -0.5   -0.4   -0.3  1.0   300</span>
-<span class="co">#&gt; beta[24]    0.2   0.7  -1.7   0.0   0.2    0.6    1.1  1.2    14</span>
-<span class="co">#&gt; totresdev 822.9 562.3 276.8 353.0 649.4 1116.4 2171.2  1.7     5</span>
-<span class="co">#&gt; deviance  838.8 562.3 293.0 368.1 665.9 1132.8 2186.1  1.7     5</span>
+<span class="co">#&gt;             mean    sd  2.5%   25%   50%    75%  97.5% Rhat n.eff</span>
+<span class="co">#&gt; beta[2]     -0.6   0.6  -1.7  -1.1  -0.5    0.0    0.2  1.1    31</span>
+<span class="co">#&gt; beta[3]     -2.0   0.5  -3.0  -2.4  -1.9   -1.6   -1.3  1.7     5</span>
+<span class="co">#&gt; beta[4]      0.5   0.1   0.2   0.4   0.5    0.5    0.7  1.0   160</span>
+<span class="co">#&gt; beta[5]      0.2   0.9  -1.5  -0.9   0.7    1.0    1.1  3.2     3</span>
+<span class="co">#&gt; beta[6]     -0.1   0.5  -0.9  -0.5  -0.3    0.4    0.7  1.6     6</span>
+<span class="co">#&gt; beta[7]     -0.5   0.1  -0.7  -0.6  -0.5   -0.4   -0.3  1.0   120</span>
+<span class="co">#&gt; beta[8]     -0.1   0.2  -0.4  -0.2  -0.1    0.0    0.2  1.0   300</span>
+<span class="co">#&gt; beta[9]     -0.5   0.1  -0.7  -0.6  -0.5   -0.4   -0.2  1.0   300</span>
+<span class="co">#&gt; beta[10]    -0.1   0.5  -0.9  -0.4  -0.1    0.0    0.9  1.1    48</span>
+<span class="co">#&gt; beta[11]     0.8   0.6  -0.6   0.4   0.8    1.2    2.0  1.1    19</span>
+<span class="co">#&gt; beta[12]    -0.7   0.1  -0.9  -0.8  -0.7   -0.6   -0.5  1.0   300</span>
+<span class="co">#&gt; beta[13]    -0.3   0.3  -0.9  -0.6  -0.4   -0.2    0.2  1.0   160</span>
+<span class="co">#&gt; beta[14]    -0.3   0.3  -0.9  -0.5  -0.3    0.0    0.3  1.0   180</span>
+<span class="co">#&gt; beta[15]     0.0   0.2  -0.3  -0.1   0.0    0.2    0.4  1.0   300</span>
+<span class="co">#&gt; beta[16]    -0.3   0.2  -0.6  -0.4  -0.3   -0.2    0.1  1.0   300</span>
+<span class="co">#&gt; beta[17]    -0.9   0.7  -2.1  -1.4  -0.6   -0.4   -0.1  1.4     8</span>
+<span class="co">#&gt; beta[18]     0.8   0.4   0.1   0.5   0.9    1.1    1.4  1.0    44</span>
+<span class="co">#&gt; beta[19]    -0.2   0.9  -1.9  -1.3   0.3    0.6    0.8  3.1     3</span>
+<span class="co">#&gt; beta[20]    -0.5   1.0  -2.2  -1.6  -0.1    0.2    0.5  3.0     3</span>
+<span class="co">#&gt; beta[21]     0.3   0.3  -0.2   0.2   0.3    0.5    0.9  1.0    57</span>
+<span class="co">#&gt; beta[22]    -0.8   0.1  -1.0  -0.9  -0.8   -0.7   -0.6  1.0   300</span>
+<span class="co">#&gt; beta[23]    -0.5   0.1  -0.8  -0.6  -0.5   -0.4   -0.3  1.0   300</span>
+<span class="co">#&gt; beta[24]     0.6   0.5  -0.4   0.3   0.5    0.9    1.4  1.0   300</span>
+<span class="co">#&gt; totresdev 1065.3 906.8 191.4 302.6 752.1 1754.2 2940.9  1.4     8</span>
+<span class="co">#&gt; deviance  1081.1 907.3 207.0 317.2 766.7 1769.1 2959.4  1.4     8</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; For each parameter, n.eff is a crude measure of effective sample size,</span>
 <span class="co">#&gt; and Rhat is the potential scale reduction factor (at convergence, Rhat=1).</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DIC info (using the rule, pD = Dbar-Dhat)</span>
-<span class="co">#&gt; pD = 429.6 and DIC = 1268.0</span>
+<span class="co">#&gt; pD = 611.5 and DIC = 1693.0</span>
 <span class="co">#&gt; DIC is an estimate of expected predictive error (lower deviance is better).</span>
 
 <span class="co"># diagnostics(nma_res)</span>
 <span class="co"># nma_outputs(nma_res)</span></pre></div>
 </div>
-<div id="reconfigure-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#reconfigure-model" class="anchor"></a>reconfigure model</h2>
-<div class="sourceCode" id="cb6"><pre class="downlit">
+<div id="reconfigure-model" class="section level3">
+<h3 class="hasAnchor">
+<a href="#reconfigure-model" class="anchor"></a>Reconfigure model</h3>
+<p>It is simple to modify an existing analysis without repeating the previous steps. For example, we can run the NMA for a random effects model version of the same model.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit">
 <span class="va">nma_model2</span> <span class="op">&lt;-</span>
   <span class="fu">NMA_update</span><span class="op">(</span><span class="va">nma_model</span>,
              is_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="va">nma_res2</span> <span class="op">&lt;-</span> <span class="fu">NMA_run</span><span class="op">(</span><span class="va">nma_model2</span><span class="op">)</span>
+<span class="va">nma_res2</span> <span class="op">&lt;-</span> <span class="fu">NMA_run</span><span class="op">(</span><span class="va">nma_model2</span>,
+                    output_dir <span class="op">=</span> <span class="st">"RE output"</span><span class="op">)</span>
 <span class="co">#&gt; model is syntactically correct</span>
 <span class="co">#&gt; data loaded</span>
 <span class="co">#&gt; model compiled</span>
@@ -554,13 +550,12 @@
 <span class="co">#&gt; monitor set for variable 'totresdev'</span>
 <span class="co">#&gt; monitor set for variable 'deviance'</span>
 <span class="co">#&gt; 150 updates took 0 s</span>
-<span class="co">#&gt; Warning in dir.create(path = here(folder)): 'C:</span>
-<span class="co">#&gt; \Users\Nathan\Documents\ICON\NMA\output' already exists</span>
 
 <span class="co"># diagnostics(nma_res2, save = TRUE)</span>
 <span class="co"># nma_outputs(nma_res2, save = TRUE)</span>
 
 <span class="co"># plotNetwork(nma_model)</span></pre></div>
+</div>
 </div>
   </div>
 

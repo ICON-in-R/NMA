@@ -68,6 +68,8 @@ subDataMed <-
   } else {NA}
 
 
+# nma_dat <- load_input_data(is_med, is_bin)
+
 ## build model
 nma_model <-
   new_NMA(subData = subData,

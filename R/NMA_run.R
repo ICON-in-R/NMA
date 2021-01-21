@@ -1,10 +1,16 @@
 
 #' @param nma 
+#' @param fileSep 
+#' @param output_dir 
+#' @param save 
 #'
 #' @return
 #' @export
 #'
-NMA_run <- function(nma) {
+NMA_run <- function(nma,
+                    fileSep = "/",
+                    output_dir = "output",
+                    save = TRUE) {
   UseMethod("NMA_run", nma)
 }
 
