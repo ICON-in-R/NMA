@@ -1,0 +1,7 @@
+pandoc: 2.11.0.4
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  how-to-use-S3: how-to-use-S3.html
+last_built: 2021-01-21T14:38Z
+

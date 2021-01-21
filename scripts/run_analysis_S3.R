@@ -52,7 +52,7 @@ is_med <- analysis$MedData == "YES"
 #}
 
 
-# read in datasets
+## read in datasets
 
 filename <- paste0(here::here("raw_data"), "/survdata_", analysis$Endpoint, "_")
 
@@ -76,34 +76,34 @@ if (is_med) {
     mutate(medR = floor(medR))
 }
 
-  
-nma_res <-
-  setupData(subData = subData,
-            subDataMed = subDataMed,
-            subDataBin = subDataBin,
-            is_random = RANDOM,
-            refTx = REFTX) %>% 
-  NMA(dat = .,
-      bugs_params = bugs_params,
-      effectParam = "beta",
-      modelParams = "totresdev",
-      label = analysis$name,
-      endpoint = analysis$Endpoint,
-      random = RANDOM)
 
-#}
-
-
-#########
-# plots #
-#########
-
-dat <- 
-  setupData(subData = subData,
+## build model
+nma_model <-
+  new_NMA(subData = subData,
           subDataMed = subDataMed,
           subDataBin = subDataBin,
+          bugs_params = bugs_params,
           is_random = RANDOM,
-          refTx = REFTX) 
+          refTx = REFTX ,
+          effectParam = "beta",
+          modelParams = "totresdev",
+          label = analysis$name,
+          endpoint = analysis$Endpoint)
 
-plotNetwork(dat)
+## create output
+nma_res <- NMA_run(nma_model)
+
+diagnostics(nma_model, save = TRUE)
+nma_outputs(nma_model, save = TRUE)
+
+## reconfigure model
+nma_model2 <-
+  NMA_update(nma_model,
+             is_random = TRUE)
+
+nma_res2 <- NMA_run(nma_model2)
+
+
+plotNetwork(nma_model)
+
 
