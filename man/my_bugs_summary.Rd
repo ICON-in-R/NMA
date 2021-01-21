@@ -11,7 +11,7 @@ my_bugs_summary(bugs_summary, params, txList)
 
 \item{params}{}
 
-\item{colEff}{}
+\item{txList}{}
 }
 \value{
 

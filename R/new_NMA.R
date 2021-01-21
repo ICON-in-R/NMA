@@ -26,8 +26,8 @@ new_NMA <- function(subData,
                     label,
                     endpoint) {
   
-  is_med <- ifelse(is.na(subDataMed), FALSE, TRUE)
-  is_bin <- ifelse(is.na(subDataBin), FALSE, TRUE)
+  is_med <- ifelse(any(is.na(subDataMed)), FALSE, TRUE)
+  is_bin <- ifelse(any(is.na(subDataBin)), FALSE, TRUE)
   
   bugs_params <- 
     modifyList(bugs_params,
@@ -48,8 +48,7 @@ new_NMA <- function(subData,
               is_random = is_random,
               refTx = refTx)
   
- structure(list(.call = as.list(match.call()),
-                dat = dat,
+ structure(list(dat = dat,
                 is_med = is_med,
                 is_bin = is_bin,
                 bugs_params = bugs_params,
@@ -60,6 +59,7 @@ new_NMA <- function(subData,
                 modelParams = modelParams,
                 label = label,
                 endpoint = endpoint),
-           class = "nma") 
+           class = "nma",
+           CALL = as.list(match.call()[-1])) 
 }
 

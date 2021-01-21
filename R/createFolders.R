@@ -1,39 +1,40 @@
 
 #' create output folders
 #' 
-createFolders <- function(folder,
+#' @param folder 
+#' @param fileSep 
+#' @param ... 
+#' @importFrom glue glue
+#' 
+#' @return 
+#' @export
+#' 
+createFolders <- function(folder = "output",
                           fileSep = "/",
                           ...) {
   
-  subFolders <- list(...)
-  
-  ##TODO: why not just use inbuilt R commands?
+  sub_dir <- list(...)
   
   SYS <- .Platform$OS.type
   
   if (SYS == "windows") {
     if (!file.exists(folder))
-      system(paste(
-        Sys.getenv("COMSPEC"),
-        "/c",
-        paste("mkdir ", folder, sep = "")
-      ))
-    for (subFolder in subFolders) {
-      if (!file.exists(paste(folder, fileSep, subFolder, sep = "")))
-        system(paste(
-          Sys.getenv("COMSPEC"),
-          "/c",
-          paste("mkdir ", folder, fileSep, subFolder, sep = "")
-        ))
+      dir.create(path = here(folder))
+    
+    for (dir in sub_dir) {
+      new_dir <- here(glue("{folder}{fileSep}{dir}"))
+      
+      if (!file.exists(new_dir))
+        dir.create(path = new_dir)
     }
   }
   
   if (SYS == "MAC") {
     if (!file.exists(folder))
       system(paste("mkdir ", folder, sep = ""))
-    for (subFolder in subFolders) {
-      if (!file.exists(paste(folder, fileSep, subFolder, sep = "")))
-        system(paste("mkdir ", folder, fileSep, subFolder, sep = ""))
+    for (dir in sub_dir) {
+      if (!file.exists(paste(folder, fileSep, dir, sep = "")))
+        system(paste("mkdir ", folder, fileSep, dir, sep = ""))
     }
   }
   

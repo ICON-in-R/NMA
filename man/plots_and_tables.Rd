@@ -9,6 +9,7 @@ plots_and_tables(
   res_bugs,
   effectParam,
   labels,
+  endpoint = NULL,
   folder = "output",
   fileSep = "/"
 )
@@ -19,6 +20,8 @@ plots_and_tables(
 \item{effectParam}{}
 
 \item{labels}{}
+
+\item{folder}{}
 
 \item{fileSep}{}
 }

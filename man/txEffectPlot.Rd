@@ -4,7 +4,7 @@
 \alias{txEffectPlot}
 \title{txEffectPlot}
 \usage{
-txEffectPlot(dat, sims, labels, preRefTx, refTx)
+txEffectPlot(dat, sims, labels, endpoint = NULL, preRefTx = NA)
 }
 \arguments{
 \item{dat}{input data list}
@@ -14,8 +14,6 @@ txEffectPlot(dat, sims, labels, preRefTx, refTx)
 \item{labels}{}
 
 \item{preRefTx}{}
-
-\item{refTx}{reference treatment}
 }
 \value{
 

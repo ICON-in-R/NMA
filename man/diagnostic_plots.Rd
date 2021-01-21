@@ -6,6 +6,13 @@
 \usage{
 diagnostic_plots(res_bugs, labels, folder = "output", fileSep = "/")
 }
+\arguments{
+\item{res_bugs}{}
+
+\item{labels}{}
+
+\item{fileSep}{}
+}
 \description{
 WinBugs diagnostic plots
 }

@@ -7,9 +7,11 @@
 bugs_stats(dat, res_bugs, effectParam, random)
 }
 \arguments{
+\item{dat}{input data; list}
+
 \item{res_bugs}{output from running bugs}
 
-\item{effectParam}{}
+\item{effectParam}{text vector of names}
 
 \item{random}{RE or FE}
 }

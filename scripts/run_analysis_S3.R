@@ -16,11 +16,6 @@ bugs_params <-
     N.THIN = 1,
     PAUSE = TRUE)
 
-RUN <- TRUE
-DIAGNOSTICS <- TRUE
-
-saveplot_fn <- customSavePlot()
-
 
 ## run analysis
 
@@ -33,10 +28,8 @@ analyses_params <-
   dplyr::rename(name = Analysis_name,
                 type = Analysis_Type)
 
-# for (a in 1:nrow(analysis)) {
-a <- 1
 
-analysis <- analyses_params[a, ]
+analysis <- analyses_params[1, ]
 
 # fixed effects RANDOM=FALSE, random effects RANDOM=TRUE
 RANDOM <- analysis$Model_effects == "RE"
@@ -49,32 +42,30 @@ is_bin <- analysis$BinData == "YES"
 # indicator for availability of median endpoint data
 is_med <- analysis$MedData == "YES"
 
-#}
-
 
 ## read in datasets
 
-filename <- paste0(here::here("raw_data"), "/survdata_", analysis$Endpoint, "_")
+file_name <- paste0(here::here("raw_data"), "/survdata_", analysis$Endpoint, "_")
 
 subData <-
   read.csv(paste0(file_name, analysis$type, ".csv"),
            header = TRUE,
            as.is = TRUE)
 
-if (is_bin) {
-  subDataBin <-
+subDataBin <-
+  if (is_bin) {
     read.csv(paste0(file_name, "bin.csv"),
              header = TRUE,
              as.is = TRUE)
-}
+  } else {NA}
 
-if (is_med) {
-  subDataMed <-
+subDataMed <-
+  if (is_med) {
     read.csv(paste0(file_name, "med.csv"),
              header = TRUE,
              as.is = TRUE) %>% 
-    mutate(medR = floor(medR))
-}
+      mutate(medR = floor(medR))
+  } else {NA}
 
 
 ## build model
@@ -93,8 +84,8 @@ nma_model <-
 ## create output
 nma_res <- NMA_run(nma_model)
 
-diagnostics(nma_model, save = TRUE)
-nma_outputs(nma_model, save = TRUE)
+diagnostics(nma_res)
+nma_outputs(nma_res)
 
 ## reconfigure model
 nma_model2 <-
@@ -103,6 +94,8 @@ nma_model2 <-
 
 nma_res2 <- NMA_run(nma_model2)
 
+diagnostics(nma_res2, save = TRUE)
+nma_outputs(nma_res2, save = TRUE)
 
 plotNetwork(nma_model)
 
