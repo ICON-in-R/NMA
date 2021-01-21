@@ -3,7 +3,6 @@
 #' 
 #' @param dat result of setupData()
 #' @param bugs_params
-#' @param bugs_fn BUGS function call
 #' @param effectParam 
 #' @param modelParams 
 #' @param output_dir
@@ -24,7 +23,6 @@
 #' 
 NMA <- function(dat,
                 bugs_params,
-                bugs_fn,
                 effectParam = NA,
                 modelParams = NA,
                 output_dir = "output",
@@ -41,6 +39,8 @@ NMA <- function(dat,
   
   bugs_filename <- make_bugs_filename(random, dat)
   labels <- make_labels(label)
+  
+  bugs_fn <- customBugs(bugs_params$PROG)
   
   ## run bugs model ----
   

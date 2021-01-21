@@ -20,7 +20,6 @@ RUN <- TRUE
 DIAGNOSTICS <- TRUE
 
 saveplot_fn <- customSavePlot()
-bugs_fn <- customBugs()
 
 
 ## run analysis
@@ -86,7 +85,6 @@ nma_res <-
             refTx = REFTX) %>% 
   NMA(dat = .,
       bugs_params = bugs_params,
-      bugs_fn = bugs_fn,
       effectParam = "beta",
       modelParams = "totresdev",
       label = analysis$name,
@@ -98,11 +96,10 @@ nma_res <-
 ##TODO: S3 version...
 # ## build model
 # nma_model <-
-#   NMA_new(subData = subData,
+#   new_NMA(subData = subData,
 #           subDataMed = subDataMed,
 #           subDataBin = subDataBin,
 #           bugs_params = bugs_params,
-#           bugs_fn = bugs_fn,
 #           is_random = RANDOM,
 #           refTx = REFTX ,
 #           effectParam = "beta",
@@ -113,14 +110,13 @@ nma_res <-
 # ## create output
 # nma_res <- NMA_run(nma_model)
 #
-# print(nma_model)
-# plot(nma_model, save = TRUE)
-# output_tables(nma_model, save = TRUE)
+# diagnostics(nma_model, save = TRUE)
+# nma_outputs(nma_model, save = TRUE)
 #
 # ## reconfigure model
 # nma_model2 <- 
 #   NMA_update(nma_model,
-#              random = TRUE)
+#              is_random = TRUE)
 #
 # nma_res2 <- NMA_run(nma_model2)
 

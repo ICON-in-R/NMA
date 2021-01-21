@@ -1,6 +1,0 @@
-
-NMA_new <- function() {
-  
-  
-}
-
