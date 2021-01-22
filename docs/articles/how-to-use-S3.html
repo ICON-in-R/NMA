@@ -58,8 +58,18 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/ICON-in-R/NMA/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -76,7 +86,7 @@
       <h1 data-toc-skip>How to use <code>nma</code> S3 methods</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/ICON-in-R/NMA/blob/master/vignettes/how-to-use-S3.Rmd"><code>vignettes/how-to-use-S3.Rmd</code></a></small>
       <div class="hidden name"><code>how-to-use-S3.Rmd</code></div>
 
     </div>
@@ -92,7 +102,7 @@
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">NMA</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://icon-in-r.github.io/NMA">NMA</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span></pre></div>
 <div id="settings" class="section level3">
@@ -187,8 +197,8 @@
 <span class="co">#&gt;         alpha = rnorm(nStudies)) %&gt;% </span>
 <span class="co">#&gt;         .[param_names]</span>
 <span class="co">#&gt;     }</span>
-<span class="co">#&gt; &lt;bytecode: 0x000000001f9ff2e0&gt;</span>
-<span class="co">#&gt; &lt;environment: 0x000000001fa03460&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x0000000020222370&gt;</span>
+<span class="co">#&gt; &lt;environment: 0x0000000020225fb8&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $dat$subData</span>
 <span class="co">#&gt;     X                                 study                  base            tx</span>
@@ -404,8 +414,8 @@
 <span class="co">#&gt; $bugs_fn</span>
 <span class="co">#&gt; function(...)</span>
 <span class="co">#&gt;         bugs(program = "openbugs", ...)</span>
-<span class="co">#&gt; &lt;bytecode: 0x000000001e83a060&gt;</span>
-<span class="co">#&gt; &lt;environment: 0x000000001e83e258&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x000000001f0572a0&gt;</span>
+<span class="co">#&gt; &lt;environment: 0x000000001f05b498&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $is_random</span>
 <span class="co">#&gt; [1] FALSE</span>
@@ -487,38 +497,38 @@
 <span class="co">#&gt; Inference for Bugs model at "C:/Users/Nathan/Documents/ICON/NMA/inst/FE_med_bin.txt", fit using OpenBUGS,</span>
 <span class="co">#&gt;  2 chains, each with 160 iterations (first 10 discarded)</span>
 <span class="co">#&gt;  n.sims = 300 iterations saved</span>
-<span class="co">#&gt;             mean    sd  2.5%   25%   50%    75%  97.5% Rhat n.eff</span>
-<span class="co">#&gt; beta[2]     -0.6   0.6  -1.7  -1.1  -0.5    0.0    0.2  1.1    31</span>
-<span class="co">#&gt; beta[3]     -2.0   0.5  -3.0  -2.4  -1.9   -1.6   -1.3  1.7     5</span>
-<span class="co">#&gt; beta[4]      0.5   0.1   0.2   0.4   0.5    0.5    0.7  1.0   160</span>
-<span class="co">#&gt; beta[5]      0.2   0.9  -1.5  -0.9   0.7    1.0    1.1  3.2     3</span>
-<span class="co">#&gt; beta[6]     -0.1   0.5  -0.9  -0.5  -0.3    0.4    0.7  1.6     6</span>
-<span class="co">#&gt; beta[7]     -0.5   0.1  -0.7  -0.6  -0.5   -0.4   -0.3  1.0   120</span>
-<span class="co">#&gt; beta[8]     -0.1   0.2  -0.4  -0.2  -0.1    0.0    0.2  1.0   300</span>
-<span class="co">#&gt; beta[9]     -0.5   0.1  -0.7  -0.6  -0.5   -0.4   -0.2  1.0   300</span>
-<span class="co">#&gt; beta[10]    -0.1   0.5  -0.9  -0.4  -0.1    0.0    0.9  1.1    48</span>
-<span class="co">#&gt; beta[11]     0.8   0.6  -0.6   0.4   0.8    1.2    2.0  1.1    19</span>
-<span class="co">#&gt; beta[12]    -0.7   0.1  -0.9  -0.8  -0.7   -0.6   -0.5  1.0   300</span>
-<span class="co">#&gt; beta[13]    -0.3   0.3  -0.9  -0.6  -0.4   -0.2    0.2  1.0   160</span>
-<span class="co">#&gt; beta[14]    -0.3   0.3  -0.9  -0.5  -0.3    0.0    0.3  1.0   180</span>
-<span class="co">#&gt; beta[15]     0.0   0.2  -0.3  -0.1   0.0    0.2    0.4  1.0   300</span>
-<span class="co">#&gt; beta[16]    -0.3   0.2  -0.6  -0.4  -0.3   -0.2    0.1  1.0   300</span>
-<span class="co">#&gt; beta[17]    -0.9   0.7  -2.1  -1.4  -0.6   -0.4   -0.1  1.4     8</span>
-<span class="co">#&gt; beta[18]     0.8   0.4   0.1   0.5   0.9    1.1    1.4  1.0    44</span>
-<span class="co">#&gt; beta[19]    -0.2   0.9  -1.9  -1.3   0.3    0.6    0.8  3.1     3</span>
-<span class="co">#&gt; beta[20]    -0.5   1.0  -2.2  -1.6  -0.1    0.2    0.5  3.0     3</span>
-<span class="co">#&gt; beta[21]     0.3   0.3  -0.2   0.2   0.3    0.5    0.9  1.0    57</span>
-<span class="co">#&gt; beta[22]    -0.8   0.1  -1.0  -0.9  -0.8   -0.7   -0.6  1.0   300</span>
-<span class="co">#&gt; beta[23]    -0.5   0.1  -0.8  -0.6  -0.5   -0.4   -0.3  1.0   300</span>
-<span class="co">#&gt; beta[24]     0.6   0.5  -0.4   0.3   0.5    0.9    1.4  1.0   300</span>
-<span class="co">#&gt; totresdev 1065.3 906.8 191.4 302.6 752.1 1754.2 2940.9  1.4     8</span>
-<span class="co">#&gt; deviance  1081.1 907.3 207.0 317.2 766.7 1769.1 2959.4  1.4     8</span>
+<span class="co">#&gt;            mean    sd  2.5%   25%   50%    75%  97.5% Rhat n.eff</span>
+<span class="co">#&gt; beta[2]     0.1   1.0  -1.4  -0.7  -0.1    0.7    1.8  5.7     2</span>
+<span class="co">#&gt; beta[3]    -0.8   1.1  -1.8  -1.5  -1.1   -0.7    1.9  1.9     4</span>
+<span class="co">#&gt; beta[4]     0.4   0.1   0.2   0.4   0.4    0.5    0.7  1.0   300</span>
+<span class="co">#&gt; beta[5]     0.9   1.3  -0.4  -0.4   0.5    2.1    2.8 10.0     2</span>
+<span class="co">#&gt; beta[6]     1.0   1.0  -1.1   0.6   1.4    1.8    1.9  2.9     3</span>
+<span class="co">#&gt; beta[7]    -0.5   0.1  -0.7  -0.6  -0.5   -0.4   -0.2  1.0   300</span>
+<span class="co">#&gt; beta[8]    -0.1   0.2  -0.5  -0.2  -0.1    0.0    0.2  1.0   300</span>
+<span class="co">#&gt; beta[9]    -0.5   0.1  -0.7  -0.6  -0.5   -0.4   -0.3  1.0   300</span>
+<span class="co">#&gt; beta[10]    0.0   0.5  -1.2  -0.2   0.1    0.3    0.6  1.2    32</span>
+<span class="co">#&gt; beta[11]    1.0   0.5   0.1   0.6   1.0    1.4    2.0  1.1    41</span>
+<span class="co">#&gt; beta[12]   -0.7   0.1  -0.9  -0.8  -0.7   -0.7   -0.5  1.0   300</span>
+<span class="co">#&gt; beta[13]   -0.4   0.3  -0.9  -0.6  -0.4   -0.2    0.2  1.0   300</span>
+<span class="co">#&gt; beta[14]   -0.2   0.4  -1.4  -0.4  -0.1    0.0    1.0  1.4     8</span>
+<span class="co">#&gt; beta[15]    0.0   0.2  -0.3  -0.1   0.0    0.2    0.4  1.0   300</span>
+<span class="co">#&gt; beta[16]   -0.3   0.2  -0.7  -0.4  -0.3   -0.2    0.0  1.0   210</span>
+<span class="co">#&gt; beta[17]   -1.0   0.8  -2.2  -1.9  -0.5   -0.4   -0.2  1.0    64</span>
+<span class="co">#&gt; beta[18]    1.2   0.6   0.3   0.7   1.2    1.6    2.2  4.2     2</span>
+<span class="co">#&gt; beta[19]    0.5   1.3  -1.1  -0.8   0.2    1.7    2.4  8.9     2</span>
+<span class="co">#&gt; beta[20]    0.1   1.3  -1.5  -1.1  -0.1    1.4    2.2  8.1     2</span>
+<span class="co">#&gt; beta[21]    0.3   0.3  -0.2   0.1   0.3    0.5    0.8  1.0   280</span>
+<span class="co">#&gt; beta[22]   -0.8   0.1  -1.0  -0.8  -0.8   -0.7   -0.6  1.0   300</span>
+<span class="co">#&gt; beta[23]   -0.5   0.1  -0.8  -0.6  -0.5   -0.4   -0.3  1.0   300</span>
+<span class="co">#&gt; beta[24]    0.7   0.6  -0.3   0.2   0.5    1.1    1.8  1.0   300</span>
+<span class="co">#&gt; totresdev 586.3 514.3  91.2 141.5 375.0 1009.7 1793.1  1.3    11</span>
+<span class="co">#&gt; deviance  603.8 516.4 105.3 156.9 390.0 1025.4 1819.0  1.3    12</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; For each parameter, n.eff is a crude measure of effective sample size,</span>
 <span class="co">#&gt; and Rhat is the potential scale reduction factor (at convergence, Rhat=1).</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DIC info (using the rule, pD = Dbar-Dhat)</span>
-<span class="co">#&gt; pD = 611.5 and DIC = 1693.0</span>
+<span class="co">#&gt; pD = 387.1 and DIC = 990.9</span>
 <span class="co">#&gt; DIC is an estimate of expected predictive error (lower deviance is better).</span>
 
 <span class="co"># diagnostics(nma_res)</span>
@@ -550,6 +560,8 @@
 <span class="co">#&gt; monitor set for variable 'totresdev'</span>
 <span class="co">#&gt; monitor set for variable 'deviance'</span>
 <span class="co">#&gt; 150 updates took 0 s</span>
+<span class="co">#&gt; Warning in dir.create(path = here(folder)): 'C:</span>
+<span class="co">#&gt; \Users\Nathan\Documents\ICON\NMA\RE output' already exists</span>
 
 <span class="co"># diagnostics(nma_res2, save = TRUE)</span>
 <span class="co"># nma_outputs(nma_res2, save = TRUE)</span>
@@ -570,7 +582,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by First Last.</p>
+  <p>Developed by Nathan Green.</p>
 </div>
 
 <div class="pkgdown">
