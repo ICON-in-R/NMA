@@ -98,12 +98,13 @@ nma_res <-
 # plots #
 #########
 
+library(sna)
 dat <- 
   setupData(subData = subData,
-          subDataMed = subDataMed,
-          subDataBin = subDataBin,
-          is_random = RANDOM,
-          refTx = REFTX) 
+            subDataMed = subDataMed,
+            subDataBin = subDataBin,
+            is_random = RANDOM,
+            refTx = REFTX) 
 
 plotNetwork(dat)
 

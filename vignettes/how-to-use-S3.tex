@@ -110,28 +110,30 @@
 \begin{document}
 \maketitle
 
+\hypertarget{introduction}{%
+\subsection{Introduction}\label{introduction}}
+
+This document describes how to use the main functions of \texttt{NMA} to
+run a network meta-analysis.
+
+\hypertarget{example}{%
+\subsection{Example}\label{example}}
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(NMA)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(purrr)}
 \end{Highlighting}
 \end{Shaded}
 
+\hypertarget{settings}{%
+\subsubsection{Settings}\label{settings}}
+
+Define the BUGS parameters for MCMC.
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(dplyr)}
-\CommentTok{\#\textgreater{} }
-\CommentTok{\#\textgreater{} Attaching package: \textquotesingle{}dplyr\textquotesingle{}}
-\CommentTok{\#\textgreater{} The following objects are masked from \textquotesingle{}package:stats\textquotesingle{}:}
-\CommentTok{\#\textgreater{} }
-\CommentTok{\#\textgreater{}     filter, lag}
-\CommentTok{\#\textgreater{} The following objects are masked from \textquotesingle{}package:base\textquotesingle{}:}
-\CommentTok{\#\textgreater{} }
-\CommentTok{\#\textgreater{}     intersect, setdiff, setequal, union}
-\FunctionTok{library}\NormalTok{(purrr)}
-
-
-\DocumentationTok{\#\# settings}
-
 \NormalTok{bugs\_params }\OtherTok{\textless{}{-}}
   \FunctionTok{list}\NormalTok{(}
     \AttributeTok{PROG =} \StringTok{"openBugs"}\NormalTok{,}
@@ -140,10 +142,14 @@
     \AttributeTok{N.CHAINS =} \DecValTok{2}\NormalTok{,}
     \AttributeTok{N.THIN =} \DecValTok{1}\NormalTok{,}
     \AttributeTok{PAUSE =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
+Define the scenario we will use for the analysis. We will load in a
+dataframe of values.
 
-\DocumentationTok{\#\# run analysis}
-
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{analyses\_params }\OtherTok{\textless{}{-}}
   \FunctionTok{read.csv}\NormalTok{(}
 \NormalTok{    here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{(}\StringTok{"raw\_data"}\NormalTok{, }\StringTok{"AnalysisList.csv"}\NormalTok{),}
@@ -152,8 +158,13 @@
   \FunctionTok{filter}\NormalTok{(Endpoint\_type }\SpecialCharTok{==} \StringTok{"Surv"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
 \NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{name =}\NormalTok{ Analysis\_name,}
                 \AttributeTok{type =}\NormalTok{ Analysis\_Type)}
+\end{Highlighting}
+\end{Shaded}
 
+For demonstration purposes we will select the first scenario to run.
 
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{analysis }\OtherTok{\textless{}{-}}\NormalTok{ analyses\_params[}\DecValTok{1}\NormalTok{, ]}
 
 \CommentTok{\# fixed effects RANDOM=FALSE, random effects RANDOM=TRUE}
@@ -170,7 +181,11 @@
 \end{Shaded}
 
 \hypertarget{read-in-datasets}{%
-\subsection{read in datasets}\label{read-in-datasets}}
+\subsubsection{Read in datasets}\label{read-in-datasets}}
+
+The trials data consist of upto 3 separate dataframes. A main table,
+\texttt{subData}, and optional tables for median event time and binary
+data, \texttt{subDataMed} and \texttt{subDataBin} respectively.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -199,7 +214,9 @@
 \end{Shaded}
 
 \hypertarget{build-model}{%
-\subsection{build model}\label{build-model}}
+\subsubsection{Build model}\label{build-model}}
+
+Now we can create the NMA object to use in the modelling.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -225,7 +242,8 @@
 \CommentTok{\#\textgreater{}         alpha = rnorm(nStudies)) \%\textgreater{}\% }
 \CommentTok{\#\textgreater{}         .[param\_names]}
 \CommentTok{\#\textgreater{}     \}}
-\CommentTok{\#\textgreater{} \textless{}environment: 0x0000027d5499f0f8\textgreater{}}
+\CommentTok{\#\textgreater{} \textless{}bytecode: 0x00000174580ede80\textgreater{}}
+\CommentTok{\#\textgreater{} \textless{}environment: 0x000001745825eed8\textgreater{}}
 \CommentTok{\#\textgreater{} }
 \CommentTok{\#\textgreater{} $dat$subData}
 \CommentTok{\#\textgreater{}     X                                 study                  base            tx       Lmean       Lse multi\_arm Ltx Lbase Lstudy}
@@ -386,7 +404,8 @@
 \CommentTok{\#\textgreater{} $bugs\_fn}
 \CommentTok{\#\textgreater{} function(...)}
 \CommentTok{\#\textgreater{}         bugs(program = "openbugs", ...)}
-\CommentTok{\#\textgreater{} \textless{}environment: 0x0000027d5c146cd0\textgreater{}}
+\CommentTok{\#\textgreater{} \textless{}bytecode: 0x000001745392bbc8\textgreater{}}
+\CommentTok{\#\textgreater{} \textless{}environment: 0x000001745e367750\textgreater{}}
 \CommentTok{\#\textgreater{} }
 \CommentTok{\#\textgreater{} $is\_random}
 \CommentTok{\#\textgreater{} [1] FALSE}
@@ -441,8 +460,19 @@
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{create-output}{%
-\subsection{create output}\label{create-output}}
+We can view the network graph.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(sna)}
+\FunctionTok{plotNetwork}\NormalTok{(nma\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{how-to-use-S3_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\hypertarget{run-mcmc}{%
+\subsubsection{Run MCMC}\label{run-mcmc}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -470,38 +500,38 @@
 \CommentTok{\#\textgreater{} Inference for Bugs model at "C:/Users/Nathan/Documents/ICON/NMA/inst/FE\_med\_bin.txt", fit using OpenBUGS,}
 \CommentTok{\#\textgreater{}  2 chains, each with 160 iterations (first 10 discarded)}
 \CommentTok{\#\textgreater{}  n.sims = 300 iterations saved}
-\CommentTok{\#\textgreater{}            mean    sd  2.5\%   25\%   50\%    75\%  97.5\% Rhat n.eff}
-\CommentTok{\#\textgreater{} beta[2]     0.4   0.6  {-}0.5   0.0   0.4    1.1    1.3  1.9     4}
-\CommentTok{\#\textgreater{} beta[3]     0.0   0.6  {-}0.9  {-}0.5   0.0    0.5    0.8  1.1    29}
-\CommentTok{\#\textgreater{} beta[4]     0.5   0.1   0.2   0.4   0.5    0.5    0.7  1.0   260}
-\CommentTok{\#\textgreater{} beta[5]     0.3   1.2  {-}1.3  {-}1.0   0.5    1.4    1.8  8.4     2}
-\CommentTok{\#\textgreater{} beta[6]     0.1   1.7  {-}2.1  {-}1.7   0.4    1.7    2.0  8.4     2}
-\CommentTok{\#\textgreater{} beta[7]    {-}0.5   0.1  {-}0.7  {-}0.6  {-}0.5   {-}0.4   {-}0.3  1.0   210}
-\CommentTok{\#\textgreater{} beta[8]    {-}0.1   0.2  {-}0.5  {-}0.2  {-}0.1    0.0    0.2  1.0   300}
-\CommentTok{\#\textgreater{} beta[9]    {-}0.5   0.1  {-}0.7  {-}0.6  {-}0.5   {-}0.4   {-}0.2  1.0   300}
-\CommentTok{\#\textgreater{} beta[10]   {-}0.2   0.7  {-}3.5  {-}0.3   0.0    0.2    0.5  1.0   300}
-\CommentTok{\#\textgreater{} beta[11]    0.6   1.0  {-}1.4   0.3   0.7    1.3    1.8  1.2    13}
-\CommentTok{\#\textgreater{} beta[12]   {-}0.7   0.1  {-}0.9  {-}0.8  {-}0.7   {-}0.6   {-}0.5  1.0   110}
-\CommentTok{\#\textgreater{} beta[13]   {-}0.4   0.3  {-}0.9  {-}0.5  {-}0.4   {-}0.2    0.2  1.0   300}
-\CommentTok{\#\textgreater{} beta[14]   {-}0.2   0.3  {-}0.8  {-}0.5  {-}0.2    0.0    0.2  1.2    14}
-\CommentTok{\#\textgreater{} beta[15]    0.0   0.2  {-}0.3  {-}0.1   0.1    0.2    0.4  1.0   300}
-\CommentTok{\#\textgreater{} beta[16]   {-}0.3   0.2  {-}0.6  {-}0.4  {-}0.3   {-}0.2    0.1  1.0   300}
-\CommentTok{\#\textgreater{} beta[17]   {-}0.8   0.4  {-}1.7  {-}1.0  {-}0.9   {-}0.4   {-}0.2  1.6     6}
-\CommentTok{\#\textgreater{} beta[18]    1.4   0.3   0.8   1.1   1.4    1.7    2.0  1.8     4}
-\CommentTok{\#\textgreater{} beta[19]   {-}0.1   1.2  {-}1.9  {-}1.4   0.2    1.0    1.5  7.4     2}
-\CommentTok{\#\textgreater{} beta[20]   {-}0.4   1.2  {-}2.3  {-}1.7  {-}0.2    0.7    1.4  6.8     2}
-\CommentTok{\#\textgreater{} beta[21]    0.3   0.3  {-}0.3   0.1   0.3    0.5    0.8  1.0    95}
-\CommentTok{\#\textgreater{} beta[22]   {-}0.8   0.1  {-}1.0  {-}0.9  {-}0.8   {-}0.7   {-}0.6  1.0   300}
-\CommentTok{\#\textgreater{} beta[23]   {-}0.5   0.1  {-}0.8  {-}0.6  {-}0.5   {-}0.4   {-}0.3  1.0   300}
-\CommentTok{\#\textgreater{} beta[24]    0.3   1.2  {-}4.9   0.1   0.6    0.8    1.4  1.2   300}
-\CommentTok{\#\textgreater{} totresdev 862.1 653.9 285.7 373.5 591.5 1226.2 2434.0  1.1    37}
-\CommentTok{\#\textgreater{} deviance  877.5 654.0 300.7 392.4 611.7 1242.1 2449.1  1.1    37}
+\CommentTok{\#\textgreater{}            mean    sd  2.5\%   25\%   50\%   75\%  97.5\% Rhat n.eff}
+\CommentTok{\#\textgreater{} beta[2]     0.2   0.7  {-}0.7  {-}0.5   0.1   0.7    1.3  2.2     4}
+\CommentTok{\#\textgreater{} beta[3]    {-}0.9   0.9  {-}2.2  {-}2.0  {-}0.5  {-}0.1    0.0  7.0     2}
+\CommentTok{\#\textgreater{} beta[4]     0.5   0.1   0.2   0.4   0.4   0.5    0.7  1.0   210}
+\CommentTok{\#\textgreater{} beta[5]     1.4   0.6   0.1   1.2   1.4   1.8    2.3  2.0     4}
+\CommentTok{\#\textgreater{} beta[6]     0.8   0.7  {-}0.2   0.4   0.9   1.1    2.8  1.5     6}
+\CommentTok{\#\textgreater{} beta[7]    {-}0.5   0.1  {-}0.7  {-}0.5  {-}0.5  {-}0.4   {-}0.2  1.0   300}
+\CommentTok{\#\textgreater{} beta[8]    {-}0.1   0.2  {-}0.4  {-}0.2  {-}0.1   0.0    0.2  1.0   190}
+\CommentTok{\#\textgreater{} beta[9]    {-}0.5   0.1  {-}0.7  {-}0.6  {-}0.5  {-}0.4   {-}0.3  1.0   210}
+\CommentTok{\#\textgreater{} beta[10]   {-}0.2   0.7  {-}1.3  {-}0.5  {-}0.2   0.1    0.7  1.2   230}
+\CommentTok{\#\textgreater{} beta[11]    0.9   0.8  {-}0.6   0.4   1.0   1.4    2.2  1.1    26}
+\CommentTok{\#\textgreater{} beta[12]   {-}0.7   0.1  {-}0.9  {-}0.8  {-}0.7  {-}0.6   {-}0.5  1.0   300}
+\CommentTok{\#\textgreater{} beta[13]   {-}0.4   0.3  {-}0.9  {-}0.6  {-}0.4  {-}0.2    0.3  1.0   150}
+\CommentTok{\#\textgreater{} beta[14]   {-}0.3   0.2  {-}0.7  {-}0.4  {-}0.3  {-}0.2    0.2  1.1    21}
+\CommentTok{\#\textgreater{} beta[15]    0.0   0.2  {-}0.3  {-}0.1   0.0   0.1    0.3  1.0   110}
+\CommentTok{\#\textgreater{} beta[16]   {-}0.3   0.2  {-}0.6  {-}0.4  {-}0.3  {-}0.2    0.1  1.0   300}
+\CommentTok{\#\textgreater{} beta[17]   {-}0.9   0.6  {-}2.1  {-}1.5  {-}0.6  {-}0.4   {-}0.2  1.0    91}
+\CommentTok{\#\textgreater{} beta[18]    1.3   0.4   0.7   0.9   1.3   1.6    1.9  2.1     4}
+\CommentTok{\#\textgreater{} beta[19]    0.9   0.6  {-}0.4   0.6   0.9   1.4    1.9  2.8     3}
+\CommentTok{\#\textgreater{} beta[20]    0.6   0.6  {-}0.7   0.3   0.7   1.1    1.7  2.6     3}
+\CommentTok{\#\textgreater{} beta[21]    0.3   0.3  {-}0.3   0.1   0.3   0.5    0.8  1.0   300}
+\CommentTok{\#\textgreater{} beta[22]   {-}0.8   0.1  {-}1.0  {-}0.8  {-}0.8  {-}0.7   {-}0.6  1.0   300}
+\CommentTok{\#\textgreater{} beta[23]   {-}0.5   0.1  {-}0.8  {-}0.6  {-}0.5  {-}0.4   {-}0.3  1.0   200}
+\CommentTok{\#\textgreater{} beta[24]    0.4   0.6  {-}0.7   0.0   0.3   0.8    1.4  1.2    11}
+\CommentTok{\#\textgreater{} totresdev 655.5 578.3 110.6 293.6 385.8 919.6 1813.1  1.1    41}
+\CommentTok{\#\textgreater{} deviance  670.8 578.7 126.9 309.2 400.9 933.8 1833.6  1.1    45}
 \CommentTok{\#\textgreater{} }
 \CommentTok{\#\textgreater{} For each parameter, n.eff is a crude measure of effective sample size,}
 \CommentTok{\#\textgreater{} and Rhat is the potential scale reduction factor (at convergence, Rhat=1).}
 \CommentTok{\#\textgreater{} }
 \CommentTok{\#\textgreater{} DIC info (using the rule, pD = Dbar{-}Dhat)}
-\CommentTok{\#\textgreater{} pD = 485.8 and DIC = 1363.0}
+\CommentTok{\#\textgreater{} pD = 349.8 and DIC = 1021.0}
 \CommentTok{\#\textgreater{} DIC is an estimate of expected predictive error (lower deviance is better).}
 
 \CommentTok{\# diagnostics(nma\_res)}
@@ -510,7 +540,11 @@
 \end{Shaded}
 
 \hypertarget{reconfigure-model}{%
-\subsection{reconfigure model}\label{reconfigure-model}}
+\subsubsection{Reconfigure model}\label{reconfigure-model}}
+
+It is simple to modify an existing analysis without repeating the
+previous steps. For example, we can run the NMA for a random effects
+model version of the same model.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -518,7 +552,8 @@
   \FunctionTok{NMA\_update}\NormalTok{(nma\_model,}
              \AttributeTok{is\_random =} \ConstantTok{TRUE}\NormalTok{)}
 
-\NormalTok{nma\_res2 }\OtherTok{\textless{}{-}} \FunctionTok{NMA\_run}\NormalTok{(nma\_model2)}
+\NormalTok{nma\_res2 }\OtherTok{\textless{}{-}} \FunctionTok{NMA\_run}\NormalTok{(nma\_model2,}
+                    \AttributeTok{output\_dir =} \StringTok{"RE output"}\NormalTok{)}
 \CommentTok{\#\textgreater{} model is syntactically correct}
 \CommentTok{\#\textgreater{} data loaded}
 \CommentTok{\#\textgreater{} model compiled}
@@ -534,12 +569,48 @@
 \CommentTok{\#\textgreater{} monitor set for variable \textquotesingle{}totresdev\textquotesingle{}}
 \CommentTok{\#\textgreater{} monitor set for variable \textquotesingle{}deviance\textquotesingle{}}
 \CommentTok{\#\textgreater{} 150 updates took 0 s}
-\CommentTok{\#\textgreater{} Warning in dir.create(path = here(folder)): \textquotesingle{}C:\textbackslash{}Users\textbackslash{}Nathan\textbackslash{}Documents\textbackslash{}ICON\textbackslash{}NMA\textbackslash{}output\textquotesingle{} already exists}
+\CommentTok{\#\textgreater{} Warning in dir.create(path = here(folder)): \textquotesingle{}C:\textbackslash{}Users\textbackslash{}Nathan\textbackslash{}Documents\textbackslash{}ICON\textbackslash{}NMA\textbackslash{}RE output\textquotesingle{} already exists}
+
+\NormalTok{nma\_res2}
+\CommentTok{\#\textgreater{} Inference for Bugs model at "C:/Users/Nathan/Documents/ICON/NMA/inst/RE\_med\_bin.txt", fit using OpenBUGS,}
+\CommentTok{\#\textgreater{}  2 chains, each with 160 iterations (first 10 discarded)}
+\CommentTok{\#\textgreater{}  n.sims = 300 iterations saved}
+\CommentTok{\#\textgreater{}            mean    sd  2.5\%   25\%   50\%   75\%  97.5\% Rhat n.eff}
+\CommentTok{\#\textgreater{} beta[2]    {-}0.6   5.4  {-}7.0  {-}6.3   0.1   4.6    5.9 12.1     2}
+\CommentTok{\#\textgreater{} beta[3]    {-}5.5   3.2 {-}10.1  {-}9.2  {-}3.4  {-}2.6   {-}1.8  5.3     2}
+\CommentTok{\#\textgreater{} beta[4]     0.4   1.7  {-}2.1  {-}1.5   0.9   1.9    2.8  6.3     2}
+\CommentTok{\#\textgreater{} beta[5]     1.1   1.1  {-}0.9   0.4   0.7   2.3    3.1  1.7     6}
+\CommentTok{\#\textgreater{} beta[6]     0.8   3.9  {-}5.4  {-}3.9   2.6   4.3    5.1  5.2     2}
+\CommentTok{\#\textgreater{} beta[7]    {-}1.1   1.2  {-}3.5  {-}2.2  {-}0.9  {-}0.1    0.7  1.9     4}
+\CommentTok{\#\textgreater{} beta[8]    {-}2.2   0.9  {-}3.7  {-}2.9  {-}2.3  {-}1.7   {-}0.1  1.0   300}
+\CommentTok{\#\textgreater{} beta[9]    {-}0.9   1.0  {-}2.8  {-}1.3  {-}0.7  {-}0.2    0.7  1.2    26}
+\CommentTok{\#\textgreater{} beta[10]   {-}1.8   1.3  {-}3.6  {-}2.6  {-}2.2  {-}0.9    0.9  3.5     3}
+\CommentTok{\#\textgreater{} beta[11]    2.0   1.3  {-}1.0   1.3   2.2   2.9    4.3  1.1    15}
+\CommentTok{\#\textgreater{} beta[12]   {-}1.2   0.5  {-}2.0  {-}1.5  {-}1.3  {-}1.0   {-}0.3  2.0     4}
+\CommentTok{\#\textgreater{} beta[13]   {-}2.6   2.2  {-}6.5  {-}3.8  {-}2.5  {-}0.8    0.8  3.6     3}
+\CommentTok{\#\textgreater{} beta[14]   {-}0.7   1.1  {-}2.1  {-}1.5  {-}1.0   0.2    1.6  1.9     4}
+\CommentTok{\#\textgreater{} beta[15]    0.1   1.2  {-}2.0  {-}0.8  {-}0.1   1.1    2.2  3.4     3}
+\CommentTok{\#\textgreater{} beta[16]    1.7   0.8   0.0   1.1   1.8   2.4    2.9  1.0   260}
+\CommentTok{\#\textgreater{} beta[17]    3.2   3.0  {-}0.3   0.6   0.8   6.2    7.8  4.0     2}
+\CommentTok{\#\textgreater{} beta[18]    0.8   2.1  {-}2.4  {-}1.1   0.7   2.6    4.4  6.2     2}
+\CommentTok{\#\textgreater{} beta[19]    1.7   2.4  {-}1.2  {-}0.5   0.8   4.4    5.3  6.0     2}
+\CommentTok{\#\textgreater{} beta[20]    1.4   1.3  {-}0.7   0.3   1.5   2.6    3.7  4.3     2}
+\CommentTok{\#\textgreater{} beta[21]    2.0   1.5  {-}1.7   1.2   2.2   3.2    4.3  1.2    24}
+\CommentTok{\#\textgreater{} beta[22]    1.3   1.5  {-}0.5   0.2   0.7   2.8    4.3  2.7     3}
+\CommentTok{\#\textgreater{} beta[23]   {-}2.3   1.0  {-}3.8  {-}2.9  {-}2.5  {-}1.9    0.0  1.7     5}
+\CommentTok{\#\textgreater{} beta[24]    0.5   1.2  {-}1.7  {-}0.5   0.7   1.7    2.3  3.8     2}
+\CommentTok{\#\textgreater{} totresdev 423.5 398.4  69.8 104.6 394.6 580.1 1670.6  5.3     2}
+\CommentTok{\#\textgreater{} deviance  440.8 401.0  84.7 121.1 412.8 594.5 1699.7  5.3     2}
+\CommentTok{\#\textgreater{} }
+\CommentTok{\#\textgreater{} For each parameter, n.eff is a crude measure of effective sample size,}
+\CommentTok{\#\textgreater{} and Rhat is the potential scale reduction factor (at convergence, Rhat=1).}
+\CommentTok{\#\textgreater{} }
+\CommentTok{\#\textgreater{} DIC info (using the rule, pD = Dbar{-}Dhat)}
+\CommentTok{\#\textgreater{} pD = 216.0 and DIC = 656.8}
+\CommentTok{\#\textgreater{} DIC is an estimate of expected predictive error (lower deviance is better).}
 
 \CommentTok{\# diagnostics(nma\_res2, save = TRUE)}
 \CommentTok{\# nma\_outputs(nma\_res2, save = TRUE)}
-
-\CommentTok{\# plotNetwork(nma\_model)}
 \end{Highlighting}
 \end{Shaded}
 

@@ -1,4 +1,12 @@
 
+#' @export
+#' 
+plotNetwork <- function(dat,
+                        usecurve = FALSE) {
+  UseMethod("plotNetwork", dat)
+}
+
+
 #' plotNetwork
 #'
 #' @param dat 
@@ -9,10 +17,10 @@
 #' @return
 #' @export
 #'
-plotNetwork <- function(dat,
-                        usecurve = FALSE,
-                        ...) {
-
+plotNetwork.default <- function(dat,
+                                usecurve = FALSE,
+                                ...) {
+  
   is_bin <- all(!is.na(dat$subDataBin))
   is_med <- all(!is.na(dat$subDataMed))
   
@@ -76,7 +84,7 @@ plotNetwork <- function(dat,
       is_tx_from <-
         subDataCombLng$base == dat$txList[tx2] &
         subDataCombLng$tx == dat$txList[tx1]
-
+      
       is_tx_to <-
         subDataCombLng$base == dat$txList[tx1] &
         subDataCombLng$tx == dat$txList[tx2]
@@ -88,12 +96,22 @@ plotNetwork <- function(dat,
   
   layout(1)
   par(mar = c(2, 2, 2, 2))
-  gplot(
-    networkData / networkData,
-    label = dat$txList,
-    edge.lwd = networkData / 200,
-    gmode = "graph",
-    label.lty = 1)#,
-    # ...)
+  sna::gplot(dat = networkData, #networkData > 0,
+             label = dat$txList,
+             edge.lwd = networkData / 200,
+             gmode = "graph",
+             # mode = "circle",
+             label.lty = 1)#,
+  # ...)
+}
+
+
+#' @export
+#'
+plotNetwork.nma <- function(dat,
+                            usecurve = FALSE,
+                            ...) {
+  dat <- dat$dat
+  NextMethod() 
 }
 

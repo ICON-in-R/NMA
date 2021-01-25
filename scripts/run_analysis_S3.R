@@ -99,6 +99,8 @@ nma_res2 <- NMA_run(nma_model2)
 diagnostics(nma_res2, save = TRUE)
 nma_outputs(nma_res2, save = TRUE)
 
+##TODO: why doesnt it work without attaching sna?
+library(sna)
 plotNetwork(nma_model)
 
 

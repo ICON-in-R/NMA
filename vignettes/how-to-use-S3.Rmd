@@ -123,6 +123,14 @@ nma_model <-
 nma_model
 ```
 
+We can view the network graph.
+
+```{r fig.width=6, fig.height=6}
+library(sna)
+plotNetwork(nma_model)
+```
+
+
 ### Run MCMC
 
 ```{r}
@@ -147,9 +155,8 @@ nma_model2 <-
 nma_res2 <- NMA_run(nma_model2,
                     output_dir = "RE output")
 
+nma_res2
+
 # diagnostics(nma_res2, save = TRUE)
 # nma_outputs(nma_res2, save = TRUE)
-
-# plotNetwork(nma_model)
-
 ```

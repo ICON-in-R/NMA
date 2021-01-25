@@ -2,6 +2,8 @@
 
 S3method(NMA_run,nma)
 S3method(NMA_update,nma)
+S3method(plotNetwork,default)
+S3method(plotNetwork,nma)
 export(.onLoad)
 export(NMA)
 export(NMA_run)
