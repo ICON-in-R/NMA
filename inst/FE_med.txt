@@ -8,12 +8,12 @@ model{
 # On tx effect mean
   beta[1] <- 0
   for (tt in 2:nTx) {
-    beta[tt] ~ dnorm(0, 1.0E-6)
+    beta[tt] ~ dnorm(mu_beta, prec_beta)
   }
 
 # On individual study baseline effect
   for(ss in 1:nStudies) {
-    alpha[ss] ~ dnorm(0, 1.0E-6)
+    alpha[ss] ~ dnorm(mu_alpha, prec_alpha)
   }
 
 # Fit data

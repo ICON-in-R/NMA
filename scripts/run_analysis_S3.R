@@ -16,6 +16,12 @@ bugs_params <-
     N.THIN = 1,
     PAUSE = TRUE)
 
+hyperparams <-
+  list(mu_beta = 0,
+       prec_beta = 1.0E-6,
+       mu_alpha = 0,
+       prec_alpha = 1.0E-6)
+
 
 ## run analysis
 
@@ -77,11 +83,17 @@ nma_model <-
           subDataBin = subDataBin,
           bugs_params = bugs_params,
           is_random = RANDOM,
+          hyperparams = hyperparams,
           refTx = REFTX ,
           effectParam = "beta",
           modelParams = "totresdev",
           label = analysis$name,
           endpoint = analysis$Endpoint)
+
+##TODO: why doesnt it work without attaching sna?
+library(sna)
+plotNetwork(nma_model)
+
 
 ## create output
 nma_res <- NMA_run(nma_model)
@@ -99,8 +111,5 @@ nma_res2 <- NMA_run(nma_model2)
 diagnostics(nma_res2, save = TRUE)
 nma_outputs(nma_res2, save = TRUE)
 
-##TODO: why doesnt it work without attaching sna?
-library(sna)
-plotNetwork(nma_model)
 
 

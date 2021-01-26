@@ -49,6 +49,8 @@ NMA_run.nma <- function(nma,
     init_vals <- map(1:bugs_params$N.CHAINS,
                      ~dat$inits())
     
+    cat("====== RUNNING BUGS MODEL\n")
+    
     res_bugs <-
       nma$bugs_fn(
         data = dat$bugsData,
