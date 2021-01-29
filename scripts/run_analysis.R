@@ -2,289 +2,109 @@
 # N Green, UCL 7-12-2020 --------------------------------------------------
 
 library(dplyr)
+library(purrr)
 
 
 ## settings
 
-fileSep <- "\\"
+bugs_params <-
+  list(
+    PROG = "openBugs",
+    N.BURNIN = 10,#00,
+    N.SIMS = 150,#0,
+    N.CHAINS = 2,
+    N.THIN = 1,
+    PAUSE = TRUE)
 
 RUN <- TRUE
-
-N.BURNIN <- 1000
-N.SIMS <- 1500
-N.CHAINS <- 2
-N.THIN <- 1
-PAUSE <- TRUE
-
-PROG <- "openBugs"
 DIAGNOSTICS <- TRUE
 
-BASEPROB <- NA
-decEff <- TRUE
+saveplot_fn <- customSavePlot()
 
-newSavePlot <- customSavePlot()
-newBugs <- customBugs()
 
-# run analysis
+## run analysis
 
-analysis <-
+analyses_params <-
   read.csv(
     here::here("raw_data", "AnalysisList.csv"),
     as.is = TRUE,
-    na.strings = c("NR", "NA"))
-
-analysis <- filter(analysis, Endpoint_type == "Surv")
-
+    na.strings = c("NR", "NA")) %>% 
+  filter(Endpoint_type == "Surv") %>% 
+  dplyr::rename(name = Analysis_name,
+                type = Analysis_Type)
 
 # for (a in 1:nrow(analysis)) {
-
 a <- 1
 
-print(analysis$Analysis_name[a])
+analysis <- analyses_params[a, ]
 
-currAnalysis <- analysis[a, ]
+# fixed effects RANDOM=FALSE, random effects RANDOM=TRUE
+RANDOM <- analysis$Model_effects == "RE"
 
-treatName <- currAnalysis$Comparators
+REFTX <- analysis$REFTX
 
-analysis_description <- currAnalysis$Analysis_description
+# indicator for availability of binary endpoint data
+is_bin <- analysis$BinData == "YES"
 
-analysis_type <- currAnalysis$Analysis_Type
-
-# for fixed effects RANDOM=FALSE, for random effects RANDOM=TRUE
-RANDOM <- currAnalysis$Model_effects == "RE"
-
-label <- currAnalysis$Analysis_name
-
-endpoint <- currAnalysis$Endpoint
-
-endpoint_type <- currAnalysis$Endpoint_type
-
-decEff <- currAnalysis$Decrease_Effect
-
-REFTX <- currAnalysis$REFTX
-
-# selects indicator for availability of binary endpoint data
-binDataInd <- currAnalysis$BinData
-
-# selects indicator for availability of median endpoint data
-medDataInd <- currAnalysis$MedData
-
-binData <- binDataInd == "YES"
-medData <- medDataInd == "YES"
+# indicator for availability of median endpoint data
+is_med <- analysis$MedData == "YES"
 
 #}
 
 
-# read in dataset
+# read in datasets
+
+filename <- paste0(here::here("raw_data"), "/survdata_", analysis$Endpoint, "_")
+
 subData <-
-  read.csv(
-    paste0(here::here("raw_data"), "/survdata_", endpoint, "_", analysis_type, ".csv"),
-    header = TRUE,
-    as.is = TRUE)
+  read.csv(paste0(file_name, analysis$type, ".csv"),
+           header = TRUE,
+           as.is = TRUE)
 
-if (binData) {
+if (is_bin) {
   subDataBin <-
-    read.csv(
-      paste0(here::here("raw_data"), "/survdata_", endpoint, "_bin.csv"),
-      header = TRUE,
-      as.is = TRUE)
+    read.csv(paste0(file_name, "bin.csv"),
+             header = TRUE,
+             as.is = TRUE)
 }
 
-if (medData) {
+if (is_med) {
   subDataMed <-
-    read.csv(
-      paste0(here::here("raw_data"), "/survdata_", endpoint, "_med.csv"),
-      header = TRUE,
-      as.is = TRUE)
+    read.csv(paste0(file_name, "med.csv"),
+             header = TRUE,
+             as.is = TRUE) %>% 
+    mutate(medR = floor(medR))
 }
 
-
-NMA_partial <-
-  purrr::partial(NMA,
-                 dataFunc =
-                   setupData(
-                     subData = subData,
-                     subDataBin = subDataBin,
-                     subDataMed = subDataMed,
-                     random = RANDOM,
-                     refTx = REFTX,
-                     binData = binData,
-                     medData = medData),
-                 effectParam = "beta",
-                 folder = endpoint,
-                 label = label,
-                 endpoint = endpoint,
-                 random = RANDOM,
-                 binData = binData,
-                 medData = medData,
-                 refTx = REFTX,
-                 decEff = decEff,
-                 lg = FALSE)
-
-if (!binData & !medData) {
-  modelResults <-
-    if (RANDOM) {
-      NMA_partial(
-        winSource = "SurvWoodsREb.txt",
-        modelParams = c("sd", "totresdev"))
-    } else {
-      NMA_partial(
-        winSource = "SurvWoodsFEa.txt",
-        modelParams = "totresdev")
-    }
-}
-
-if (binData & !medData) {
-  if (!RANDOM) {
-    modelResults <- NMA(
-      winSource = here::here("inst", "SurvWoodsFEa_bin.txt"),
-      dataFunc = setupData(
-        subData = subData,
-        subDataBin = subDataBin,
-        subDataMed = subDataMed,        
-        random = RANDOM,
-        refTx = REFTX,
-        binData = binData,
-        medData = medData),
-      effectParam = "beta",
-      modelParams = NA,
-      folder = endpoint,
-      label = label,
-      endpoint = endpoint,
-      random = RANDOM,
-      binData = binData,
-      medData = medData,
-      refTx = REFTX,
-      decEff = decEff,
-      lg = FALSE)
-  } else {
-    modelResults <- NMA(
-      winSource = here::here("inst", "SurvWoodsREb_bin.txt"),
-      dataFunc = setupData(
-        subData = subData,
-        subDataBin = subDataBin,
-        subDataMed = subDataMed,        
-        random = RANDOM,
-        refTx = REFTX,
-        binData = binData,
-        medData = medData),
-      effectParam = "beta",
-      modelParams = "sd",
-      folder = endpoint,
-      label = label,
-      endpoint = endpoint,
-      random = TRUE,
-      binData = binData,
-      medData = medData,
-      refTx = REFTX,
-      decEff = decEff,
-      lg = FALSE)
-  }
-}
-
-if (!binData & medData) {
-  if (!RANDOM) {
-    modelResults <- NMA(
-      winSource = here::here("inst", "SurvWoodsFEa_med.txt"),
-      dataFunc = setupData(
-        subData = subData,
-        subDataBin = subDataBin,
-        subDataMed = subDataMed,
-        random = RANDOM,
-        refTx = REFTX,
-        binData = binData,
-        medData = medData),
-      effectParam = "beta",
-      modelParams = NA,
-      folder = endpoint,
-      label = label,
-      endpoint = endpoint,
-      random = FALSE,
-      binData = binData,
-      medData = medData,
-      refTx = REFTX,
-      decEff = decEff,
-      lg = FALSE)
-  } else {
-    modelResults <- NMA(
-      winSource = here::here("inst", "SurvWoodsREb_med.txt"),
-      dataFunc = setupData(
-        subData = subData,
-        subDataMed = subDataMed,
-        subDataBin = subDataBin,
-        random = RANDOM,
-        refTx = REFTX,
-        binData = binData,
-        medData = medData),
-      effectParam = "beta",
-      modelParams = "sd",
-      folder = endpoint,
-      label = label,
-      endpoint = endpoint,
-      random = TRUE,
-      binData = binData,
-      medData = medData,
-      refTx = REFTX,
-      decEff = decEff,
-      lg = FALSE)
-  }
-}
-
-if (binData & medData) {
-  if (!RANDOM) {
-    modelResults <- NMA(
-      winSource = here::here("inst", "SurvWoodsFEa_med_bin.txt"),
-      dataFunc = setupData(
-        subData = subData,
-        subDataMed = subDataMed,
-        subDataBin = subDataBin,
-        random = RANDOM,
-        refTx = REFTX,
-        binData = binData,
-        medData = medData),
+  
+nma_res <-
+  setupData(subData = subData,
+            subDataMed = subDataMed,
+            subDataBin = subDataBin,
+            is_random = RANDOM,
+            refTx = REFTX) %>% 
+  NMA(dat = .,
+      bugs_params = bugs_params,
       effectParam = "beta",
       modelParams = "totresdev",
-      folder = endpoint,
-      label = label,
-      endpoint = endpoint,
-      random = FALSE,
-      binData = binData,
-      medData = medData,
-      refTx = REFTX,
-      decEff = decEff,
-      lg = FALSE)
-  } else {
-    modelResults <- NMA(
-      winSource = here::here("inst", "SurvWoodsREb_med_bin.txt"),
-      dataFunc = setupData(
-        subData = subData,
-        subDataMed = subDataMed,
-        subDataBin = subDataBin,
-        random = RANDOM,
-        refTx = REFTX,
-        binData = binData,
-        medData = medData),
-      effectParam = "beta",
-      modelParams = c("sd", "totresdev"),
-      folder = endpoint,
-      label = label,
-      endpoint = endpoint,
-      random = TRUE,
-      binData = binData,
-      medData = medData,
-      refTx = REFTX,
-      decEff = decEff,
-      lg = FALSE)
-  }
-}
+      label = analysis$name,
+      endpoint = analysis$Endpoint,
+      random = RANDOM)
 
 #}
+
 
 #########
 # plots #
 #########
 
-plotNetwork(subData,
-            subDataBin, binData,
-            subDataMed, medData)
+library(sna)
+dat <- 
+  setupData(subData = subData,
+            subDataMed = subDataMed,
+            subDataBin = subDataBin,
+            is_random = RANDOM,
+            refTx = REFTX) 
+
+plotNetwork(dat)
 

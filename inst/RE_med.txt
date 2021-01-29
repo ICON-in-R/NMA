@@ -1,0 +1,82 @@
+# Survival analysis - random effects analysis (B) 
+# intended for use on survival data to estimate hazard ratios but can be
+# used for synthesising any constant treatment effects
+
+model{
+
+# Define Prior Distributions
+# on random tx effect variance
+  sd ~ dunif(0, 5)
+  reTau <- 2/pow(sd, 2)
+
+# On tx effect mean
+  beta[1] <- 0
+  for (tt in 2:nTx) {
+    beta[tt] ~ dnorm(mu_beta, prec_beta)
+  }
+
+# On individual study baseline effect
+  for(ss in 1:nStudies) {
+    alpha[ss] ~ dnorm(mu_alpha, prec_alpha)
+  }
+
+# Define random effect
+  for (ss in 1:nStudies) {
+    for(tt in 1:nTx) {
+      re[ss, tt] ~ dnorm(0, reTau)
+    }
+  }
+
+# Fit data
+# For hazard ratio reporting studies
+  for(ii in 1:LnObs) {
+    Lmu[ii] <- alpha[Lstudy[ii]]*multi[ii] + re[Lstudy[ii], Ltx[ii]] -
+              re[Lstudy[ii], Lbase[ii]] + beta[Ltx[ii]] - beta[Lbase[ii]] 
+    Lprec[ii] <- 1/pow(Lse[ii], 2)
+    Lmean[ii] ~ dnorm(Lmu[ii], Lprec[ii])
+	
+  # Residual deviance for hazard ratio reporting studies
+	Ldev[ii] <- (Lmean[ii] - Lmu[ii])*(Lmean[ii] - Lmu[ii])*Lprec[ii] 
+  }
+
+# For binary data reporting studies
+#  for(ss in 1:BnObs) {
+#    logCumHaz[ss] <- alpha[Bstudy[ss]] + re[Bstudy[ss], Btx[ss]] -
+#    re[Bstudy[ss], Bbase[ss]] + beta[Btx[ss]] - beta[Bbase[ss]] 
+#    cumFail[ss] <- 1 - exp(-1*exp(logCumHaz[ss]))
+#    Br[ss] ~ dbin(cumFail[ss], Bn[ss])
+#  }
+
+# For data reported as median survival times
+   for (kk in 1:medianNObs) {
+     medianMu[kk] <- alpha[medianStudy[kk]] + re[medianStudy[kk], medianTx[kk]] - 
+                    re[medianStudy[kk], medianBase[kk]] + beta[medianTx[kk]] -
+                    beta[medianBase[kk]]
+     prob[kk] <- exp(-median[kk]*exp(medianMu[kk]))
+     medianR[kk] ~ dbin(prob[kk], medianN[kk])
+
+# Deviance for binary data
+	rhat[kk] <- prob[kk] * medianN[kk]
+	mediandev[kk] <- 2 * (medianR[kk] * (log(medianR[kk]) - log(rhat[kk])) +
+	                (medianN[kk] - medianR[kk]) * (log(medianN[kk] - medianR[kk]) -
+	                log(medianN[kk] - rhat[kk]))) 
+   }
+
+# Calculate HRs
+  for (hh in 2:nTx) {
+    hr[hh] <- exp(beta[hh])
+  }
+
+# Ranking plot
+  for (ll in 1:nTx) {
+    for (mm in 1:nTx) {
+      rk[ll, mm] <- equals(ranked(beta[], mm), beta[ll])
+    }
+  }
+
+# Total residual deviances
+	totLdev <- sum(Ldev[])
+	totmediandev <- sum(mediandev[])
+	totresdev <- totmediandev + totLdev
+}
+

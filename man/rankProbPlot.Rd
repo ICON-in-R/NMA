@@ -2,9 +2,17 @@
 % Please edit documentation in R/rankProbPlot.R
 \name{rankProbPlot}
 \alias{rankProbPlot}
-\title{Treatment Ranking Plot}
+\title{rankProbPlot}
 \usage{
-rankProbPlot(sims)
+rankProbPlot(sims, labels)
+}
+\arguments{
+\item{sims}{sims.matrix bugs output}
+
+\item{labels}{}
+}
+\value{
+
 }
 \description{
 Treatment Ranking Plot

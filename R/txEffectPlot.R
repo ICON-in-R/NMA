@@ -1,41 +1,49 @@
 
+#' txEffectPlot
 #'
-txEffectPlot <- function(sims,
-                         preRefTx,
-                         refTx) {
+#' @param dat input data list
+#' @param sims 
+#' @param labels 
+#' @param endpoint
+#' @param preRefTx 
+#'
+#' @return
+#' @export
+#'
+txEffectPlot <- function(dat,
+                         sims,
+                         labels,
+                         endpoint = NULL,
+                         preRefTx = NA) {
   
-  plotSims <- sims
+  txListSims <- colnames(sims)
+  nTx <- dat$bugsData$nTx
   
-  txListSims <- colnames(plotSims)
-  
-  if (preRefTx %in% txListSims &
-      !is.na(preRefTx)) {
-    if (!lg) {
-      plotSims <- plotSims - plotSims[, preRefTx]
-    } else{
-      plotSims <- plotSims - plotSims[, preRefTx]
+  sims <- 
+    if (!is.na(preRefTx) &
+        preRefTx %in% txListSims) {
+      sims - sims[, preRefTx]
+    } else {
+      sims - sims[, dat$txList[1]]
     }
-  }
-  
-  if (!(preRefTx %in% txListSims) |
-      is.na(preRefTx)) {
-    plotSims <- plotSims - plotSims[, refTx]
-  }
   
   plotResults <-
-    round(exp(t(apply(
-      plotSims, 2, summStat))), 2)
+    round(digits = 2,
+          exp(t(
+            apply(sims, 2, summStat))))
   
   plotResults <-
     plotResults[order(plotResults[, 2], decreasing = TRUE), ]
+  
   plotResults[plotResults == 0] <- 0.001
   
   txList <- rownames(plotResults)
   nTx <- length(txList)
   
-  layout(cbind(1, 2), widths = c(2, 1))
-  par(mar = c(5, 12, 2, 1), cex = 0.8)
-  
+  layout(cbind(1, 2),
+         widths = c(2, 1))
+  par(mar = c(5, 12, 2, 1),
+      cex = 0.8)
   
   plot(
     plotResults[, 2],
@@ -44,7 +52,7 @@ txEffectPlot <- function(sims,
     xlim = (range(plotResults[, 3], plotResults[, 4])),
     yaxt = "n",
     xaxt = "n",
-    main = label,
+    main = labels$orig,
     cex.main = 0.6,
     xlab = c(endpoint, "Median hazard ratio (95% CrI)"),
     ylab = " ",
@@ -53,21 +61,18 @@ txEffectPlot <- function(sims,
     log = "x",
     cex = 0.8)
   
-  axis(
-    1,
-    at = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
-    label = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
-    cex.axis = 0.8)
+  axis(1,
+       at =    c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
+       label = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
+       cex.axis = 0.8)
   abline(v = 1, col = "grey")
   
-  axis(
-    2,
-    at = 1:nTx,
-    labels = txList,
-    las = 2,
-    cex.axis = 0.8,
-    cex = 0.8)
-  
+  axis(2,
+       at = 1:nTx,
+       labels = txList,
+       las = 2,
+       cex.axis = 0.8,
+       cex = 0.8)
   
   for (ii in seq_len(nTx)) {
     lines(c(plotResults[ii, 3], plotResults[ii, 4]),
@@ -76,7 +81,7 @@ txEffectPlot <- function(sims,
           lwd = 2)
   }
   
-  for (ii in 1:nTx) {
+  for (ii in seq_len(nTx)) {
     points(
       plotResults[ii, 2],
       ii,
@@ -100,29 +105,22 @@ txEffectPlot <- function(sims,
     ylab = " ",
     xlab = " ")
   
-  for (ii in 1:nTx) {
+  for (ii in seq_len(nTx)) {
     if (plotResults[ii, 2] == plotResults[ii, 3] &
         plotResults[ii, 2] == plotResults[ii, 3]) {
-      text(0,
-           ii,
+      text(x = 0, y = ii,
            "Reference Treatment",
            pos = 4,
            cex = 0.8)
     } else {
-      text(
-        0,
-        ii,
-        paste0(
-          plotResults[ii, 2],
-          " (",
-          plotResults[ii, 3],
-          " to ",
-          plotResults[ii, 4],
-          ")"),
+      text(x = 0, y = ii,
+        paste0(plotResults[ii, 2], " (", plotResults[ii, 3],
+               " to ", plotResults[ii, 4], ")"),
         pos = 4,
         cex = 0.8)
     }
   }
   
+  invisible(dat)
 }
 

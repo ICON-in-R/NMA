@@ -1,0 +1,162 @@
+---
+title: "How to use `nma` S3 methods"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{how-to-use-S3}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This document describes how to use the main functions of `NMA` to run a network meta-analysis.
+
+## Example
+
+```{r setup, warning=FALSE, message=FALSE}
+library(NMA)
+library(dplyr)
+library(purrr)
+```
+
+### Settings
+
+Define the BUGS parameters for MCMC.
+
+```{r}
+bugs_params <-
+  list(
+    PROG = "openBugs",
+    N.BURNIN = 10,#00,
+    N.SIMS = 150,#0,
+    N.CHAINS = 2,
+    N.THIN = 1,
+    PAUSE = TRUE)
+```
+
+Define the scenario we will use for the analysis.
+We will load in a dataframe of values.
+
+```{r}
+analyses_params <-
+  read.csv(
+    here::here("raw_data", "AnalysisList.csv"),
+    as.is = TRUE,
+    na.strings = c("NR", "NA")) %>% 
+  filter(Endpoint_type == "Surv") %>% 
+  dplyr::rename(name = Analysis_name,
+                type = Analysis_Type)
+
+```
+
+For demonstration purposes we will select the first scenario to run.
+
+```{r}
+analysis <- analyses_params[1, ]
+
+# fixed effects RANDOM=FALSE, random effects RANDOM=TRUE
+RANDOM <- analysis$Model_effects == "RE"
+
+REFTX <- analysis$REFTX
+
+# indicator for availability of binary endpoint data
+is_bin <- analysis$BinData == "YES"
+
+# indicator for availability of median endpoint data
+is_med <- analysis$MedData == "YES"
+```
+
+### Read in datasets
+
+The trials data consist of upto 3 separate dataframes.
+A main table, `subData`, and optional tables for median event time and binary data, `subDataMed` and `subDataBin` respectively.
+
+```{r}
+file_name <- paste0(here::here("raw_data"), "/survdata_", analysis$Endpoint, "_")
+
+subData <-
+  read.csv(paste0(file_name, analysis$type, ".csv"),
+           header = TRUE,
+           as.is = TRUE)
+
+subDataBin <-
+  if (is_bin) {
+    read.csv(paste0(file_name, "bin.csv"),
+             header = TRUE,
+             as.is = TRUE)
+  } else {NA}
+
+subDataMed <-
+  if (is_med) {
+    read.csv(paste0(file_name, "med.csv"),
+             header = TRUE,
+             as.is = TRUE) %>% 
+      mutate(medR = floor(medR))
+  } else {NA}
+```
+
+
+### Build model
+
+Now we can create the NMA object to use in the modelling.
+
+```{r}
+nma_model <-
+  new_NMA(subData = subData,
+          subDataMed = subDataMed,
+          subDataBin = subDataBin,
+          bugs_params = bugs_params,
+          is_random = RANDOM,
+          refTx = REFTX ,
+          effectParam = "beta",
+          modelParams = "totresdev",
+          label = analysis$name,
+          endpoint = analysis$Endpoint)
+
+nma_model
+```
+
+We can view the network graph.
+
+```{r fig.width=6, fig.height=6}
+library(sna)
+plotNetwork(nma_model)
+```
+
+
+### Run MCMC
+
+```{r}
+nma_res <- NMA_run(nma_model)
+
+nma_res
+
+# diagnostics(nma_res)
+# nma_outputs(nma_res)
+```
+
+### Reconfigure model
+
+It is simple to modify an existing analysis without repeating the previous steps.
+For example, we can run the NMA for a random effects model version of the same model.
+
+```{r}
+nma_model2 <-
+  NMA_update(nma_model,
+             is_random = TRUE)
+
+nma_res2 <- NMA_run(nma_model2,
+                    output_dir = "RE output")
+
+nma_res2
+
+# diagnostics(nma_res2, save = TRUE)
+# nma_outputs(nma_res2, save = TRUE)
+```

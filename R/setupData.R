@@ -1,284 +1,168 @@
 
-#'
-setupData <-
-  function(subData,
-           subDataBin,
-           binData,
-           subDataMed,
-           medData,
-           random,
-           refTx) {
+#' randomly generate MCMC initial values
+#' closure
+#' 
+rinits <-
+  function(nTx, nStudies, param_names) {
+    force(nTx)
+    force(nStudies)
+    force(param_names)
     
-    if (binData == FALSE & medData == FALSE) {
-      subData <- codeData(subData = subData, refTx = refTx)
-      
-      LstudyT <- subData$Lstudy
-      LtxT <- subData$Ltx
-      LbaseT <- subData$Lbase
-      LmeanT <- subData$Lmean
-      LseT <- subData$Lse
-      multiT <- subData$multi
-      
-      LnObsT <- nrow(subData)
-      nTxT <- length(txList)
-      nStudiesT <- max(subData$Lstudy)
-      
-      bugsData <<- list(
-        Lstudy = LstudyT,
-        Ltx = LtxT,
-        Lbase = LbaseT,
-        Lmean = LmeanT,
-        Lse = LseT,
-        multi = multiT,
-        LnObs = LnObsT,
-        nTx = nTxT,
-        nStudies = nStudiesT
-      )
-      
-      if (!random) {
-        inits <-
-          function() {
-            list(beta = c(NA, rnorm(nTx - 1, 0, 2)),
-                 alpha = rnorm(nStudies))
-          }
-      } else {
-        inits <-
-          function() {
-            list(
-              beta = c(NA, rnorm(nTx - 1, 0, 2)),
-              sd = 0.1,
-              alpha = rnorm(nStudies)
-            )
-          }
-      }
-      
-      subData <<- subData
-      inits <<- inits
+    function() {
+      list(
+        beta = c(NA, rnorm(nTx - 1, 0, 2)),
+        sd = 0.1,
+        alpha = rnorm(nStudies)) %>% 
+        .[param_names]
     }
-    
-    if (binData & medData) {
-      subDatalist <-
-        codeDataBin(subData = subData,
-                    subDataBin = subDataBin,
-                    refTx = refTx)
-      subData <- as.data.frame(subDatalist[1])
-      subDataBin <- as.data.frame(subDatalist[2])
-      
-      LstudyT <- subData$Lstudy
-      LtxT <- subData$Ltx
-      LbaseT <- subData$Lbase
-      LmeanT <- subData$Lmean
-      LseT <- subData$Lse
-      multiT <- subData$multi
-      
-      BstudyT <- subDataBin$Bstudy
-      BtxT <- subDataBin$Btx
-      BbaseT <- subDataBin$Bbase
-      BrT <- subDataBin$BinR
-      BnT <- subDataBin$BinN
-      
-      LnObsT <- nrow(subData)
-      BnObsT <- nrow(subDataBin)
-      
-      nTxT <- length(txList)
-      nStudiesT <- max(subData$Lstudy, subDataBin$Bstudy)
-      
-      bugsData <<- list(
-        Lstudy = LstudyT,
-        Ltx = LtxT,
-        Lbase = LbaseT,
-        Bstudy = BstudyT,
-        Btx = BtxT,
-        Bbase = BbaseT,
-        Lmean = LmeanT,
-        Lse = LseT,
-        multi = multiT,
-        LnObs = LnObsT,
-        Bn = BnT,
-        Br = BrT,
-        BnObs = BnObsT,
-        nTx = nTxT,
-        nStudies = nStudiesT)
-      
-      if (!random)
-        inits <-
-        function() {
-          list(beta = c(NA, rnorm(nTx - 1, 0, 2)),
-               alpha = rnorm(nStudies))
-        }
-      if (random)
-        inits <-
-        function() {
-          list(
-            beta = c(NA, rnorm(nTx - 1, 0, 2)),
-            sd = 0.1,
-            alpha = rnorm(nStudies))
-        }
-      
-      subData <<- subData
-      subDataBin <<- subDataBin
-      
-      inits <<- inits
-    }
-    
-    if (!binData & medData) {
-      subDatalist <-
-        codeDataMed(subData = subData,
-                    subDataMed = subDataMed,
-                    refTx = refTx)
-      subData <- as.data.frame(subDatalist[1])
-      subDataMed <- as.data.frame(subDatalist[2])
-      
-      LstudyT <- subData$Lstudy
-      LtxT <- subData$Ltx
-      LbaseT <- subData$Lbase
-      LmeanT <- subData$Lmean
-      LseT <- subData$Lse
-      multiT <- subData$multi
-      
-      medianStudyT <- subDataMed$medianstudy
-      medianTxT <- subDataMed$mediantx
-      medianBaseT <- subDataMed$medianbase
-      medianRT <- subDataMed$medR
-      medianNT <- subDataMed$medN
-      medianT <- subDataMed$median
-      
-      LnObsT <- nrow(subData)
-      medianNObsT <- nrow(subDataMed)
-      
-      nTxT <- length(txList)
-      nStudiesT <- max(subData$Lstudy, subDataMed$mediantudy)
-      
-      bugsData <<- list(
-        Lstudy = LstudyT,
-        Ltx = LtxT,
-        Lbase = LbaseT,
-        medianStudy = medianStudyT,
-        medianTx = medianTxT ,
-        medianBase = medianBaseT,
-        Lmean = LmeanT,
-        Lse = LseT,
-        multi = multiT,
-        LnObs = LnObsT,
-        medianN = medianNT,
-        medianR = medianRT,
-        medianNObs = medianNObsT,
-        median = medianT,
-        nTx = nTxT,
-        nStudies = nStudiesT
-      )
-      
-      if (!random)
-        inits <-
-        function() {
-          list(beta = c(NA, rnorm(nTx - 1, 0, 2)),
-               alpha = rnorm(nStudies))
-        }
-      if (random)
-        inits <-
-        function() {
-          list(
-            beta = c(NA, rnorm(nTx - 1, 0, 2)),
-            sd = 0.1,
-            alpha = rnorm(nStudies)
-          )
-        }
-      
-      subData <<- subData
-      subDataMed <<- subDataMed
-      
-      inits <<- inits
-    }
-    
-    if (binData == TRUE & medData == TRUE) {
-      subDatalist <-
-        codeDataBinMed(
-          subData = subData,
-          subDataMed = subDataMed,
-          subDataBin,
-          refTx = refTx
-        )
-      subData <- as.data.frame(subDatalist[1])
-      subDataMed <- as.data.frame(subDatalist[2])
-      subDataBin <- as.data.frame(subDatalist[3])
-      
-      LstudyT <- subData$Lstudy
-      LtxT <- subData$Ltx
-      LbaseT <- subData$Lbase
-      LmeanT <- subData$Lmean
-      LseT <- subData$Lse
-      multiT <- subData$multi
-      
-      medianStudyT <- subDataMed$medianstudy
-      medianTxT <- subDataMed$mediantx
-      medianBaseT <- subDataMed$medianbase
-      medianRT <- subDataMed$medR
-      medianNT <- subDataMed$medN
-      medianT <- subDataMed$median
-      
-      BstudyT <- subDataBin$Bstudy
-      BtxT <- subDataBin$Btx
-      BbaseT <- subDataBin$Bbase
-      BrT <- subDataBin$BinR
-      BnT <- subDataBin$BinN
-      
-      LnObsT <- nrow(subData)
-      medianNObsT <- nrow(subDataMed)
-      BnObsT <- nrow(subDataBin)
-      
-      nTxT <- length(txList)
-      nStudiesT <-
-        max(subData$Lstudy,
-            subDataMed$medianstudy,
-            subDataBin$Bstudy)
-      
-      bugsData <<- list(
-        Lstudy = LstudyT,
-        Ltx = LtxT,
-        Lbase = LbaseT,
-        medianStudy = medianStudyT,
-        medianTx = medianTxT ,
-        medianBase = medianBaseT,
-        Bstudy = BstudyT,
-        Btx = BtxT,
-        Bbase = BbaseT,
-        Lmean = LmeanT,
-        Lse = LseT,
-        multi = multiT,
-        LnObs = LnObsT,
-        medianN = medianNT,
-        medianR = medianRT,
-        medianNObs = medianNObsT,
-        median = medianT,
-        Bn = BnT,
-        Br = BrT,
-        BnObs = BnObsT,
-        nTx = nTxT,
-        nStudies = nStudiesT
-      )
-      
-      if (!random)
-        inits <-
-        function() {
-          list(beta = c(NA, rnorm(nTx - 1, 0, 2)),
-               alpha = rnorm(nStudies))
-        }
-      if (random)
-        inits <-
-        function() {
-          list(
-            beta = c(NA, rnorm(nTx - 1, 0, 2)),
-            sd = 0.1,
-            alpha = rnorm(nStudies)
-          )
-        }
-      
-      subData <<- subData
-      subDataMed <<- subDataMed
-      subDataBin <<- subDataBin
-      
-      inits <<- inits
-    }
-    
   }
+
+
+#' setupData
+#' 
+#' Arrange input data for NMA.
+#' 
+#' @param subData 
+#' @param refTx Reference treatment name
+#' @param subDataBin 
+#' @param subDataMed 
+#' @param is_random Is this a random effects model?
+#' @export
+#' @return list
+#' 
+setupData <- function(subData,
+                      refTx = NA,
+                      subDataBin = NA,
+                      subDataMed = NA,
+                      is_random = TRUE) {
+  
+  is_bin <- all(!is.na(subDataBin))
+  is_med <- all(!is.na(subDataMed))
+  
+  param_names <-
+    if (is_random) {
+      c("beta", "sd", "alpha")
+    } else {
+      c("beta", "alpha")}
+  
+  input <-
+    prep_codeData(subData,
+                  subDataBin,
+                  subDataMed,
+                  refTx)
+  
+  if (!is_bin & !is_med) {
+    
+    bugsData <-
+      list(
+        Lstudy = input$subData$dat$Lstudy,
+        Ltx = input$subData$dat$Ltx,
+        Lbase = input$subData$dat$Lbase,
+        Lmean = input$subData$dat$Lmean,
+        Lse = input$subData$dat$Lse,
+        multi = input$subData$dat$multi_arm,
+        LnObs = input$subData$LnObs,
+        nTx = input$nTx,
+        nStudies = input$nStudies)
+    
+    return(list(
+      inits = rinits(input$nTx, input$nStudies, input$param_names),
+      subData = input$subData$dat,
+      bugsData = bugsData,
+      txList = input$txList))
+  }
+  
+  if (is_bin & !is_med) {
+    
+    bugsData <-
+      list(
+        Lstudy = input$subData$dat$Lstudy,
+        Ltx = input$subData$dat$Ltx,
+        Lbase = input$subData$dat$Lbase,
+        Lmean = input$subData$dat$Lmean,
+        Lse = input$subData$dat$Lse,
+        multi = input$subData$dat$multi,
+        LnObs = input$subData$LnObs,
+        nTx = input$nTx,
+        nStudies = input$nStudies,
+        Bstudy = input$subDataBin$dat$Bstudy,
+        Btx = input$subDataBin$dat$Btx,
+        Bbase = input$subDataBin$dat$Bbase,
+        Bn = input$subDataBin$dat$BinN,
+        Br = input$subDataBin$dat$BinR,
+        BnObs = input$subDataBin$BnObs)
+    
+    return(list(
+      inits = rinits(input$nTx, input$nStudies, input$param_names),
+      subData = input$subData$dat,
+      subDataBin = input$subDataBin$dat,
+      bugsData = bugsData,
+      txList = input$txList))
+  }
+  
+  if (!is_bin & is_med) {
+    
+    bugsData <-
+      list(
+        Lstudy = input$subData$dat$Lstudy,
+        Ltx = input$subData$dat$Ltx,
+        Lbase = input$subData$dat$Lbase,
+        Lmean = input$subData$dat$Lmean,
+        Lse = input$subData$dat$Lse,
+        multi = input$subData$dat$multi_arm,
+        LnObs = input$subData$LnObs,
+        nTx = input$nTx,
+        nStudies = input$nStudies,
+        medianStudy = input$subDataMed$dat$medianstudy,
+        medianTx = input$subDataMed$dat$mediantx ,
+        medianBase = input$subDataMed$dat$medianbase,
+        medianN = input$subDataMed$dat$medN,
+        medianR = input$subDataMed$dat$medR,
+        median = input$subDataMed$dat$median,
+        medianNObs = input$subDataMed$medianNObs)
+    
+    return(list(
+      inits = rinits(input$nTx, input$nStudies, input$param_names),
+      subData = input$subData$dat,
+      subDataMed = input$subDataMed$dat,
+      bugsData = bugsData,
+      txList = input$txList))
+  }
+  
+  if (is_bin & is_med) {
+    
+    bugsData <-
+      list(
+        Lstudy = input$subData$dat$Lstudy,
+        Ltx = input$subData$dat$Ltx,
+        Lbase = input$subData$dat$Lbase,
+        Lmean = input$subData$dat$Lmean,
+        Lse = input$subData$dat$Lse,
+        multi = input$subData$dat$multi_arm,
+        LnObs = input$subData$LnObs,
+        nTx = input$nTx,
+        nStudies = input$nStudies,
+        medianStudy = input$subDataMed$dat$medianstudy,
+        medianTx = input$subDataMed$dat$mediantx ,
+        medianBase = input$subDataMed$dat$medianbase,
+        Bstudy = input$subDataBin$dat$Bstudy,
+        Btx = input$subDataBin$dat$Btx,
+        Bbase = input$subDataBin$dat$Bbase,
+        medianN = input$subDataMed$dat$medN,
+        medianR = input$subDataMed$dat$medR,
+        median = input$subDataMed$dat$median,
+        medianNObs = input$subDataMed$medianNObs,
+        Bn = input$subDataBin$dat$BinN,
+        Br = input$subDataBin$dat$BinR,
+        BnObs = input$subDataBin$BnObs)
+    
+    return(list(
+      inits = rinits(input$nTx, input$nStudies, param_names),
+      subData = input$subData$dat,
+      subDataBin = input$subDataBin$dat,
+      subDataMed = input$subDataMed$dat,
+      bugsData = bugsData,
+      txList = input$txList))
+  }
+}
 
