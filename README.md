@@ -1,7 +1,7 @@
 # NMA
 
 <!-- badges: start -->
-[![Build Status](https://travis-ci.com/ICON-in-R/NMA.svg?branch=main)](https://travis-ci.com/ICON-in-R/NMA)
+[![Build Status](https://travis-ci.com/ICON-in-R/NMA.svg?branch=refactor-jan)](https://travis-ci.com/ICON-in-R/NMA)
 [![Codecov test coverage](https://codecov.io/gh/n8thangreen/NMA/branch/master/graph/badge.svg)](https://codecov.io/gh/n8thangreen/NMA?branch=master)
 <!-- badges: end -->
   
