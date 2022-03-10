@@ -1,7 +1,7 @@
 # NMA: Network Meta-Analysis
 
 <!-- badges: start -->
-[![Build Status](https://travis-ci.com/ICON-in-R/NMA.svg?branch=refactor-jan)](https://travis-ci.com/ICON-in-R/NMA)
+[![R-CMD-check](https://github.com/ICON-in-R/NMA/workflows/R-CMD-check/badge.svg)](https://github.com/ICON-in-R/NMA/actions)
 [![Codecov test coverage](https://codecov.io/gh/ICON-in-R/NMA/branch/master/graph/badge.svg)](https://codecov.io/gh/ICON-in-R/NMA?branch=master)
 <!-- badges: end -->
   
