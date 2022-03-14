@@ -1,5 +1,5 @@
 ---
-title: "How to use `nma` S3 methods"
+title: "How to use `NMA`: Introduction"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{how-to-use-S3}
@@ -16,13 +16,14 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-This document describes how to use the main functions of `NMA` to run a network meta-analysis.
+This document describes how to use the main functions of `NMA` to run a single network meta-analysis.
 
 ## Example
 
 ```{r setup, warning=FALSE, message=FALSE}
 library(NMA)
 library(dplyr)
+library(BRugs)
 library(purrr)
 ```
 
@@ -42,9 +43,9 @@ bugs_params <-
 ```
 
 Define the scenario we will use for the analysis.
-We will load in a dataframe of values.
 
-```{r}
+```{r eval=FALSE, echo=FALSE}
+# We will load in a dataframe of values.
 analyses_params <-
   read.csv(
     here::here("raw_data", "AnalysisList.csv"),
@@ -56,33 +57,40 @@ analyses_params <-
 
 ```
 
-For demonstration purposes we will select the first scenario to run.
-
-```{r}
+```{r eval=FALSE, echo=FALSE}
+# For demonstration purposes we will select the first scenario to run.
 analysis <- analyses_params[1, ]
 
-# fixed effects RANDOM=FALSE, random effects RANDOM=TRUE
-RANDOM <- analysis$Model_effects == "RE"
-
-REFTX <- analysis$REFTX
-
-# indicator for availability of binary endpoint data
-is_bin <- analysis$BinData == "YES"
-
-# indicator for availability of median endpoint data
-is_med <- analysis$MedData == "YES"
+RANDOM <- analysis$Model_effects == "RE"  # fixed effects FALSE, random effects TRUE
+is_bin <- analysis$BinData == "YES"       # indicator if binary endpoint data
+is_med <- analysis$MedData == "YES"       # indicator if median endpoint data
+REFTX <- analysis$REFTX                   # reference treatment
+label_name <- analysis$name
+endpoint <- analysis$Endpoint
+analysis_type <- analysis$type
 ```
+
+```{r}
+RANDOM <- FALSE
+REFTX <- "ERL/GEF"
+is_bin <- TRUE
+is_med <- TRUE
+label_name <- "BC_PFS_mFE"
+endpoint <- "PFS"
+analysis_type <- "BC"
+```
+
 
 ### Read in datasets
 
-The trials data consist of upto 3 separate dataframes.
+The trials data consist of up to 3 separate dataframes.
 A main table, `subData`, and optional tables for median event time and binary data, `subDataMed` and `subDataBin` respectively.
 
 ```{r}
-file_name <- paste0(here::here("raw_data"), "/survdata_", analysis$Endpoint, "_")
+file_name <- paste0(here::here("raw_data"), "/survdata_", endpoint, "_")
 
 subData <-
-  read.csv(paste0(file_name, analysis$type, ".csv"),
+  read.csv(paste0(file_name, analysis_type, ".csv"),
            header = TRUE,
            as.is = TRUE)
 
@@ -117,15 +125,15 @@ nma_model <-
           refTx = REFTX ,
           effectParam = "beta",
           modelParams = "totresdev",
-          label = analysis$name,
-          endpoint = analysis$Endpoint)
+          label = label_name,
+          endpoint = endpoint)
 
 nma_model
 ```
 
 We can view the network graph.
 
-```{r fig.width=6, fig.height=6}
+```{r, warning=FALSE, message=FALSE, fig.width=6, fig.height=6}
 library(sna)
 plotNetwork(nma_model)
 ```
@@ -147,7 +155,11 @@ nma_res
 It is simple to modify an existing analysis without repeating the previous steps.
 For example, we can run the NMA for a random effects model version of the same model.
 
-```{r}
+```{r eval=FALSE}
+##TODO: error 
+# Error in scan(paste(tempDir, "/output", i, ".txt", sep = ""), switch(cmdtypes[i], : 
+# scan() expected 'a real', got '1.#INF00'
+
 nma_model2 <-
   NMA_update(nma_model,
              is_random = TRUE)

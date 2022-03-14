@@ -1,0 +1,68 @@
+---
+title: "Running an NMA with a Reference file"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{reference_file}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+library(NMA)
+```
+
+Borrowing from the approach in the `heemod` package, as well as defining the analysis in an `R` script it is also possible to specify the analysis with only file inputs.
+This vignette will show how to do this with a simple example.
+
+## Introduction
+The idea is to create folder with all of the information needed to run the NMA analysis contained in files within.
+The meta information about the contents of the folder is contained in a _reference file_. The reference file is called `REFERENCE.csv`.
+
+## Reference file
+This file contains two columns called `type` and `file`.
+Rows in the `type` column must contain one of the following keywords:
+
+* `bugs`: file containing the BUGS input parameters for MCMC.
+* `analysis`: file containing the scenario information, including where a random effects model, `RANDOM` and the reference treatment, `REFTX`.
+* `subData`: Mandatory NMA data.
+* `subDataBin`: Optional binary data.
+* `subDataMed`: Optional median time data.
+
+`type` | `file`
+-----|------
+`bugs` | `bugs.csv`
+`analysis` | `analysis.csv`
+`subData` | `subData.csv`
+
+## Parameter files
+An example, `bugs.csv`
+
+    
+    PROG, openBugs,
+    N.BURNIN, 1000,
+    N.SIMS, 1500,
+    N.CHAINS, 2,
+    N.THIN, 1,
+    PAUSE, TRUE
+    
+`analysis.csv`
+
+    RANDOM, TRUE,
+    REFTX, 1
+    
+## Running an NMA
+
+A single call sets-up the NMA represented by the contents of the folder.
+
+```r
+nma_model <- new_NMA_dir(dir = "analysis_folder/)
+```
