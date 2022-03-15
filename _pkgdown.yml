@@ -1,0 +1,38 @@
+template:
+  bootstrap: 5
+
+reference:
+- title: NMA functions
+  contents:
+  - NMA
+  - NMA_run
+  - NMA_update
+  - new_NMA
+- title: BUGS functions
+  contents:
+  - bugs_stats
+  - make_bugs_filename
+  - my_bugs_summary
+  - save_bugs_files
+- title: Plotting and tables
+  contents:
+  - diagnostic_plots
+  - pairwiseTable
+  - plot
+  - plotNetwork
+  - plots_and_tables
+  - rankProbPlot
+  - txEffectPlot
+  - varPlot
+- title: Other functions
+  contents:
+  - createFolders
+  - custom_fns
+  - load_input_data
+  - make_labels
+  - nma_helper
+  - nma_outputs
+  - prep_codeData
+  - print
+  - setupData
+  - validate_nma
