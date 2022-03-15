@@ -10,6 +10,7 @@ new_NMA(
   subDataBin = NA,
   bugs_params = NA,
   is_random = TRUE,
+  hyperparams = list(),
   refTx = NA,
   effectParam,
   modelParams,

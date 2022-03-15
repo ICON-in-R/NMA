@@ -1,19 +1,20 @@
 
+#' NMA_update
+#' 
 #' @param nma 
 #' @param ... 
 #'
 #' @return
 #' @export
-#'
+#' @name NMA_update
+#' 
 NMA_update <- function(nma, ...) {
   UseMethod("NMA_update", nma)
 }
 
 
-#' NMA_update
-#'
-#' @param nma 
-#' @param ... 
+#' @rdname NMA_update
+#' 
 #' @importFrom purrr map
 #' @return
 #' @export

@@ -1,5 +1,11 @@
 
+#' plotNetwork
+#'
+#' @param dat 
+#' @param usecurve 
+#' @param ... 
 #' @export
+#' @name plotNetwork
 #' 
 plotNetwork <- function(dat,
                         usecurve = FALSE) {
@@ -7,11 +13,7 @@ plotNetwork <- function(dat,
 }
 
 
-#' plotNetwork
-#'
-#' @param dat 
-#' @param usecurve 
-#' @param ... 
+#' @rdname plotNetwork
 #' @importFrom sna gplot
 #' 
 #' @return
