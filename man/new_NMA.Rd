@@ -37,7 +37,7 @@ new_NMA(
 
 \item{modelParams}{Model parameter}
 
-\item{label}{}
+\item{label}{Label}
 
 \item{endpoint}{End point name; string}
 }

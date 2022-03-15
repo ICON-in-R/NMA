@@ -4,7 +4,7 @@
 #' Treatment Ranking Plot.
 #'
 #' @param sims sims.matrix bugs output
-#' @param labels 
+#' @param labels Labels
 #'
 #' @importFrom gplots balloonplot
 #' @return

@@ -4,7 +4,7 @@
 #' @param res_bugs BUGS output 
 #' @param bugs_params BUGS parameter names; strings
 #' @param run_bugs Run BUGS? Logical
-#' @param labels 
+#' @param labels Labels
 #' @param folder output folder name; string
 #' @param fileSep File separator; default forward slash
 #' @importFrom glue glue

@@ -9,7 +9,7 @@ rankProbPlot(sims, labels)
 \arguments{
 \item{sims}{sims.matrix bugs output}
 
-\item{labels}{}
+\item{labels}{Labels}
 }
 \value{
 

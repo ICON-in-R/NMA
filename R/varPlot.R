@@ -2,6 +2,18 @@
 
 #' Study network diagram
 #' 
+#' @param xVar x variable
+#' @param yVar y variable
+#' @param showYLab logical
+#' @param showXLab logical
+#' @param pointText point text
+#' @param joinY join y
+#' @param txList List of treatments
+#' @param folder Folder name; string
+#' @param label label
+#' @param cex.axis size axis
+#' @param ... Additional arguments
+#' 
 varPlot <- function(xVar,
                     yVar ,
                     showYLab = TRUE,

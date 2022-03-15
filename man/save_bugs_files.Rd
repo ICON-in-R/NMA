@@ -20,7 +20,7 @@ save_bugs_files(
 
 \item{run_bugs}{Run BUGS? Logical}
 
-\item{labels}{}
+\item{labels}{Labels}
 
 \item{folder}{output folder name; string}
 

@@ -5,7 +5,7 @@
 #'  and possibly subDataBin and subDataMed
 #' @param res_bugs BUGS output
 #' @param effectParam Effect parameter names; string
-#' @param labels 
+#' @param labels Labels
 #' @param endpoint End point names; string
 #' @param folder Output folder name; string
 #' @param fileSep File separator; default forward slash

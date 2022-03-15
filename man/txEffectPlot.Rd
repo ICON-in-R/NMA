@@ -11,7 +11,7 @@ txEffectPlot(dat, sims, labels, endpoint = NULL, preRefTx = NA)
 
 \item{sims}{Simulations}
 
-\item{labels}{}
+\item{labels}{Labels}
 
 \item{endpoint}{End point name; string}
 

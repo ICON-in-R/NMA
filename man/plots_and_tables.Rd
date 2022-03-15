@@ -22,7 +22,7 @@ and possibly subDataBin and subDataMed}
 
 \item{effectParam}{Effect parameter names; string}
 
-\item{labels}{}
+\item{labels}{Labels}
 
 \item{endpoint}{End point names; string}
 

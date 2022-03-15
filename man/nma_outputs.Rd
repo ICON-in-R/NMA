@@ -17,3 +17,4 @@ nma_outputs(
 \description{
 All output functions
 }
+\keyword{internal}

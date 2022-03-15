@@ -1,9 +1,12 @@
 
 #' Randomly generate MCMC initial values
+#' 
+#' @param nTx Number of treatments
+#' @param nStudies Number of studies
+#' @param param_names Parameter names
 #' @return closure
 #' 
-rinits <-
-  function(nTx, nStudies, param_names) {
+rinits <- function(nTx, nStudies, param_names) {
     force(nTx)
     force(nStudies)
     force(param_names)

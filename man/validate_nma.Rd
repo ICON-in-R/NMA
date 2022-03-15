@@ -7,7 +7,7 @@
 validate_nma(nma)
 }
 \arguments{
-\item{nma}{}
+\item{nma}{object}
 }
 \value{
 

@@ -12,7 +12,7 @@
 #' @param refTx Reference treatment; string
 #' @param effectParam Effect parameter
 #' @param modelParams Model parameter
-#' @param label 
+#' @param label Label
 #' @param endpoint End point name; string
 #' @seealso \code{\link{NMA_run}}, \code{\link{NMA_update}}
 #' @return

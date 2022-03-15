@@ -3,7 +3,7 @@
 #'
 #' @param dat Study input data; list
 #' @param sims Simulations
-#' @param labels 
+#' @param labels Labels
 #' @param endpoint End point name; string
 #' @param preRefTx Reference treatment
 #'

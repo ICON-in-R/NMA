@@ -1,5 +1,5 @@
 Package: NMA
-Title: What the Package Does (One Line, Title Case)
+Title: Easy Network Meta-Analysis.
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Nathan",
@@ -19,12 +19,22 @@ RoxygenNote: 7.1.2
 Depends:
     R (>= 3.5.0)
 Imports:
+    coda,
     dplyr (>= 0.7.0),
     glue (>= 1.3.0),
+    gplots,
+    here,
     purrr,
-Suggests: 
+    R2OpenBUGS,
+    R2WinBUGS,
+    R2jags,
+    sna
+Suggests:
+    BRugs,
     knitr,
+    qpdf,
     rmarkdown,
     covr,
-    testthat
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3

@@ -18,6 +18,29 @@ varPlot(
   ...
 )
 }
+\arguments{
+\item{xVar}{x variable}
+
+\item{yVar}{y variable}
+
+\item{showYLab}{logical}
+
+\item{showXLab}{logical}
+
+\item{pointText}{point text}
+
+\item{joinY}{join y}
+
+\item{txList}{List of treatments}
+
+\item{folder}{Folder name; string}
+
+\item{label}{label}
+
+\item{cex.axis}{size axis}
+
+\item{...}{Additional arguments}
+}
 \description{
 Study network diagram
 }

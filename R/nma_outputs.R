@@ -1,5 +1,6 @@
 
-#
+#' @keywords internal
+#' 
 diagnostics <- function(res_bugs,
                         labels,
                         output_dir = "output",
@@ -13,7 +14,8 @@ diagnostics <- function(res_bugs,
 
 
 #' All output functions
-#'
+#' @keywords internal
+#' 
 nma_outputs <- function(nma,
                         res_bugs,
                         effectParam,

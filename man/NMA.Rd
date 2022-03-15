@@ -12,3 +12,4 @@ nma()
 \description{
 nma helper
 }
+\keyword{internal}

@@ -6,6 +6,13 @@
 \usage{
 rinits(nTx, nStudies, param_names)
 }
+\arguments{
+\item{nTx}{Number of treatments}
+
+\item{nStudies}{Number of studies}
+
+\item{param_names}{Parameter names}
+}
 \value{
 closure
 }
