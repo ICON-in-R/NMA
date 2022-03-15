@@ -1,12 +1,15 @@
 
-#' @param nma 
-#' @param fileSep 
+#' Network meta-analysis
+#' 
+#' @param nma object of class nma
 #' @param output_dir 
-#' @param save 
+#' @param fileSep File separator; string
+#' @param save save bugs output to file; logical
 #'
 #' @return
 #' @export
-#'
+#' @name NMA_run
+
 NMA_run <- function(nma,
                     fileSep = "/",
                     output_dir = "output",
@@ -15,13 +18,7 @@ NMA_run <- function(nma,
 }
 
 
-#' Network meta-analysis
-#' 
-#' @param nma object of class nma
-#' @param output_dir 
-#' @param fileSep File separator; string
-#' @param save save bugs output to file; logical
-#' 
+#' @rdname NMA_run
 #' @importFrom glue glue
 #' @importFrom purrr map
 #' @importFrom here here

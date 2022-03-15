@@ -4,10 +4,19 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/articles/how-to-use-nma.html</loc>
+  </url>
+  <url>
     <loc>/articles/how-to-use-S3.html</loc>
   </url>
   <url>
     <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/reference_file.html</loc>
+  </url>
+  <url>
+    <loc>/articles/run_multiple_nma.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
