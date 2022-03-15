@@ -7,14 +7,14 @@ summStat <- function(x) {
 }
 
 
-#' my_bugs_summary
+#' BUGS summary
 #'
 #' Function to set up results file for
-#' multiple parameters monitored
+#' multiple parameters monitored.
 #' 
-#' @param bugs_summary 
-#' @param params 
-#' @param txList
+#' @param bugs_summary Output of BUGS summary call
+#' @param params Parameter names
+#' @param txList List of treatment names
 #'
 #' @import dplyr
 #' @return

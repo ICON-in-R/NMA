@@ -1,12 +1,12 @@
 
-#' prep_codeData
+#' Prepare data used in computation
 #' 
 #' Create input data for NMA.
 #' 
-#' @param subData 
-#' @param subDataBin 
-#' @param subDataMed 
-#' @param refTx 
+#' @param subData Main data frame
+#' @param subDataBin Optional data frame. Binary data
+#' @param subDataMed Optional data frame. Median times
+#' @param refTx Reference treatment name; string
 #' @importFrom purrr map
 #' @import dplyr
 #' 
@@ -30,7 +30,7 @@ prep_codeData <- function(subData,
               subDataMed,
               subDataBin)
   
-  # all tx in datasets
+  # all treatments in data sets
   tx_names <-
     sort(unlist(
       map(dat, ~select(., tx, base))))

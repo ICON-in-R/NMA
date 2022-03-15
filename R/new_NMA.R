@@ -1,18 +1,20 @@
 
-#' nma constructor
-#'
-#' @param subData 
-#' @param subDataMed 
-#' @param subDataBin 
-#' @param bugs_params 
-#' @param is_random 
-#' @param hyperparams
-#' @param refTx 
-#' @param effectParam 
-#' @param modelParams 
+#' NMA constructor
+#' 
+#' Create an \code{nma} class object to use in an analysis.
+#' 
+#' @param subData Main input data frame. Mandatory
+#' @param subDataMed Median time input data frame. Optional
+#' @param subDataBin Binary data input data frame. Optional
+#' @param bugs_params List of BUGS parameters. Optional
+#' @param is_random Random effects model? Logical
+#' @param hyperparams List of hyperparameters
+#' @param refTx Reference treatment; string
+#' @param effectParam Effect parameter
+#' @param modelParams Model parameter
 #' @param label 
-#' @param endpoint 
-#'
+#' @param endpoint End point name; string
+#' @seealso \code{\link{NMA_run}}, \code{\link{NMA_update}}
 #' @return
 #' @export
 #'

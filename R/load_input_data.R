@@ -1,10 +1,10 @@
 
-#' load_input_data
+#' Load input data
 #'
-#' @param is_med logical
-#' @param is_bin logical
-#' @param analysis_type
-#' @param folder 
+#' @param is_med Load median time data? logical
+#' @param is_bin Load binary data? logical
+#' @param analysis_type Appended to file name
+#' @param folder Text string name
 #'
 #' @return
 #' @export

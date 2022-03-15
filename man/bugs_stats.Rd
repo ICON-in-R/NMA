@@ -2,14 +2,14 @@
 % Please edit documentation in R/bugs_stats.R
 \name{bugs_stats}
 \alias{bugs_stats}
-\title{bugs_stats}
+\title{BUGS statistics}
 \usage{
 bugs_stats(dat, res_bugs, effectParam, random)
 }
 \arguments{
 \item{dat}{input data; list}
 
-\item{res_bugs}{output from running bugs}
+\item{res_bugs}{output from running BUGS}
 
 \item{effectParam}{text vector of names}
 
@@ -19,5 +19,5 @@ bugs_stats(dat, res_bugs, effectParam, random)
 
 }
 \description{
-bugs_stats
+BUGS statistics
 }

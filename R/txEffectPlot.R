@@ -1,13 +1,13 @@
 
-#' txEffectPlot
+#' Treatment effect plot
 #'
-#' @param dat input data list
-#' @param sims 
+#' @param dat Study input data; list
+#' @param sims Simulations
 #' @param labels 
-#' @param endpoint
-#' @param preRefTx 
+#' @param endpoint End point name; string
+#' @param preRefTx Reference treatment
 #'
-#' @return
+#' @return dat
 #' @export
 #'
 txEffectPlot <- function(dat,

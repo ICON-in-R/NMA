@@ -1,6 +1,6 @@
 
-#' randomly generate MCMC initial values
-#' closure
+#' Randomly generate MCMC initial values
+#' @return closure
 #' 
 rinits <-
   function(nTx, nStudies, param_names) {
@@ -18,15 +18,15 @@ rinits <-
   }
 
 
-#' setupData
+#' Set-up study data
 #' 
 #' Arrange input data for NMA.
 #' 
-#' @param subData 
+#' @param subData Main data. Mandatory
 #' @param refTx Reference treatment name
-#' @param subDataBin 
-#' @param subDataMed 
-#' @param is_random Is this a random effects model?
+#' @param subDataBin Binary data. Optional
+#' @param subDataMed Median time data. Optional
+#' @param is_random Is this a random effects model? Logical
 #' @export
 #' @return list
 #' 

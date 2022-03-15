@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots_and_tables.R
 \name{plots_and_tables}
 \alias{plots_and_tables}
-\title{plots_and_tables}
+\title{Write to file multiple NMA plots and tables}
 \usage{
 plots_and_tables(
   dat,
@@ -15,19 +15,24 @@ plots_and_tables(
 )
 }
 \arguments{
-\item{dat}{}
+\item{dat}{ist of study data, including subData
+and possibly subDataBin and subDataMed}
 
-\item{effectParam}{}
+\item{res_bugs}{BUGS output}
+
+\item{effectParam}{Effect parameter names; string}
 
 \item{labels}{}
 
-\item{folder}{}
+\item{endpoint}{End point names; string}
 
-\item{fileSep}{}
+\item{folder}{Output folder name; string}
+
+\item{fileSep}{File separator; default forward slash}
 }
 \value{
-
+res_bugs
 }
 \description{
-plots_and_tables
+Write to file multiple NMA plots and tables
 }

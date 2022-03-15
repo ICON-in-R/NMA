@@ -1,8 +1,8 @@
 
-#' bugs_stats
+#' BUGS statistics
 #'
 #' @param dat input data; list
-#' @param res_bugs output from running bugs
+#' @param res_bugs output from running BUGS
 #' @param effectParam text vector of names
 #' @param random RE or FE
 #'

@@ -3,26 +3,29 @@
 \name{NMA_run}
 \alias{NMA_run}
 \alias{NMA_run.nma}
-\title{Network meta-analysis}
+\title{Run network meta-analysis}
 \usage{
 NMA_run(nma, fileSep = "/", output_dir = "output", save = TRUE)
 
 \method{NMA_run}{nma}(nma, fileSep = "/", output_dir = "output", save = TRUE)
 }
 \arguments{
-\item{nma}{object of class nma}
+\item{nma}{Object of class \code{nma}}
 
 \item{fileSep}{File separator; string}
 
-\item{output_dir}{}
+\item{output_dir}{Output folder name; string}
 
-\item{save}{save bugs output to file; logical}
+\item{save}{Save BUGS output to file? Logical}
 }
 \value{
-
+\code{res_bugs}
 
 
 }
 \description{
-Network meta-analysis
+Run network meta-analysis
+}
+\seealso{
+\code{\link{new_NMA}}, \code{\link{NMA_update}}
 }

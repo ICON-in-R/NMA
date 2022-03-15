@@ -2,22 +2,24 @@
 % Please edit documentation in R/txEffectPlot.R
 \name{txEffectPlot}
 \alias{txEffectPlot}
-\title{txEffectPlot}
+\title{Treatment effect plot}
 \usage{
 txEffectPlot(dat, sims, labels, endpoint = NULL, preRefTx = NA)
 }
 \arguments{
-\item{dat}{input data list}
+\item{dat}{Study input data; list}
 
-\item{sims}{}
+\item{sims}{Simulations}
 
 \item{labels}{}
 
-\item{preRefTx}{}
+\item{endpoint}{End point name; string}
+
+\item{preRefTx}{Reference treatment}
 }
 \value{
-
+dat
 }
 \description{
-txEffectPlot
+Treatment effect plot
 }

@@ -2,18 +2,18 @@
 % Please edit documentation in R/prep_codeData.R
 \name{prep_codeData}
 \alias{prep_codeData}
-\title{prep_codeData}
+\title{Prepare data used in computation}
 \usage{
 prep_codeData(subData, subDataBin = NA, subDataMed = NA, refTx = NA)
 }
 \arguments{
-\item{subData}{}
+\item{subData}{Main data frame}
 
-\item{subDataBin}{}
+\item{subDataBin}{Optional data frame. Binary data}
 
-\item{subDataMed}{}
+\item{subDataMed}{Optional data frame. Median times}
 
-\item{refTx}{}
+\item{refTx}{Reference treatment name; string}
 }
 \value{
 List of data and statistics.

@@ -2,20 +2,20 @@
 % Please edit documentation in R/createFolders.R
 \name{createFolders}
 \alias{createFolders}
-\title{create output folders}
+\title{Create output folders}
 \usage{
 createFolders(folder = "output", fileSep = "/", ...)
 }
 \arguments{
-\item{folder}{}
+\item{folder}{Text string name}
 
-\item{fileSep}{}
+\item{fileSep}{File separate; default forward slash}
 
-\item{...}{}
+\item{...}{Additional arguments}
 }
 \value{
 
 }
 \description{
-create output folders
+Create output folders
 }

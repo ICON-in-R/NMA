@@ -2,20 +2,22 @@
 % Please edit documentation in R/load_input_data.R
 \name{load_input_data}
 \alias{load_input_data}
-\title{load_input_data}
+\title{Load input data}
 \usage{
 load_input_data(is_med, is_bin, analysis_type, folder = here::here("raw_data"))
 }
 \arguments{
-\item{is_med}{logical}
+\item{is_med}{Load median time data? logical}
 
-\item{is_bin}{logical}
+\item{is_bin}{Load binary data? logical}
 
-\item{folder}{}
+\item{analysis_type}{Appended to file name}
+
+\item{folder}{Text string name}
 }
 \value{
 
 }
 \description{
-load_input_data
+Load input data
 }

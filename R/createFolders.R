@@ -1,9 +1,10 @@
 
-#' create output folders
+#' Create output folders
 #' 
-#' @param folder 
-#' @param fileSep 
-#' @param ... 
+#' @param folder Text string name
+#' @param fileSep File separate; default forward slash
+#' @param ... Additional arguments
+#' 
 #' @importFrom glue glue
 #' 
 #' @return 
@@ -37,6 +38,5 @@ createFolders <- function(folder = "output",
         system(paste("mkdir ", folder, fileSep, dir, sep = ""))
     }
   }
-  
 }
 

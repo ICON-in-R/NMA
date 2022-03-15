@@ -2,17 +2,19 @@
 % Please edit documentation in R/diagnostic_plots.R
 \name{diagnostic_plots}
 \alias{diagnostic_plots}
-\title{WinBugs diagnostic plots}
+\title{WinBUGS diagnostic plots}
 \usage{
 diagnostic_plots(res_bugs, labels, folder = "output", fileSep = "/")
 }
 \arguments{
-\item{res_bugs}{}
+\item{res_bugs}{Output from a BUGS run}
 
-\item{labels}{}
+\item{labels}{$short is used in file name save}
 
-\item{fileSep}{}
+\item{folder}{Text string name}
+
+\item{fileSep}{File separator; default forward slash}
 }
 \description{
-WinBugs diagnostic plots
+WinBUGS diagnostic plots
 }

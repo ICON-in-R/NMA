@@ -3,16 +3,16 @@
 \name{NMA_update}
 \alias{NMA_update}
 \alias{NMA_update.nma}
-\title{NMA_update}
+\title{Update NMA}
 \usage{
 NMA_update(nma, ...)
 
 \method{NMA_update}{nma}(nma, ...)
 }
 \arguments{
-\item{nma}{}
+\item{nma}{Object of class \code{nma}}
 
-\item{...}{}
+\item{...}{Additional arguments}
 }
 \value{
 
@@ -20,5 +20,8 @@ NMA_update(nma, ...)
 
 }
 \description{
-NMA_update
+Take an existing analysis and modify it.
+}
+\seealso{
+\code{\link{new_NMA}}, \code{\link{NMA_run}}
 }

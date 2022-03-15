@@ -1,7 +1,7 @@
 
-#' pairwiseTable
+#' Pairwise table
 #'
-#' @param sims 
+#' @param sims Simulations of different treatments
 #'
 #' @return
 #' @export

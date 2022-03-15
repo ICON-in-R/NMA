@@ -1,7 +1,7 @@
 
-#' rankProbPlot
+#' Rank probability plot
 #' 
-#' Treatment Ranking Plot
+#' Treatment Ranking Plot.
 #'
 #' @param sims sims.matrix bugs output
 #' @param labels 

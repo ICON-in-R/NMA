@@ -1,15 +1,16 @@
 
-#' plots_and_tables
+#' Write to file multiple NMA plots and tables
 #'
-#' @param dat 
-#' @param res_bugs
-#' @param effectParam 
+#' @param dat ist of study data, including subData
+#'  and possibly subDataBin and subDataMed
+#' @param res_bugs BUGS output
+#' @param effectParam Effect parameter names; string
 #' @param labels 
-#' @param endpoint
-#' @param folder 
-#' @param fileSep 
+#' @param endpoint End point names; string
+#' @param folder Output folder name; string
+#' @param fileSep File separator; default forward slash
 #'
-#' @return
+#' @return res_bugs
 #' @export
 #'
 plots_and_tables <- function(dat,
@@ -28,6 +29,7 @@ plots_and_tables <- function(dat,
     colnames(sims) <- dat$txList
     
     # rank probability plot
+    
     rankFileLoc <-
       paste0(folder, fileSep, "graphs", fileSep, "ranking_", labels$short, ".pdf")
     

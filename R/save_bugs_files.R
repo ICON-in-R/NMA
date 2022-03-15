@@ -1,15 +1,15 @@
 
-#' save_bugs_files
+#' Save BUGS files
 #'
-#' @param res_bugs 
-#' @param bugs_params 
-#' @param run_bugs 
+#' @param res_bugs BUGS output 
+#' @param bugs_params BUGS parameter names; strings
+#' @param run_bugs Run BUGS? Logical
 #' @param labels 
-#' @param folder 
-#' @param fileSep 
+#' @param folder output folder name; string
+#' @param fileSep File separator; default forward slash
 #' @importFrom glue glue
 #' 
-#' @return
+#' @return res_bugs
 #' @export
 #'
 save_bugs_files <- function(res_bugs,

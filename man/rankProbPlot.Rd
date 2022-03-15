@@ -2,7 +2,7 @@
 % Please edit documentation in R/rankProbPlot.R
 \name{rankProbPlot}
 \alias{rankProbPlot}
-\title{rankProbPlot}
+\title{Rank probability plot}
 \usage{
 rankProbPlot(sims, labels)
 }
@@ -15,5 +15,5 @@ rankProbPlot(sims, labels)
 
 }
 \description{
-Treatment Ranking Plot
+Treatment Ranking Plot.
 }

@@ -2,21 +2,21 @@
 % Please edit documentation in R/my_bugs_summary.R
 \name{my_bugs_summary}
 \alias{my_bugs_summary}
-\title{my_bugs_summary}
+\title{BUGS summary}
 \usage{
 my_bugs_summary(bugs_summary, params, txList)
 }
 \arguments{
-\item{bugs_summary}{}
+\item{bugs_summary}{Output of BUGS summary call}
 
-\item{params}{}
+\item{params}{Parameter names}
 
-\item{txList}{}
+\item{txList}{List of treatment names}
 }
 \value{
 
 }
 \description{
 Function to set up results file for
-multiple parameters monitored
+multiple parameters monitored.
 }

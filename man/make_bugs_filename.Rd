@@ -2,18 +2,18 @@
 % Please edit documentation in R/make_bugs_filename.R
 \name{make_bugs_filename}
 \alias{make_bugs_filename}
-\title{make_bugs_filename}
+\title{Make BUGS filename}
 \usage{
 make_bugs_filename(random, dat)
 }
 \arguments{
-\item{random}{logical}
+\item{random}{Type of model, RE or FE; logical}
 
-\item{dat}{list}
+\item{dat}{List of data frames. Possible from subData/Med/Bin}
 }
 \value{
 string
 }
 \description{
-make_bugs_filename
+Make BUGS filename
 }

@@ -3,22 +3,26 @@
 \name{plotNetwork}
 \alias{plotNetwork}
 \alias{plotNetwork.default}
-\title{plotNetwork}
+\alias{plotNetwork.nma}
+\title{Plot network diagram}
 \usage{
 plotNetwork(dat, usecurve = FALSE)
 
 \method{plotNetwork}{default}(dat, usecurve = FALSE, ...)
+
+\method{plotNetwork}{nma}(dat, usecurve = FALSE, ...)
 }
 \arguments{
-\item{dat}{}
+\item{dat}{List of study data, including subData
+and possibly subDataBin and subDataMed}
 
-\item{usecurve}{}
+\item{usecurve}{Which line to use? Logical}
 
-\item{...}{}
+\item{...}{Additional arguments}
 }
 \value{
 
 }
 \description{
-plotNetwork
+Plot network diagram
 }

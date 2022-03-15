@@ -2,16 +2,16 @@
 % Please edit documentation in R/pairwiseTable.R
 \name{pairwiseTable}
 \alias{pairwiseTable}
-\title{pairwiseTable}
+\title{Pairwise table}
 \usage{
 pairwiseTable(sims)
 }
 \arguments{
-\item{sims}{}
+\item{sims}{Simulations of different treatments}
 }
 \value{
 
 }
 \description{
-pairwiseTable
+Pairwise table
 }

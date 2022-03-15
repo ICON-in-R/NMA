@@ -1,15 +1,16 @@
 
-#' Network meta-analysis
+#' Run network meta-analysis
 #' 
-#' @param nma object of class nma
-#' @param output_dir 
+#' @param nma Object of class \code{nma}
+#' @param output_dir Output folder name; string
 #' @param fileSep File separator; string
-#' @param save save bugs output to file; logical
+#' @param save Save BUGS output to file? Logical
 #'
-#' @return
+#' @return \code{res_bugs}
 #' @export
 #' @name NMA_run
-
+#' @seealso \code{\link{new_NMA}}, \code{\link{NMA_update}}
+#' 
 NMA_run <- function(nma,
                     fileSep = "/",
                     output_dir = "output",

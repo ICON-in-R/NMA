@@ -58,7 +58,16 @@
     <loc>/reference/NMA.html</loc>
   </url>
   <url>
+    <loc>/reference/nma_outputs.html</loc>
+  </url>
+  <url>
+    <loc>/reference/NMA_run.html</loc>
+  </url>
+  <url>
     <loc>/reference/NMA_run.nma.html</loc>
+  </url>
+  <url>
+    <loc>/reference/NMA_update.html</loc>
   </url>
   <url>
     <loc>/reference/NMA_update.nma.html</loc>
@@ -95,5 +104,8 @@
   </url>
   <url>
     <loc>/reference/validate_nma.html</loc>
+  </url>
+  <url>
+    <loc>/reference/varPlot.html</loc>
   </url>
 </urlset>

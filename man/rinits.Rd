@@ -2,12 +2,13 @@
 % Please edit documentation in R/setupData.R
 \name{rinits}
 \alias{rinits}
-\title{randomly generate MCMC initial values
-closure}
+\title{Randomly generate MCMC initial values}
 \usage{
 rinits(nTx, nStudies, param_names)
 }
-\description{
-randomly generate MCMC initial values
+\value{
 closure
+}
+\description{
+Randomly generate MCMC initial values
 }

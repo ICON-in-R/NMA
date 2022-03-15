@@ -2,7 +2,7 @@
 % Please edit documentation in R/new_NMA.R
 \name{new_NMA}
 \alias{new_NMA}
-\title{nma constructor}
+\title{NMA constructor}
 \usage{
 new_NMA(
   subData,
@@ -19,29 +19,34 @@ new_NMA(
 )
 }
 \arguments{
-\item{subData}{}
+\item{subData}{Main input data frame. Mandatory}
 
-\item{subDataMed}{}
+\item{subDataMed}{Median time input data frame. Optional}
 
-\item{subDataBin}{}
+\item{subDataBin}{Binary data input data frame. Optional}
 
-\item{bugs_params}{}
+\item{bugs_params}{List of BUGS parameters. Optional}
 
-\item{is_random}{}
+\item{is_random}{Random effects model? Logical}
 
-\item{refTx}{}
+\item{hyperparams}{List of hyperparameters}
 
-\item{effectParam}{}
+\item{refTx}{Reference treatment; string}
 
-\item{modelParams}{}
+\item{effectParam}{Effect parameter}
+
+\item{modelParams}{Model parameter}
 
 \item{label}{}
 
-\item{endpoint}{}
+\item{endpoint}{End point name; string}
 }
 \value{
 
 }
 \description{
-nma constructor
+Create an \code{nma} class object to use in an analysis.
+}
+\seealso{
+\code{\link{NMA_run}}, \code{\link{NMA_update}}
 }

@@ -1,9 +1,10 @@
 
-#' plotNetwork
+#' Plot network diagram
 #'
-#' @param dat 
-#' @param usecurve 
-#' @param ... 
+#' @param dat List of study data, including subData
+#'  and possibly subDataBin and subDataMed
+#' @param usecurve Which line to use? Logical 
+#' @param ... Additional arguments
 #' @export
 #' @name plotNetwork
 #' 
@@ -108,6 +109,7 @@ plotNetwork.default <- function(dat,
 }
 
 
+#' @rdname plotNetwork
 #' @export
 #'
 plotNetwork.nma <- function(dat,

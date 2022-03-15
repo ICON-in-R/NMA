@@ -2,7 +2,7 @@
 % Please edit documentation in R/setupData.R
 \name{setupData}
 \alias{setupData}
-\title{setupData}
+\title{Set-up study data}
 \usage{
 setupData(
   subData,
@@ -13,15 +13,15 @@ setupData(
 )
 }
 \arguments{
-\item{subData}{}
+\item{subData}{Main data. Mandatory}
 
 \item{refTx}{Reference treatment name}
 
-\item{subDataBin}{}
+\item{subDataBin}{Binary data. Optional}
 
-\item{subDataMed}{}
+\item{subDataMed}{Median time data. Optional}
 
-\item{is_random}{Is this a random effects model?}
+\item{is_random}{Is this a random effects model? Logical}
 }
 \value{
 list

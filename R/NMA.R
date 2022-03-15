@@ -1,24 +1,25 @@
 
-#' Network meta-analysis
+#' Perform a network meta-analysis
 #' 
-#' @param dat result of setupData()
-#' @param bugs_params
-#' @param effectParam 
-#' @param modelParams 
-#' @param output_dir
+#' @param dat Result of \code{setupData}
+#' @param bugs_params List of BUGS parameters
+#' @param effectParam Effect parameters. Optional
+#' @param modelParams Model parameters. Optional
+#' @param output_dir Name of output folder; string
 #' @param label
-#' @param endpoint 
-#' @param preRefTx what is this?
-#' @param random 
-#' @param run_bugs 
+#' @param endpoint Name of end point; string
+#' @param preRefTx what is this? Reference treatment
+#' @param random Random effects model?
+#' @param run_bugs Logical
 #' @param DIAGNOSTICS Produce diagnostic plots; logical
 #' @param fileSep File separator; string
 #' 
 #' @importFrom glue glue
 #' @importFrom purrr map
 #' @importFrom here here
+#' @seealso \code{\link{NMA_run}}, \code{\link{NMA_update}}
 #' 
-#' @return
+#' @return \code{res_bugs}
 #' @export
 #' 
 NMA <- function(dat,

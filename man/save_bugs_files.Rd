@@ -2,7 +2,7 @@
 % Please edit documentation in R/save_bugs_files.R
 \name{save_bugs_files}
 \alias{save_bugs_files}
-\title{save_bugs_files}
+\title{Save BUGS files}
 \usage{
 save_bugs_files(
   res_bugs,
@@ -14,21 +14,21 @@ save_bugs_files(
 )
 }
 \arguments{
-\item{res_bugs}{}
+\item{res_bugs}{BUGS output}
 
-\item{bugs_params}{}
+\item{bugs_params}{BUGS parameter names; strings}
 
-\item{run_bugs}{}
+\item{run_bugs}{Run BUGS? Logical}
 
 \item{labels}{}
 
-\item{folder}{}
+\item{folder}{output folder name; string}
 
-\item{fileSep}{}
+\item{fileSep}{File separator; default forward slash}
 }
 \value{
-
+res_bugs
 }
 \description{
-save_bugs_files
+Save BUGS files
 }

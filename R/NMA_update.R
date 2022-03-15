@@ -1,12 +1,15 @@
 
-#' NMA_update
+#' Update NMA
 #' 
-#' @param nma 
-#' @param ... 
+#' Take an existing analysis and modify it.
+#' 
+#' @param nma Object of class \code{nma} 
+#' @param ... Additional arguments
 #'
 #' @return
 #' @export
 #' @name NMA_update
+#' @seealso \code{\link{new_NMA}}, \code{\link{NMA_run}}
 #' 
 NMA_update <- function(nma, ...) {
   UseMethod("NMA_update", nma)
