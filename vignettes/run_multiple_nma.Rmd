@@ -2,7 +2,7 @@
 title: "Run multiple NMA"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{run_multiple_nma}
+  %\VignetteIndexEntry{Run-multiple-NMA}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,7 +23,6 @@ This document describes how to use the main functions of `NMA` to run multiple n
 ```{r setup, warning=FALSE, message=FALSE}
 library(NMA)
 library(dplyr)
-library(BRugs)
 library(purrr)
 ```
 

@@ -2,7 +2,7 @@
 title: "How to use NMA: Introduction"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{how-to-use-S3}
+  %\VignetteIndexEntry{How-to-use-NMA:-Introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -128,11 +128,7 @@ nma_res
 It is simple to modify an existing analysis without repeating the previous steps.
 For example, we can run the NMA for a random effects model version of the same model.
 
-```{r eval=FALSE}
-##TODO: error 
-# Error in scan(paste(tempDir, "/output", i, ".txt", sep = ""), switch(cmdtypes[i], : 
-# scan() expected 'a real', got '1.#INF00'
-
+```{r}
 nma_model2 <-
   NMA_update(nma_model,
              is_random = TRUE)
