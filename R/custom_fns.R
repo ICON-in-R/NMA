@@ -21,6 +21,7 @@ customSavePlot <- function() {
 
 
 #' @importFrom R2WinBUGS bugs
+#' @importFrom R2OpenBUGS bugs
 #' @importFrom R2jags jags
 #'
 customBugs <- function(PROG = "openbugs", ...) {
@@ -30,13 +31,13 @@ customBugs <- function(PROG = "openbugs", ...) {
   if (PROG == "openbugs") {
     return(
       function(...)
-        bugs(program = "openbugs", ...))
+        R2OpenBUGS::bugs(...))
   }
   
   if (PROG == "winbugs") {
     return(
       function(...)
-        bugs(program = "winbugs", ...))
+        R2WinBUGS::bugs(...))
   }
   
   if (PROG == "jags") {

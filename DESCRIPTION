@@ -30,7 +30,6 @@ Imports:
     R2jags,
     sna
 Suggests:
-    BRugs,
     knitr,
     qpdf,
     rmarkdown,

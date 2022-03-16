@@ -23,7 +23,6 @@ This document describes how to use the main functions of `NMA` to run a single n
 ```{r setup, warning=FALSE, message=FALSE}
 library(NMA)
 library(dplyr)
-library(BRugs)
 library(purrr)
 ```
 
@@ -43,32 +42,6 @@ bugs_params <-
 ```
 
 Define the scenario we will use for the analysis.
-
-```{r eval=FALSE, echo=FALSE}
-# We will load in a dataframe of values.
-analyses_params <-
-  read.csv(
-    here::here("raw_data", "AnalysisList.csv"),
-    as.is = TRUE,
-    na.strings = c("NR", "NA")) %>% 
-  filter(Endpoint_type == "Surv") %>% 
-  dplyr::rename(name = Analysis_name,
-                type = Analysis_Type)
-
-```
-
-```{r eval=FALSE, echo=FALSE}
-# For demonstration purposes we will select the first scenario to run.
-analysis <- analyses_params[1, ]
-
-RANDOM <- analysis$Model_effects == "RE"  # fixed effects FALSE, random effects TRUE
-is_bin <- analysis$BinData == "YES"       # indicator if binary endpoint data
-is_med <- analysis$MedData == "YES"       # indicator if median endpoint data
-REFTX <- analysis$REFTX                   # reference treatment
-label_name <- analysis$name
-endpoint <- analysis$Endpoint
-analysis_type <- analysis$type
-```
 
 ```{r}
 RANDOM <- FALSE
