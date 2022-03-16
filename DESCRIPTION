@@ -1,5 +1,5 @@
 Package: NMA
-Title: Easy Network Meta-Analysis.
+Title: Easy Network Meta-Analysis
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Nathan",
@@ -9,7 +9,7 @@ Authors@R:
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: The objective of this package is to perform
              easy network meta-analysis.
-License: use_mit_license()
+License: GPL (>= 3)
 URL: https://icon-in-r.github.io/NMA
 BugReports: https://github.com/ICON-in-R/NMA/issues
 Encoding: UTF-8

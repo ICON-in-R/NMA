@@ -51,7 +51,7 @@
 #'     
 #'     res_bugs <-
 #'       bugs_fn(
-#'       # R2OpenBUGS::bugs(
+#'       # R2WinBUGS::bugs(
 #'       # R2jags::jags(
 #'         data = dat$bugsData,
 #'         parameters.to.save = params_to_save,
