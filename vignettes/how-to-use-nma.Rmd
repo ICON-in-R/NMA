@@ -20,6 +20,8 @@ This document describes how to use the main functions of `NMA` to run a single n
 
 ## Example
 
+First load the required packages.
+
 ```{r setup, warning=FALSE, message=FALSE}
 library(NMA)
 library(dplyr)
@@ -29,28 +31,29 @@ library(purrr)
 ### Settings
 
 Define the BUGS parameters for MCMC.
+This is not necessary, but recommended, because there are default values for these.
 
 ```{r}
 bugs_params <-
   list(
-    PROG = "openBugs",
-    N.BURNIN = 10,#00,
-    N.SIMS = 150,#0,
-    N.CHAINS = 2,
-    N.THIN = 1,
+    PROG = "openBugs",  # which version of BUGS to use to run the MCMC
+    N.BURNIN = 10,#00,  # number of steps to throw away
+    N.SIMS = 150,#0,    # total number of simulations
+    N.CHAINS = 2,       # number of chains
+    N.THIN = 1,         # thinning rate
     PAUSE = TRUE)
 ```
 
 Define the scenario we will use for the analysis.
 
 ```{r}
-RANDOM <- FALSE
-REFTX <- "ERL/GEF"
-is_bin <- TRUE
-is_med <- TRUE
+RANDOM <- FALSE             # is this a random effects model?
+REFTX <- "ERL/GEF"          # reference treatment
+is_bin <- TRUE              # include binary data?
+is_med <- TRUE              # include median data?
 label_name <- "BC_PFS_mFE"
-endpoint <- "PFS"
-analysis_type <- "BC"
+endpoint <- "PFS"           # which end point, PFS, OS, ...?
+analysis_type <- "BC"       # main data tag
 ```
 
 
@@ -58,6 +61,9 @@ analysis_type <- "BC"
 
 The trials data consist of up to 3 separate dataframes.
 A main table, `subData`, and optional tables for median event time and binary data, `subDataMed` and `subDataBin` respectively.
+Lets read in the each data set separately.
+In another article we will show how to do this in one function call by including a Reference file in the data folder which contains the meta data of how to read in the study data.
+If there is no binary or median data used in the NMA then the variables `subDataBin` and `subDataMed` are assigned `NA`.
 
 ```{r}
 file_name <- paste0(here::here("raw_data"), "/survdata_", endpoint, "_")
@@ -87,6 +93,8 @@ subDataMed <-
 ### Build model
 
 Now we can create the NMA object to use in the modelling.
+The workflow is to first create this separately to actually doing the fitting.
+This then means that we can perform modified fits but we don't have to redo any of the preparatory work.
 
 ```{r}
 nma_model <-
@@ -114,6 +122,8 @@ plotNetwork(nma_model)
 
 ### Run MCMC
 
+The NMA MCMC function calls the appropriate BUGS model.
+
 ```{r}
 nma_res <- NMA_run(nma_model)
 
@@ -126,7 +136,7 @@ nma_res
 ### Reconfigure model
 
 It is simple to modify an existing analysis without repeating the previous steps.
-For example, we can run the NMA for a random effects model version of the same model.
+For example, we can run the NMA for a random effects rather than a fixed effects model version of the same model.
 
 ```{r}
 nma_model2 <-

@@ -33,9 +33,9 @@ Rows in the `type` column must contain one of the following keywords:
 
 * `bugs`: file containing the BUGS input parameters for MCMC.
 * `analysis`: file containing the scenario information, including where a random effects model, `RANDOM` and the reference treatment, `REFTX`.
-* `subData`: Mandatory NMA data.
-* `subDataBin`: Optional binary data.
-* `subDataMed`: Optional median time data.
+* `subData`: Mandatory NMA data. Required column headings of `tx`, `base`, `study`, `Lmean`, `Lse`, `multi_arm`
+* `subDataBin`: Optional binary data. Required column headings of `tx`, `base`, `study`, `BinN`, `BinR`
+* `subDataMed`: Optional median time data. Required column headings of `tx`, `base`, `study`, `medN`, `MedR`, `median`
 
 `type` | `file`
 -----|------
@@ -43,26 +43,45 @@ Rows in the `type` column must contain one of the following keywords:
 `analysis` | `analysis.csv`
 `subData` | `subData.csv`
 
-## Parameter files
-An example, `bugs.csv`
 
+## Parameter files
+
+An example, `bugs.csv`
     
-    PROG, openBugs,
-    N.BURNIN, 1000,
-    N.SIMS, 1500,
-    N.CHAINS, 2,
-    N.THIN, 1,
+    PROG, openBugs
+    N.BURNIN, 1000
+    N.SIMS, 1500
+    N.CHAINS, 2
+    N.THIN, 1
     PAUSE, TRUE
     
-`analysis.csv`
+and `analysis.csv`
 
-    RANDOM, TRUE,
-    REFTX, 1
+    is_random, FALSE
+    refTx, ERL/GEF
+    effectParam, beta
+    modelParams, totresdev
+    label, BC_PFS_mFE
+    endpoint,	PFS
+    
     
 ## Running an NMA
 
 A single call sets-up the NMA represented by the contents of the folder.
 
-```r
-nma_model <- new_NMA_dir(dir = "analysis_folder/)
+```{r}
+nma_model <- new_NMA_dir(data_dir = "inst/analysis_folder")
 ```
+
+
+### Run MCMC
+
+The NMA MCMC function calls the appropriate BUGS model in the usual way.
+
+```{r}
+##TODO: error.compare this with simple case for difference
+nma_res <- NMA_run(nma_model)
+
+nma_res
+```
+

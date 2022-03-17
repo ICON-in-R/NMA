@@ -2,6 +2,8 @@
 #' Prepare data used in computation
 #' 
 #' Create input data for NMA.
+#' Renames the study, base and other fields with appended letter
+#' depending on type of data.
 #' 
 #' @param subData Main data frame
 #' @param subDataBin Optional data frame. Binary data
@@ -33,7 +35,9 @@ prep_codeData <- function(subData,
   # all treatments in data sets
   tx_names <-
     sort(unlist(
-      map(dat, ~select(., tx, base))))
+      map_if(dat,
+             .p = ~all(!is.na(.)),         # data provided
+             .f = ~select(., tx, base))))  # treatment names
   
   tx_names <- unique(c(refTx, tx_names))
   

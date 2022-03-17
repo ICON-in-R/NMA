@@ -45,6 +45,8 @@ new_NMA <- function(subData,
   
   bugs_fn <- customBugs(bugs_params$PROG)
   
+  check_study_data(subData, subDataMed, subDataBin)
+  
   dat <- 
     setupData(subData = subData,
               subDataMed = subDataMed,

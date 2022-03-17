@@ -41,7 +41,7 @@ NMA_run.nma <- function(nma,
   bugs_filename <- make_bugs_filename(nma$is_random, dat)
   labels <- make_labels(nma$label)
   
-  ## run bugs model ----
+  ## run bugs model
   
   if (run_bugs) {
     init_vals <- map(1:bugs_params$N.CHAINS,
