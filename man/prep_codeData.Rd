@@ -21,4 +21,6 @@ If no binary of median data empty sub-lists.
 }
 \description{
 Create input data for NMA.
+Renames the study, base and other fields with appended letter
+depending on type of data.
 }

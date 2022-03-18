@@ -32,11 +32,11 @@ The meta information about the contents of the folder is contained in a _referen
 This file contains two columns called `type` and `file`.
 Rows in the `type` column must contain one of the following keywords:
 
-* `bugs`: file containing the BUGS input parameters for MCMC.
-* `analysis`: file containing the scenario information, including where a random effects model, `RANDOM` and the reference treatment, `REFTX`.
+* `bugs`: File containing the BUGS input parameters for MCMC
+* `analysis`: File containing the scenario information
 * `subData`: Mandatory NMA data. Required column headings of `tx`, `base`, `study`, `Lmean`, `Lse`, `multi_arm`
 * `subDataBin`: Optional binary data. Required column headings of `tx`, `base`, `study`, `BinN`, `BinR`
-* `subDataMed`: Optional median time data. Required column headings of `tx`, `base`, `study`, `medN`, `MedR`, `median`
+* `subDataMed`: Optional median time data. Required column headings of `tx`, `base`, `study`, `medN`, `medR`, `median`
 
 `type` | `file`
 -----|------
@@ -47,7 +47,8 @@ Rows in the `type` column must contain one of the following keywords:
 
 ## Parameter files
 
-An example, `bugs.csv`
+`bugs.csv` includes: OpenBUGS or WinBUGS option `PROG`, `N.BURNIN`, `N.SIMS`, `N.CHAINS`, `N.THIN`, `PAUSE.`
+For example,
     
     PROG, openBugs
     N.BURNIN, 1000
@@ -56,14 +57,15 @@ An example, `bugs.csv`
     N.THIN, 1
     PAUSE, TRUE
     
-and `analysis.csv`
+and `analysis.csv` includes: whether a random effects model, `RANDOM`; the reference treatment, `REFTX`; `effectParam`, `modelParams`, `label` and `endpoint`.
+For example,
 
     is_random, FALSE
     refTx, ERL/GEF
     effectParam, beta
     modelParams, totresdev
     label, BC_PFS_mFE
-    endpoint,	PFS
+    endpoint, PFS
     
     
 ## Running an NMA
@@ -71,7 +73,7 @@ and `analysis.csv`
 A single call sets-up the NMA represented by the contents of the folder.
 
 ```{r}
-nma_model <- new_NMA_dir(data_dir = "inst/analysis_folder")
+nma_model <- new_NMA_dir(data_dir = here::here("inst/analysis_folder"))
 ```
 
 

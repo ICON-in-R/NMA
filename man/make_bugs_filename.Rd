@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_bugs_filename.R
 \name{make_bugs_filename}
 \alias{make_bugs_filename}
-\title{Make BUGS filename}
+\title{Make BUGS model file name}
 \usage{
 make_bugs_filename(random, dat)
 }
@@ -15,5 +15,5 @@ make_bugs_filename(random, dat)
 string
 }
 \description{
-Make BUGS filename
+Make BUGS model file name
 }
