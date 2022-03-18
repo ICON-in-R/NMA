@@ -1,5 +1,5 @@
 
-#' Make BUGS filename
+#' Make BUGS model file name
 #'
 #' @param random Type of model, RE or FE; logical
 #' @param dat List of data frames. Possible from subData/Med/Bin
@@ -10,10 +10,10 @@
 make_bugs_filename <- function(random, dat) {
   
   effect <- ifelse(random, "RE", "FE")
-  med <- ifelse(any(is.na(dat$subDataBin)), NA, "med")  ##TODO: should this be subDataMed?
-  bin <- ifelse(any(is.na(dat$subDataBin)), NA, "bin")
+  med <- ifelse(any(is.na(dat$subDataMed)) | length(dat$subDataMed) == 0, NA, "med")
+  bin <- ifelse(any(is.na(dat$subDataBin)) | length(dat$subDataBin) == 0, NA, "bin")
   fname <- c(effect, med, bin)
   
-  here("inst", paste0(paste(fname[!is.na(fname)], collapse = "_"), ".txt"))
+  here::here("inst", paste0(paste(fname[!is.na(fname)], collapse = "_"), ".txt"))
 }
 

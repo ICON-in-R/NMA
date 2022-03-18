@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
 library(NMA)
+library(purrr)
 ```
 
 Borrowing from the approach in the `heemod` package, as well as defining the analysis in an `R` script it is also possible to specify the analysis with only file inputs.
@@ -79,7 +80,6 @@ nma_model <- new_NMA_dir(data_dir = "inst/analysis_folder")
 The NMA MCMC function calls the appropriate BUGS model in the usual way.
 
 ```{r}
-##TODO: error.compare this with simple case for difference
 nma_res <- NMA_run(nma_model)
 
 nma_res

@@ -37,15 +37,7 @@ model {
 	Ldev[ii] <- pow((Lmean[ii] - Lmu[ii]), 2)/pow(Lse[ii], 2)
   }
 	
-	totresdev <- sum(Ldev[1:LnObs])
-
-# For binary data reporting studies
-#  for(ss in 1:BnObs) {
-#    logCumHaz[ss] <- alpha[Bstudy[ss]] + re[Bstudy[ss], Btx[ss]] -
-#    re[Bstudy[ss], Bbase[ss]] + beta[Btx[ss]] - beta[Bbase[ss]] 
-#    cumFail[ss] <- 1 - exp(-1*exp(logCumHaz[ss]))
-#    Br[ss] ~ dbin(cumFail[ss], Bn[ss])
-#  }
+totresdev <- sum(Ldev[1:LnObs])
 
 # Calculate HRs
   for (hh in 2:nTx) {

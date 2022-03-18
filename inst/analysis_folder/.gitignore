@@ -1,3 +1,6 @@
 *
 */
 !.gitignore
+!analysis.csv
+!bugs.csv
+!REFERENCE.csv

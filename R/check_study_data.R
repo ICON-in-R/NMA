@@ -19,7 +19,7 @@ check_study_data <- function(subData,
   }
   
   if (!is.na(subDataMed)) {
-    med_col_names <- c("tx", "base", "study", "medN", "MedR", "median")
+    med_col_names <- c("tx", "base", "study", "medN", "medR", "median")
     med_missing_cols <- !all(med_col_names %in% names(subDataMed))
     
     if (med_missing_cols)

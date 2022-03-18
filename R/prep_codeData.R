@@ -9,7 +9,7 @@
 #' @param subDataBin Optional data frame. Binary data
 #' @param subDataMed Optional data frame. Median times
 #' @param refTx Reference treatment name; string
-#' @importFrom purrr map
+#' @importFrom purrr map map_if
 #' @import dplyr
 #' 
 #' @return List of data and statistics.

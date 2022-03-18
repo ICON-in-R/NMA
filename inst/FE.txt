@@ -27,14 +27,6 @@ model{
 
 totresdev <- sum(Ldev[1:LnObs])
 
-# For binary data reporting studies
-#
-#  for(ss in 1:BnObs) {
-#    logCumHaz[ss] <- alpha[Bstudy[ss]] + beta[Btx[ss]] - beta[Bbase[ss]]
-#    cumFail[ss] <- 1 - exp(-1*exp(logCumHaz[ss]))
-#    Br[ss] ~ dbin(cumFail[ss], Bn[ss])
-#  }
-
 # Calculate HRs
   for (hh in 1:nTx) {
     hr[hh] <- exp(beta[hh])

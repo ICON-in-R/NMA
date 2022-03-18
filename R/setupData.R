@@ -69,7 +69,7 @@ setupData <- function(subData,
         nStudies = input$nStudies)
     
     return(list(
-      inits = rinits(input$nTx, input$nStudies, input$param_names),
+      inits = rinits(input$nTx, input$nStudies, param_names),
       subData = input$subData$dat,
       bugsData = bugsData,
       txList = input$txList))
@@ -96,7 +96,7 @@ setupData <- function(subData,
         BnObs = input$subDataBin$BnObs)
     
     return(list(
-      inits = rinits(input$nTx, input$nStudies, input$param_names),
+      inits = rinits(input$nTx, input$nStudies, param_names),
       subData = input$subData$dat,
       subDataBin = input$subDataBin$dat,
       bugsData = bugsData,
@@ -125,7 +125,7 @@ setupData <- function(subData,
         medianNObs = input$subDataMed$medianNObs)
     
     return(list(
-      inits = rinits(input$nTx, input$nStudies, input$param_names),
+      inits = rinits(input$nTx, input$nStudies, param_names),
       subData = input$subData$dat,
       subDataMed = input$subDataMed$dat,
       bugsData = bugsData,

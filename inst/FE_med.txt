@@ -27,13 +27,6 @@ model{
 	Ldev[ii] <- (Lmean[ii] - Lmu[ii])*(Lmean[ii] - Lmu[ii])*Lprec[ii]  
   }
 
-# For binary data reporting studies
-#  for(ss in 1:BnObs) {
-#    logCumHaz[ss] <- alpha[Bstudy[ss]] + beta[Btx[ss]] - beta[Bbase[ss]]
-#    cumFail[ss] <- 1 - exp(-1*exp(logCumHaz[ss]))
-#    Br[ss] ~ dbin(cumFail[ss], Bn[ss])
-#  }
-
 # For data reported as median survival times
    for (kk in 1:medianNObs) {
      medianMu[kk] <- alpha[medianStudy[kk]] + beta[medianTx[kk]] - beta[medianBase[kk]]

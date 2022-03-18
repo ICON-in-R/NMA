@@ -59,7 +59,7 @@ analysis_type <- "BC"       # main data tag
 
 ### Read in datasets
 
-The trials data consist of up to 3 separate dataframes.
+The trials data consist of up to 3 separate data frames.
 A main table, `subData`, and optional tables for median event time and binary data, `subDataMed` and `subDataBin` respectively.
 Lets read in the each data set separately.
 In another article we will show how to do this in one function call by including a Reference file in the data folder which contains the meta data of how to read in the study data.
@@ -100,7 +100,7 @@ This then means that we can perform modified fits but we don't have to redo any 
 nma_model <-
   new_NMA(subData = subData,
           subDataMed = subDataMed,
-          subDataBin = subDataBin,
+          # subDataBin = subDataBin,
           bugs_params = bugs_params,
           is_random = RANDOM,
           refTx = REFTX ,
@@ -115,6 +115,8 @@ nma_model
 We can view the network graph.
 
 ```{r, warning=FALSE, message=FALSE, fig.width=6, fig.height=6}
+##TODO: error when either bin or med missing
+
 library(sna)
 plotNetwork(nma_model)
 ```
@@ -128,6 +130,8 @@ The NMA MCMC function calls the appropriate BUGS model.
 nma_res <- NMA_run(nma_model)
 
 nma_res
+
+##TODO: errors
 
 # diagnostics(nma_res)
 # nma_outputs(nma_res)

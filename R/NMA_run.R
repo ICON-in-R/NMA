@@ -48,7 +48,7 @@ NMA_run.nma <- function(nma,
                      ~dat$inits())
     
     cat("====== RUNNING BUGS MODEL\n")
-    
+
     res_bugs <-
       nma$bugs_fn(
         data = dat$bugsData,
@@ -74,6 +74,6 @@ NMA_run.nma <- function(nma,
   save(res_bugs,
        file = here(glue("{output_dir}{fileSep}model{fileSep}bugsObject_{labels$short}.RData")))
   
-  return(res_bugs)
+  res_bugs
 }
 
