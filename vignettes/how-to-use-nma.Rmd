@@ -100,7 +100,7 @@ This then means that we can perform modified fits but we don't have to redo any 
 nma_model <-
   new_NMA(subData = subData,
           subDataMed = subDataMed,
-          # subDataBin = subDataBin,
+          subDataBin = subDataBin,
           bugs_params = bugs_params,
           is_random = RANDOM,
           refTx = REFTX ,
