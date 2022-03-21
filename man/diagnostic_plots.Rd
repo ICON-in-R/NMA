@@ -12,8 +12,6 @@ diagnostic_plots(res_bugs, labels_short = "", folder = "output")
 \item{folder}{Text string name}
 
 \item{labels}{$short is used in file name save}
-
-\item{fileSep}{File separator; default forward slash}
 }
 \description{
 WinBUGS diagnostic plots

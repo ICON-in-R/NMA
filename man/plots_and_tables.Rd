@@ -41,8 +41,6 @@ plots_and_tables(
 and possibly subDataBin and subDataMed}
 
 \item{labels}{Labels}
-
-\item{fileSep}{File separator; default forward slash}
 }
 \value{
 res_bugs

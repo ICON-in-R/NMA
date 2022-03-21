@@ -4,14 +4,7 @@
 \alias{save_bugs_files}
 \title{Save BUGS files}
 \usage{
-save_bugs_files(
-  res_bugs,
-  bugs_params,
-  run_bugs,
-  labels,
-  folder = "output",
-  fileSep = "/"
-)
+save_bugs_files(res_bugs, bugs_params, run_bugs, labels, folder = "output")
 }
 \arguments{
 \item{res_bugs}{BUGS output}
@@ -23,8 +16,6 @@ save_bugs_files(
 \item{labels}{Labels}
 
 \item{folder}{output folder name; string}
-
-\item{fileSep}{File separator; default forward slash}
 }
 \value{
 res_bugs

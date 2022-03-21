@@ -5,14 +5,12 @@ customSavePlot <- function() {
   SYS <- .Platform$OS.type
   
   if (SYS == "MAC") {
-    fileSep <- "/"
     return(
       function(file)
         quartz.save(file = file, type = "pdf"))
   }
   
   if (SYS == "windows") {
-    fileSep <- "\\"
     return(
       function(file)
         savePlot(filename = file, type = "pdf"))

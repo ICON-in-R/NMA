@@ -4,7 +4,6 @@
 #' @param res_bugs Output from a BUGS run
 #' @param labels $short is used in file name save
 #' @param folder Text string name
-#' @param fileSep  File separator; default forward slash
 #'
 #' @importFrom glue glue
 #' @importFrom here here

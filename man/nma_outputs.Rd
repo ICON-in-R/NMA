@@ -4,7 +4,7 @@
 \alias{nma_outputs}
 \title{All output functions}
 \usage{
-nma_outputs(nma, nma_model, output_dir = "output", fileSep = "/")
+nma_outputs(nma, nma_model, output_dir = "output")
 }
 \description{
 All output functions

@@ -3,7 +3,6 @@
 #' 
 #' @param nma Object of class \code{nma}
 #' @param output_dir Output folder name; string
-#' @param fileSep File separator; string
 #' @param save Save BUGS output to file? Logical
 #'
 #' @return \code{res_bugs}
@@ -12,7 +11,6 @@
 #' @seealso \code{\link{new_NMA}}, \code{\link{NMA_update}}
 #' 
 NMA_run <- function(nma,
-                    fileSep = "/",
                     output_dir = "output",
                     save = TRUE) {
   UseMethod("NMA_run", nma)
@@ -28,7 +26,6 @@ NMA_run <- function(nma,
 #' @export
 #' 
 NMA_run.nma <- function(nma,
-                        fileSep = "/",
                         output_dir = "output",
                         save = TRUE) {
   dat <- nma$dat
@@ -64,15 +61,16 @@ NMA_run.nma <- function(nma,
     if (bugs_params$PROG == "JAGS")
       res_bugs <- res_bugs$BUGSoutput
   } else {
-    load(here(glue("{output_dir}{fileSep}model{fileSep}bugsObject_{labels$short}")))
+    file_name <- paste0("bugsObject_", label, ".RData")
+    dir_name <- file.path(output_dir, "model", file_name)
   }
 
-  createFolders(folder = output_dir, fileSep,
+  createFolders(folder = output_dir, 
                 "results", "model", "sims", "data")
-  save_bugs_files(res_bugs, bugs_params, run_bugs, labels, output_dir, fileSep)
+  save_bugs_files(res_bugs, bugs_params, run_bugs, labels, output_dir)
   
-  save(res_bugs,
-       file = here(glue("{output_dir}{fileSep}model{fileSep}bugsObject_{labels$short}.RData")))
+  file_name <- paste0("bugsObject_", label, ".RData")
+  save(res_bugs, file.path(output_dir, "model", file_name))
   
   res_bugs
 }
