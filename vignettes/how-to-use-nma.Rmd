@@ -100,7 +100,7 @@ This then means that we can perform modified fits but we don't have to redo any 
 nma_model <-
   new_NMA(subData = subData,
           subDataMed = subDataMed,
-          # subDataBin = subDataBin,
+          subDataBin = subDataBin,
           bugs_params = bugs_params,
           is_random = RANDOM,
           refTx = REFTX ,
@@ -115,8 +115,6 @@ nma_model
 We can view the network graph.
 
 ```{r, warning=FALSE, message=FALSE, fig.width=6, fig.height=6}
-##TODO: error when either bin or med missing
-
 library(sna)
 plotNetwork(nma_model)
 ```
@@ -130,11 +128,16 @@ The NMA MCMC function calls the appropriate BUGS model.
 nma_res <- NMA_run(nma_model)
 
 nma_res
+```
 
-##TODO: errors
+Some useful plots.
 
+```{r}
+# # save trace plots to file
 # diagnostics(nma_res)
-# nma_outputs(nma_res)
+
+# # save lots of other plots to file
+# nma_outputs(nma_res, nma_model)
 ```
 
 ### Reconfigure model

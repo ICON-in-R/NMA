@@ -2,12 +2,13 @@
 #' @keywords internal
 #' 
 diagnostics <- function(res_bugs,
-                        labels,
+                        labels_short = "",
                         output_dir = "output",
                         fileSep = "/") {
   
+  browser()
   createFolders(folder = output_dir, fileSep, "diagnostics")
-  diagnostic_plots(res_bugs, labels)
+  diagnostic_plots(res_bugs, labels_short)
   
   invisible(res_bugs)
 }
@@ -17,19 +18,19 @@ diagnostics <- function(res_bugs,
 #' @keywords internal
 #' 
 nma_outputs <- function(nma,
-                        res_bugs,
-                        effectParam,
-                        labels,
-                        endpoint,
+                        nma_model,
                         output_dir = "output",
                         fileSep = "/") {
-  
+ 
   createFolders(folder = output_dir, fileSep, "graphs")
   
-  bugs_stats(nma$dat, res_bugs, effectParam, nma$is_random)
+  bugs_stats(nma_model$dat, nma, nma_model$effectParam, nma_model$is_random)
   
-  plots_and_tables(nma$dat, res_bugs, effectParam, nma$labels, nma$endpoint)
+  plots_and_tables(dat = nma_model$dat,
+                   res_bugs = nma,
+                   effectParam = nma_model$effectParam,
+                   endpoint = nma_model$endpoint)
   
-  invisible(res_bugs)
+  invisible(nma)
 }
 

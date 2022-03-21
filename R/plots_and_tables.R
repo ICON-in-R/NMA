@@ -16,11 +16,13 @@
 plots_and_tables <- function(dat,
                              res_bugs,
                              effectParam,
-                             labels,
+                             labels = list(short = "",
+                                           refe = "",
+                                           orig = ""),
                              endpoint = NULL,
                              folder = "output",
                              fileSep = "/") {
-
+  
   if (all(!is.na(effectParam))) {
     
     sims <-
@@ -47,7 +49,7 @@ plots_and_tables <- function(dat,
     txEffectPlot(dat, sims, labels, endpoint)
 
     pdf(file = forestFileLoc)
-    txEffectPlot(dat, sims, label, endpoint)
+    txEffectPlot(dat, sims, labels, endpoint)
     dev.off()
     
     # pairwise table
@@ -57,7 +59,7 @@ plots_and_tables <- function(dat,
       paste0(folder, fileSep, "results", fileSep, "Pairwise_results_", labels$short, ".csv")
     
     write.table(
-      paste("Pairwise Treatment Co-efficients;",
+      paste("Pairwise Treatment Coefficients;",
             "Median hazard ratio (95% Credible Interval)",
             sep = " "),
       file = pairFileLoc ,
@@ -90,9 +92,9 @@ plots_and_tables <- function(dat,
   
   write.table(
     paste0(
-      "Key: Lmean=mean log hazard ratios;
-            Lse=standard error for log hazard ratios;
-            multi=multi-arm trial indicator"),
+      "Key: Lmean = mean log hazard ratios;
+            Lse = standard error for log hazard ratios;
+            multi = multi-arm trial indicator"),
     file = dataFileLoc,
     append = FALSE,
     col.names = NA)
@@ -117,7 +119,7 @@ plots_and_tables <- function(dat,
     
     write.table(
       paste0(
-        "Key: Bn=Number of patients in arm; Br=number of events in arm"),
+        "Key: Bn is number of patients in arm; Br is number of events in arm"),
       file = dataFileLocBin,
       append = FALSE,
       col.names = NA)
@@ -177,9 +179,9 @@ plots_and_tables <- function(dat,
   
   write.table(
     paste0(
-      "Key: SE=standard error;
-            L95CrI/U95CrI=lower/upper 95% credible interval;
-            DIC=deviance information criterion"),
+      "Key: SE = standard error;
+            L95CrI/U95CrI = lower/upper 95% credible interval;
+            DIC = deviance information criterion"),
     file = resultsFileLoc,
     append = TRUE,
     col.names = NA)

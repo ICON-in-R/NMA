@@ -24,26 +24,32 @@ plotNetwork.default <- function(dat,
                                 usecurve = FALSE,
                                 ...) {
   
-  is_bin <- all(!is.na(dat$subDataBin))
-  is_med <- all(!is.na(dat$subDataMed))
+  is_bin <- !(any(is.na(dat$subDataBin)) || any(is.null(dat$subDataBin)))
+  is_med <- !(any(is.na(dat$subDataMed)) || any(is.null(dat$subDataMed)))
   
   if (!is_bin & !is_med) {
-    subDataComb <- subData[, c("study", "tx", "base", "Ltx", "Lbase")]
+    subDataComb <- dat$subData[, c("study", "tx", "base", "Ltx", "Lbase")]
   }
   
   if (is_bin & !is_med) {
     subDataBinN <- dat$subDataBin
-    names(subDataBinN)[c(6, 7)] <- c("Ltx", "Lbase")
+    
+    names(subDataBinN)[names(subDataBinN) == "BinR"] <- "Ltx"
+    names(subDataBinN)[names(subDataBinN) == "BinN"] <- "Lbase"
+
     subDataComb <-
-      rbind(subData[, c("study", "tx", "base", "Ltx", "Lbase")],
+      rbind(dat$subData[, c("study", "tx", "base", "Ltx", "Lbase")],
             subDataBinN[, c("study", "tx", "base", "Ltx", "Lbase")])
   }
   
   if (!is_bin & is_med) {
-    subDataMedN <- subDataMed
-    names(subDataMedN)[c(5, 6)] <- c("Ltx", "Lbase")
+    subDataMedN <- dat$subDataMed
+    
+    names(subDataMedN)[names(subDataMedN) == "medR"] <- "Ltx"
+    names(subDataMedN)[names(subDataMedN) == "medN"] <- "Lbase"
+    
     subDataComb <-
-      rbind(subData[, c("study", "tx", "base", "Ltx", "Lbase")],
+      rbind(data$subData[, c("study", "tx", "base", "Ltx", "Lbase")],
             subDataMedN[, c("study", "tx", "base", "Ltx", "Lbase")])
   }
   
@@ -51,10 +57,10 @@ plotNetwork.default <- function(dat,
     
     subDataBinN <- dat$subDataBin
     subDataMedN <- dat$subDataMed
-    
+
     names(subDataBinN)[names(subDataBinN) == "BinR"] <- "Ltx"
-    names(subDataBinN)[names(subDataBinN) == "BinN"] <- "Lbase"
     names(subDataMedN)[names(subDataMedN) == "medR"] <- "Ltx"
+    names(subDataBinN)[names(subDataBinN) == "BinN"] <- "Lbase"
     names(subDataMedN)[names(subDataMedN) == "medN"] <- "Lbase"
     
     keep_cols <- c("study", "tx", "base", "Ltx", "Lbase")
