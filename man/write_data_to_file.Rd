@@ -7,10 +7,12 @@
 \usage{
 write_data_to_file(nma, label = "", folder = "output", ...)
 
-\method{write_data_to_file}{nma}(nma, label = "", folder = "output")
+\method{write_data_to_file}{nma}(nma, label = "", folder = "output", ...)
 }
 \arguments{
 \item{nma}{Result of \code{new_NMA}}
+
+\item{...}{Additional arguments}
 }
 \description{
 Write study data to file

@@ -4,7 +4,7 @@
 #' @param nma Result of \code{new_NMA}
 #' @param label
 #' @param folder
-#' @param ...
+#' @param ... Additional arguments
 #' @export
 #' 
 write_data_to_file <- function(nma,
@@ -20,7 +20,8 @@ write_data_to_file <- function(nma,
 #' 
 write_data_to_file.nma <- function(nma,
                                    label = "",
-                                   folder = "output") {
+                                   folder = "output",
+                                   ...) {
   dat <- nma$dat
   
   file_name <- paste0("data_", label, ".csv")

@@ -5,9 +5,10 @@
 \title{Treatment effect plot}
 \usage{
 txEffectPlot(
-  dat,
+  nma,
   res_bugs,
-  labels,
+  label = "",
+  folder = "output",
   endpoint = NULL,
   preRefTx = NA,
   save = FALSE,
@@ -15,21 +16,26 @@ txEffectPlot(
 )
 }
 \arguments{
-\item{dat}{Study input data; list}
+\item{nma}{Study input data; list}
 
 \item{res_bugs}{Simulations}
 
-\item{labels}{Labels}
+\item{label}{Label}
+
+\item{folder}{String}
 
 \item{endpoint}{End point name; string}
 
 \item{preRefTx}{Reference treatment}
 
-\item{...}{}
+\item{save}{Logical}
+
+\item{...}{Additional arguments}
 }
 \value{
 dat
 }
 \description{
-Treatment effect plot
+Forest plot of 2.5, median and 07.5\% quantiles of
+posterior distributions for each treatment.
 }

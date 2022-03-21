@@ -4,12 +4,10 @@
 \alias{createFolders}
 \title{Create output folders}
 \usage{
-createFolders(folder = "output", fileSep = "/", ...)
+createFolders(folder = "output", ...)
 }
 \arguments{
-\item{folder}{Text string name}
-
-\item{fileSep}{File separate; default forward slash}
+\item{folder}{Output folder. Text string}
 
 \item{...}{Additional arguments}
 }

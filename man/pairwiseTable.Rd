@@ -15,7 +15,9 @@ pairwiseTable(
 )
 }
 \arguments{
-\item{...}{}
+\item{save}{Logical}
+
+\item{...}{Additional arguments}
 }
 \value{
 table

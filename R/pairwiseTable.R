@@ -6,8 +6,8 @@
 #' @param folder
 #' @param probs
 #' @param label
-#' @param save
-#' @param ...
+#' @param save Logical
+#' @param ... Additional arguments
 #'
 #' @return table
 #' @export

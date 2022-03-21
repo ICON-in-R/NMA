@@ -130,16 +130,6 @@ nma_res <- NMA_run(nma_model)
 nma_res
 ```
 
-Some useful plots.
-
-```{r}
-# # save trace plots to file
-# diagnostics(nma_res)
-
-# # save lots of other plots to file
-# nma_outputs(nma_res, nma_model)
-```
-
 ### Reconfigure model
 
 It is simple to modify an existing analysis without repeating the previous steps.
@@ -156,28 +146,31 @@ nma_res2 <- NMA_run(nma_model2,
 nma_res2
 ```
 
-BUGS plots
+
+### Plot and tables
+
+BUGS plots are available for diagnosing the performance.
 
 ```{r}
 # diagnostics(nma_res2, save = TRUE)
 ```
 
-NMA tables
+Different NMA tables can be created. They can provide a record of the analysis.
 
 ```{r}
-write_data_to_file(nma_model)
-write_results_table(nma_model, nma_res)
+# write_data_to_file(nma_model)
+# write_results_table(nma_model, nma_res)
 pairwiseTable(nma_model, nma_res)
 ```
 
-NMA plots
+Currently available NMA plots are a treatment effect forest plot of posterior samples and a rank probability grid.
 
-```{r}
-txEffectPlot()
-rankProbPlot()
+```{r, fig.height=8, fig.width=8}
+txEffectPlot(nma_model, nma_res)
+rankProbPlot(nma_model, nma_res)
 ```
 
-Its also possible to run all of the BUGS and output plots and table functions together and dump to file.
+It's also possible to create all of the BUGS and output plots and table functions together and write to an analysis folder.
 
 ```{r}
 # nma_outputs(nma_res2, save = TRUE)

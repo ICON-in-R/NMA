@@ -4,12 +4,12 @@
 \alias{rankProbPlot}
 \title{Rank probability plot}
 \usage{
-rankProbPlot(res_bugs, labels, dat, save = FALSE, ...)
+rankProbPlot(nma, res_bugs, folder = "output", label = "", save = FALSE, ...)
 }
 \arguments{
-\item{labels}{Labels}
+\item{save}{Logical}
 
-\item{...}{}
+\item{...}{Additional arguments}
 }
 \value{
 

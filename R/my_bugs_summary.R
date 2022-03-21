@@ -1,9 +1,9 @@
 
-#'
-summStat <- function(x) {
-  y <- c(mean(x), quantile(x, c(0.5, 0.025, 0.975), na.rm = TRUE))
-  names(y)[1] <- "mean"
-  return(y)
+#' @export
+#' 
+summStat <- function(x, probs = c(0.5, 0.025, 0.975)) {
+  c(mean = mean(x),
+    quantile(x, probs, na.rm = TRUE))
 }
 
 

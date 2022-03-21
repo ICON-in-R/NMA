@@ -5,38 +5,42 @@
 \title{Write to file multiple NMA plots and tables}
 \usage{
 plots_and_tables(
-  dat,
+  nma,
   res_bugs,
-  effectParam,
-  labels,
+  effectParam = NA,
+  label = "",
   endpoint = NULL,
   folder = "output",
-  fileSep = "/"
+  save = FALSE
 )
 
 plots_and_tables(
-  dat,
+  nma,
   res_bugs,
-  effectParam,
-  labels,
+  effectParam = NA,
+  label = "",
   endpoint = NULL,
   folder = "output",
-  fileSep = "/"
+  save = FALSE
 )
 }
 \arguments{
-\item{dat}{List of study data, including subData
-and possibly subDataBin and subDataMed}
-
 \item{res_bugs}{BUGS output}
 
 \item{effectParam}{Effect parameter names; string}
 
-\item{labels}{Labels}
+\item{label}{Label}
 
 \item{endpoint}{End point names; string}
 
 \item{folder}{Output folder name; string}
+
+\item{save}{Logical}
+
+\item{dat}{ist of study data, including subData
+and possibly subDataBin and subDataMed}
+
+\item{labels}{Labels}
 
 \item{fileSep}{File separator; default forward slash}
 }

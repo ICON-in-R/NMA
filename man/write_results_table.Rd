@@ -2,13 +2,13 @@
 % Please edit documentation in R/write_results_table.R
 \name{write_results_table}
 \alias{write_results_table}
-\title{write_results_table}
+\title{Write results table}
 \usage{
 write_results_table(nma, res_bugs, folder = "output", label = "", ...)
 }
 \arguments{
-\item{...}{}
+\item{...}{Additional arguments}
 }
 \description{
-write_results_table
+Write results table
 }

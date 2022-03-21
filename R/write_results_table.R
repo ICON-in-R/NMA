@@ -1,8 +1,9 @@
 
-#' write_results_table
+#' Write results table
 #' 
 #' @param nma
-#' @param ...
+#' @param ... Additional arguments
+#' @export
 #'
 write_results_table <- function(nma,
                                 res_bugs,

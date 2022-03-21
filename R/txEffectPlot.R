@@ -1,33 +1,40 @@
 
 #' Treatment effect plot
+#' 
+#' Forest plot of 2.5, median and 07.5% quantiles of
+#' posterior distributions for each treatment.
 #'
-#' @param dat Study input data; list
+#' @param nma Study input data; list
 #' @param res_bugs Simulations
-#' @param labels Labels
+#' @param label Label
+#' @param folder String
 #' @param endpoint End point name; string
 #' @param preRefTx Reference treatment
-#' @param ...
+#' @param save Logical
+#' @param ... Additional arguments
 #'
 #' @return dat
 #' @export
 #'
-txEffectPlot <- function(dat,
+txEffectPlot <- function(nma,
                          res_bugs,
-                         labels,
+                         label = "",
+                         folder = "output",
                          endpoint = NULL,
                          preRefTx = NA,
                          save = FALSE,
                          ...) {
+  dat <- nma$dat
   
   beta_cols <- grep(paste0("^beta"), rownames(res_bugs$summary))
   sims <- res_bugs$sims.matrix[, beta_cols]
   sims <- cbind(0, sims)
   colnames(sims) <- dat$txList
   
-  dir_name <-
-    paste0(folder, fileSep, "graphs", fileSep, "forest_", labels$short, ".pdf")
-
   if (save) {
+    file_name <- paste0("forest_", label, ".pdf")
+    dir_name <- file.path(folder, "graphs", file_name)
+    
     pdf(file = dir_name)
     on.exit(dev.off(), add = TRUE)
   }
@@ -43,6 +50,7 @@ txEffectPlot <- function(dat,
       sims - sims[, dat$txList[1]]
     }
   
+  ##what is this and can we name it better?
   res <-
     round(digits = 2,
           exp(t(
@@ -53,6 +61,7 @@ txEffectPlot <- function(dat,
   
   res[res == 0] <- 0.001
   
+  ## why isnt this above?...
   txList <- rownames(res)
   nTx <- length(txList)
   
@@ -68,18 +77,20 @@ txEffectPlot <- function(dat,
     xlim = (range(res[, 3], res[, 4])),
     yaxt = "n",
     xaxt = "n",
-    main = labels$orig,
+    main = label,
     cex.main = 0.6,
     xlab = c(endpoint, "Median hazard ratio (95% CrI)"),
-    ylab = " ",
+    ylab = "",
     pch = 19,
     type = "n",
     log = "x",
     cex = 0.8)
   
+  where_tics <- c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4))))
+  
   axis(1,
-       at =    c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
-       label = c(round(0.5 ^ seq(5:1), 3), 1, round(1 / (0.5 ^ seq(1:4)))),
+       at = where_tics,
+       label = where_tics,
        cex.axis = 0.8)
   abline(v = 1, col = "grey")
   
@@ -96,17 +107,14 @@ txEffectPlot <- function(dat,
           col = "black",
           lwd = 2)
   }
-  
-  for (ii in seq_len(nTx)) {
-    points(
-      res[ii, 2],
-      ii,
-      pch = 21,
-      cex = 2,
-      bg = "black",
-      col = "white",
-      lwd = 2)
-  }
+
+  points(
+    res[, "50%"], 1:nTx,
+    pch = 21,
+    cex = 2,
+    bg = "black",
+    col = "white",
+    lwd = 2)
   
   par(mar = c(5, 0, 2, 0))
   plot(
@@ -123,7 +131,7 @@ txEffectPlot <- function(dat,
   
   for (ii in seq_len(nTx)) {
     if (res[ii, 2] == res[ii, 3] &
-        res[ii, 2] == res[ii, 3]) {
+        res[ii, 2] == res[ii, 4]) {
       text(x = 0, y = ii,
            "Reference Treatment",
            pos = 4,

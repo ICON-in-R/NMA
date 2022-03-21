@@ -3,30 +3,34 @@
 #' 
 #' Treatment Ranking Plot.
 #'
+#' @param nma
 #' @param res_bugs
-#' @param labels Labels
-#' @param dat
-#' @param ...
+#' @param folder
+#' @param label
+#' @param save Logical
+#' @param ... Additional arguments
 #' 
 #' @importFrom gplots balloonplot
 #' @return
 #' @export
 #'
-rankProbPlot <- function(res_bugs,
-                         labels,
-                         dat,
+rankProbPlot <- function(nma,
+                         res_bugs,
+                         folder = "output",
+                         label = "",
                          save = FALSE,
                          ...) {
+  dat <- nma$dat
   
   beta_cols <- grep(paste0("^beta"), rownames(res_bugs$summary))
   sims <- res_bugs$sims.matrix[, beta_cols]
   sims <- cbind(0, sims)
   colnames(sims) <- dat$txList
   
-  dir_name <-
-    paste0(folder, fileSep, "graphs", fileSep, "ranking_", labels$short, ".pdf")
-
   if (save) {
+    file_name <- paste0("ranking_", label, ".pdf")
+    dir_name <- file.path(folder, "graphs", file_name)
+    
     pdf(file = dir_name)
     on.exit(dev.off(), add = TRUE)
   }
@@ -34,9 +38,10 @@ rankProbPlot <- function(res_bugs,
   nRanks <- ncol(sims)
   
   sims <- sims[, order(apply(sims, 2, mean), decreasing = TRUE)]
-  rankSummary <- numeric()
   ranks <- apply(sims, 1, rank, ties.method = "random")
   
+  ##WHY like this?
+  rankSummary <- numeric()
   for (i in seq_len(ncol(sims))) {
     rankSummary <- c(rankSummary, apply(ranks == i, 1, mean))
   }
@@ -52,7 +57,7 @@ rankProbPlot <- function(res_bugs,
   
   main.txt <-
     paste(
-      labels$orig,
+      label,
       "Rank based on treatment effect",
       "Rank 1: Most effective treatment (Smallest hazard ratio)",
       sep = "\n")

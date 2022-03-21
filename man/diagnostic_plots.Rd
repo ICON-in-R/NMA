@@ -4,14 +4,14 @@
 \alias{diagnostic_plots}
 \title{WinBUGS diagnostic plots}
 \usage{
-diagnostic_plots(res_bugs, labels, folder = "output", fileSep = "/")
+diagnostic_plots(res_bugs, labels_short = "", folder = "output")
 }
 \arguments{
 \item{res_bugs}{Output from a BUGS run}
 
-\item{labels}{$short is used in file name save}
-
 \item{folder}{Text string name}
+
+\item{labels}{$short is used in file name save}
 
 \item{fileSep}{File separator; default forward slash}
 }
