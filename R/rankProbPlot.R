@@ -3,15 +3,33 @@
 #' 
 #' Treatment Ranking Plot.
 #'
-#' @param sims sims.matrix bugs output
+#' @param res_bugs
 #' @param labels Labels
-#'
+#' @param dat
+#' @param ...
+#' 
 #' @importFrom gplots balloonplot
 #' @return
 #' @export
 #'
-rankProbPlot <- function(sims,
-                         labels) {
+rankProbPlot <- function(res_bugs,
+                         labels,
+                         dat,
+                         save = FALSE,
+                         ...) {
+  
+  beta_cols <- grep(paste0("^beta"), rownames(res_bugs$summary))
+  sims <- res_bugs$sims.matrix[, beta_cols]
+  sims <- cbind(0, sims)
+  colnames(sims) <- dat$txList
+  
+  dir_name <-
+    paste0(folder, fileSep, "graphs", fileSep, "ranking_", labels$short, ".pdf")
+
+  if (save) {
+    pdf(file = dir_name)
+    on.exit(dev.off(), add = TRUE)
+  }
   
   nRanks <- ncol(sims)
   
@@ -19,7 +37,7 @@ rankProbPlot <- function(sims,
   rankSummary <- numeric()
   ranks <- apply(sims, 1, rank, ties.method = "random")
   
-  for (i in 1:ncol(sims)) {
+  for (i in seq_len(ncol(sims))) {
     rankSummary <- c(rankSummary, apply(ranks == i, 1, mean))
   }
   
@@ -41,7 +59,7 @@ rankProbPlot <- function(sims,
   
   par(mar = c(2, 2, 3, 2))
   
-  balloonplot(
+  gplots::balloonplot(
     x = Ranking,
     y = Treatment,
     z = rankSummary,

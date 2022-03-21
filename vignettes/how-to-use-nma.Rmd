@@ -151,7 +151,32 @@ nma_res2 <- NMA_run(nma_model2,
                     output_dir = "RE output")
 
 nma_res2
+```
 
+BUGS plots
+
+```{r}
 # diagnostics(nma_res2, save = TRUE)
+```
+
+NMA tables
+
+```{r}
+write_data_to_file(nma_model)
+write_results_table(nma_model, nma_res)
+pairwiseTable(nma_model, nma_res)
+```
+
+NMA plots
+
+```{r}
+txEffectPlot()
+rankProbPlot()
+```
+
+Its also possible to run all of the BUGS and output plots and table functions together and dump to file.
+
+```{r}
 # nma_outputs(nma_res2, save = TRUE)
 ```
+

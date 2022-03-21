@@ -4,18 +4,28 @@
 \alias{txEffectPlot}
 \title{Treatment effect plot}
 \usage{
-txEffectPlot(dat, sims, labels, endpoint = NULL, preRefTx = NA)
+txEffectPlot(
+  dat,
+  res_bugs,
+  labels,
+  endpoint = NULL,
+  preRefTx = NA,
+  save = FALSE,
+  ...
+)
 }
 \arguments{
 \item{dat}{Study input data; list}
 
-\item{sims}{Simulations}
+\item{res_bugs}{Simulations}
 
 \item{labels}{Labels}
 
 \item{endpoint}{End point name; string}
 
 \item{preRefTx}{Reference treatment}
+
+\item{...}{}
 }
 \value{
 dat

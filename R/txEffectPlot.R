@@ -2,19 +2,35 @@
 #' Treatment effect plot
 #'
 #' @param dat Study input data; list
-#' @param sims Simulations
+#' @param res_bugs Simulations
 #' @param labels Labels
 #' @param endpoint End point name; string
 #' @param preRefTx Reference treatment
+#' @param ...
 #'
 #' @return dat
 #' @export
 #'
 txEffectPlot <- function(dat,
-                         sims,
+                         res_bugs,
                          labels,
                          endpoint = NULL,
-                         preRefTx = NA) {
+                         preRefTx = NA,
+                         save = FALSE,
+                         ...) {
+  
+  beta_cols <- grep(paste0("^beta"), rownames(res_bugs$summary))
+  sims <- res_bugs$sims.matrix[, beta_cols]
+  sims <- cbind(0, sims)
+  colnames(sims) <- dat$txList
+  
+  dir_name <-
+    paste0(folder, fileSep, "graphs", fileSep, "forest_", labels$short, ".pdf")
+
+  if (save) {
+    pdf(file = dir_name)
+    on.exit(dev.off(), add = TRUE)
+  }
   
   txListSims <- colnames(sims)
   nTx <- dat$bugsData$nTx
@@ -27,17 +43,17 @@ txEffectPlot <- function(dat,
       sims - sims[, dat$txList[1]]
     }
   
-  plotResults <-
+  res <-
     round(digits = 2,
           exp(t(
             apply(sims, 2, summStat))))
   
-  plotResults <-
-    plotResults[order(plotResults[, 2], decreasing = TRUE), ]
+  res <-
+    res[order(res[, 2], decreasing = TRUE), ]
   
-  plotResults[plotResults == 0] <- 0.001
+  res[res == 0] <- 0.001
   
-  txList <- rownames(plotResults)
+  txList <- rownames(res)
   nTx <- length(txList)
   
   layout(cbind(1, 2),
@@ -46,10 +62,10 @@ txEffectPlot <- function(dat,
       cex = 0.8)
   
   plot(
-    plotResults[, 2],
+    res[, 2],
     1:nTx,
     ylim = c(0.75, nTx + 0.25),
-    xlim = (range(plotResults[, 3], plotResults[, 4])),
+    xlim = (range(res[, 3], res[, 4])),
     yaxt = "n",
     xaxt = "n",
     main = labels$orig,
@@ -75,7 +91,7 @@ txEffectPlot <- function(dat,
        cex = 0.8)
   
   for (ii in seq_len(nTx)) {
-    lines(c(plotResults[ii, 3], plotResults[ii, 4]),
+    lines(c(res[ii, 3], res[ii, 4]),
           c(ii, ii),
           col = "black",
           lwd = 2)
@@ -83,7 +99,7 @@ txEffectPlot <- function(dat,
   
   for (ii in seq_len(nTx)) {
     points(
-      plotResults[ii, 2],
+      res[ii, 2],
       ii,
       pch = 21,
       cex = 2,
@@ -106,16 +122,16 @@ txEffectPlot <- function(dat,
     xlab = " ")
   
   for (ii in seq_len(nTx)) {
-    if (plotResults[ii, 2] == plotResults[ii, 3] &
-        plotResults[ii, 2] == plotResults[ii, 3]) {
+    if (res[ii, 2] == res[ii, 3] &
+        res[ii, 2] == res[ii, 3]) {
       text(x = 0, y = ii,
            "Reference Treatment",
            pos = 4,
            cex = 0.8)
     } else {
       text(x = 0, y = ii,
-        paste0(plotResults[ii, 2], " (", plotResults[ii, 3],
-               " to ", plotResults[ii, 4], ")"),
+        paste0(res[ii, 2], " (", res[ii, 3],
+               " to ", res[ii, 4], ")"),
         pos = 4,
         cex = 0.8)
     }
