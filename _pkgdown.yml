@@ -46,5 +46,7 @@ navbar:
     menu:
     - text: Introduction
       href: articles/how-to-use-nma-test-data.html
+    - text: Reference file
+      href: articles/reference-file-test-data.html
 
   

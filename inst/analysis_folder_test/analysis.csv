@@ -1,0 +1,6 @@
+is_random,FALSE
+refTx,X
+effectParam,beta
+modelParams,totresdev
+label,my_label
+endpoint,my_endpoint

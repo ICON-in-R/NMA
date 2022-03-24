@@ -8,7 +8,7 @@
 #' 
 new_NMA_dir <- function(data_dir = ".") {
   
-  reference <- read.csv(file = glue::glue("{data_dir}/REFERENCE.csv"))
+  reference <- read.csv(file.path(data_dir, "REFERENCE.csv"))
   
   analysis_filename <- reference$file[reference$type == "analysis"]
   bugs_filename <- reference$file[reference$type == "bugs"]
@@ -17,20 +17,20 @@ new_NMA_dir <- function(data_dir = ".") {
   subDataMed_filename <- reference$file[reference$type == "subDataMed"]
   
   subData <-
-    read.csv(paste(data_dir, subData_filename, sep = "/"),
+    read.csv(file.path(data_dir, subData_filename),
              stringsAsFactors = FALSE,
              header = TRUE,
              as.is = TRUE)
   
   bugs_params <-
-    read.csv(paste(data_dir, bugs_filename, sep = "/"),
+    read.csv(file.path(data_dir, bugs_filename),
              stringsAsFactors = FALSE,
              header = FALSE) %>% 
     keyval_as_list %>% 
     validate_bugs_param
   
   analysis_params <-
-    read.csv(paste(data_dir, analysis_filename, sep = "/"),
+    read.csv(file.path(data_dir, analysis_filename),
              stringsAsFactors = FALSE,
              header = FALSE) %>% 
     keyval_as_list %>% 
@@ -38,16 +38,15 @@ new_NMA_dir <- function(data_dir = ".") {
   
   subDataBin <-
     if (length(subDataBin_filename) != 0) {
-      read.csv(paste(data_dir, subDataBin_filename, sep = "/"),
+      read.csv(file.path(data_dir, subDataBin_filename),
                stringsAsFactors = FALSE,
                header = TRUE,
                as.is = TRUE)
-      
     } else {NA}
   
   subDataMed <-
     if (length(subDataMed_filename) != 0) {
-      read.csv(paste(data_dir, subDataMed_filename, sep = "/"),
+      read.csv(file.path(data_dir, subDataMed_filename),
                stringsAsFactors = FALSE,
                header = TRUE,
                as.is = TRUE) %>% 

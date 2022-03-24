@@ -1,8 +1,14 @@
 ---
-title: "Running an NMA with a Reference file"
+title: "Running an NMA with a Reference file and test data"
 output:
   rmarkdown::html_vignette:
     toc: true
+vignette: >
+  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Running-an-NMA-with-a-Reference-file-and-test-data}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -57,11 +63,11 @@ and `analysis.csv` includes: whether a random effects model, `RANDOM`; the refer
 For example,
 
     is_random, FALSE
-    refTx, ERL/GEF
+    refTx, X
     effectParam, beta
     modelParams, totresdev
-    label, BC_PFS_mFE
-    endpoint, PFS
+    label, my_label
+    endpoint, my_endpoint
     
     
 ## Running an NMA
@@ -69,7 +75,7 @@ For example,
 A single call sets-up the NMA represented by the contents of the folder.
 
 ```{r}
-nma_model <- new_NMA_dir(data_dir = here::here("inst/analysis_folder"))
+nma_model <- new_NMA_dir(data_dir = here::here("inst/analysis_folder_test"))
 ```
 
 
