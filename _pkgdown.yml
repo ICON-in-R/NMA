@@ -1,6 +1,8 @@
 template:
   bootstrap: 5
 
+url: https://icon-in-r.github.io/NMA/
+
 reference:
 - title: NMA functions
   contents:
@@ -36,3 +38,13 @@ reference:
   - print
   - setupData
   - validate_nma
+
+navbar:
+ components:
+   articles:
+    text: Articles
+    menu:
+    - text: Introduction
+      href: articles/how-to-use-nma-test-data.html
+
+  

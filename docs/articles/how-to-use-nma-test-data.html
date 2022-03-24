@@ -41,10 +41,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/dont-build/how-to-use-nma.html">How to use NMA: Introduction</a>
-    <a class="dropdown-item" href="../articles/dont-build/reference_file.html">Running an NMA with a Reference file</a>
-    <a class="dropdown-item" href="../articles/dont-build/run_multiple_nma.html">Run multiple NMA</a>
-    <a class="dropdown-item" href="../articles/how-to-use-nma-test-data.html">How to use NMA: Introduction with test data</a>
+    <a class="dropdown-item" href="../articles/how-to-use-nma-test-data.html">Introduction</a>
   </div>
 </li>
 <li class="nav-item">
@@ -91,7 +88,7 @@
 </h2>
 <p>First load the required packages.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://icon-in-r.github.io/NMA" class="external-link">NMA</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://icon-in-r.github.io/NMA">NMA</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org" class="external-link">purrr</a></span><span class="op">)</span></code></pre></div>
 <div class="section level3">
@@ -181,8 +178,8 @@ have to redo any of the preparatory work.</p>
 <span class="co">#&gt;         alpha = rnorm(nStudies)) %&gt;% </span>
 <span class="co">#&gt;         .[param_names]</span>
 <span class="co">#&gt;     }</span>
-<span class="co">#&gt; &lt;bytecode: 0x0000000013abcb28&gt;</span>
-<span class="co">#&gt; &lt;environment: 0x00000000138e7668&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x0000000013ab6550&gt;</span>
+<span class="co">#&gt; &lt;environment: 0x0000000013d56a00&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $dat$subData</span>
 <span class="co">#&gt;   study base tx      Lmean       Lse multi_arm Ltx Lbase Lstudy</span>
@@ -317,8 +314,8 @@ have to redo any of the preparatory work.</p>
 <span class="co">#&gt; $bugs_fn</span>
 <span class="co">#&gt; function(...)</span>
 <span class="co">#&gt;         R2OpenBUGS::bugs(...)</span>
-<span class="co">#&gt; &lt;bytecode: 0x000000001fb648f0&gt;</span>
-<span class="co">#&gt; &lt;environment: 0x000000001fb68960&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x000000001e9a2f98&gt;</span>
+<span class="co">#&gt; &lt;environment: 0x000000001e9a7008&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $is_random</span>
 <span class="co">#&gt; [1] FALSE</span>
@@ -389,16 +386,16 @@ have to redo any of the preparatory work.</p>
 <span class="co">#&gt;  2 chains, each with 160 iterations (first 10 discarded)</span>
 <span class="co">#&gt;  n.sims = 300 iterations saved</span>
 <span class="co">#&gt;            mean    sd  2.5%   25%   50%   75% 97.5% Rhat n.eff</span>
-<span class="co">#&gt; beta[2]    -0.8   0.3  -1.2  -1.0  -0.9  -0.7  -0.1  2.0     4</span>
-<span class="co">#&gt; beta[3]    -1.2   0.2  -1.5  -1.4  -1.1  -1.0  -0.7  3.9     2</span>
-<span class="co">#&gt; totresdev 228.5 112.3  84.0 138.1 211.2 314.3 448.0  5.9     2</span>
-<span class="co">#&gt; deviance  405.9  84.8 293.7 342.5 393.5 474.6 568.9  5.5     2</span>
+<span class="co">#&gt; beta[2]    -0.3   0.7  -1.2  -1.0  -0.3   0.6   0.7  6.6     2</span>
+<span class="co">#&gt; beta[3]    -1.1   0.9  -2.1  -1.9  -1.1  -0.1   0.0  9.7     2</span>
+<span class="co">#&gt; totresdev 283.6 146.9  72.4 148.4 383.4 417.3 436.2  5.2     2</span>
+<span class="co">#&gt; deviance  433.9  99.3 294.0 347.3 490.8 522.7 541.7  5.2     2</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; For each parameter, n.eff is a crude measure of effective sample size,</span>
 <span class="co">#&gt; and Rhat is the potential scale reduction factor (at convergence, Rhat=1).</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DIC info (using the rule, pD = Dbar-Dhat)</span>
-<span class="co">#&gt; pD = 34.6 and DIC = 440.5</span>
+<span class="co">#&gt; pD = 99.2 and DIC = 533.1</span>
 <span class="co">#&gt; DIC is an estimate of expected predictive error (lower deviance is better).</span></code></pre></div>
 </div>
 <div class="section level3">
@@ -420,16 +417,16 @@ rather than a fixed effects model version of the same model.</p>
 <span class="co">#&gt;  2 chains, each with 160 iterations (first 10 discarded)</span>
 <span class="co">#&gt;  n.sims = 300 iterations saved</span>
 <span class="co">#&gt;            mean   sd  2.5%   25%   50%   75% 97.5% Rhat n.eff</span>
-<span class="co">#&gt; beta[2]     0.3  0.7  -1.0  -0.2   0.2   1.1   1.3  2.2     4</span>
-<span class="co">#&gt; beta[3]    -1.9  0.5  -2.6  -2.4  -1.9  -1.6  -1.0  1.9     4</span>
-<span class="co">#&gt; totresdev 149.3 88.0  61.4  89.3 137.5 178.5 444.3  1.6     6</span>
-<span class="co">#&gt; deviance  190.3 88.4 122.8 141.0 168.8 205.0 505.9  1.2    18</span>
+<span class="co">#&gt; beta[2]     0.4  0.4  -0.2   0.1   0.2   0.6   1.1  3.4     3</span>
+<span class="co">#&gt; beta[3]     1.5  1.3  -1.0   0.6   0.9   2.9   3.4  3.7     2</span>
+<span class="co">#&gt; totresdev 121.7 96.6  25.9  43.3 135.8 159.8 365.4  3.8     2</span>
+<span class="co">#&gt; deviance  199.4 88.9 113.3 121.2 221.8 233.0 432.5  3.1     3</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; For each parameter, n.eff is a crude measure of effective sample size,</span>
 <span class="co">#&gt; and Rhat is the potential scale reduction factor (at convergence, Rhat=1).</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DIC info (using the rule, pD = Dbar-Dhat)</span>
-<span class="co">#&gt; pD = 31.2 and DIC = 221.4</span>
+<span class="co">#&gt; pD = 43.4 and DIC = 242.8</span>
 <span class="co">#&gt; DIC is an estimate of expected predictive error (lower deviance is better).</span></code></pre></div>
 </div>
 <div class="section level3">
@@ -445,10 +442,10 @@ analysis.</p>
 <span class="fu"><a href="../reference/write_results_table.html">write_results_table</a></span><span class="op">(</span><span class="va">nma_model</span>, <span class="va">nma_res</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/pairwiseTable.html">pairwiseTable</a></span><span class="op">(</span><span class="va">nma_model</span>, <span class="va">nma_res</span><span class="op">)</span>
-<span class="co">#&gt;   X                  Y                  Z                 </span>
-<span class="co">#&gt; X "1 (1,1)"          "2.36 (1.11,3.18)" "3.13 (2.03,4.48)"</span>
-<span class="co">#&gt; Y "0.42 (0.31,0.9)"  "1 (1,1)"          "1.39 (1.22,1.94)"</span>
-<span class="co">#&gt; Z "0.32 (0.22,0.49)" "0.72 (0.52,0.82)" "1 (1,1)"</span></code></pre></div>
+<span class="co">#&gt;   X                  Y                 Z                 </span>
+<span class="co">#&gt; X "1 (1,1)"          "1.33 (0.49,3.2)" "3.07 (0.97,8.13)"</span>
+<span class="co">#&gt; Y "0.75 (0.31,2.05)" "1 (1,1)"         "2.17 (1.42,2.83)"</span>
+<span class="co">#&gt; Z "0.33 (0.12,1.03)" "0.46 (0.35,0.7)" "1 (1,1)"</span></code></pre></div>
 <p>Currently available NMA plots are a treatment effect forest plot of
 posterior samples and a rank probability grid.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
