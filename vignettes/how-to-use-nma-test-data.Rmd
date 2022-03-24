@@ -1,0 +1,180 @@
+---
+title: "How to use NMA: Introduction with test data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{How-to-use-NMA:-Introduction-with-test-data}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This document describes how to use the main functions of `NMA` to run a single network meta-analysis.
+
+## Example
+
+First load the required packages.
+
+```{r setup, warning=FALSE, message=FALSE}
+library(NMA)
+library(dplyr)
+library(purrr)
+```
+
+### Settings
+
+Define the BUGS parameters for MCMC.
+This is not necessary, but recommended, because there are default values for these.
+
+```{r}
+bugs_params <-
+  list(
+    PROG = "openBugs",  # which version of BUGS to use to run the MCMC
+    N.BURNIN = 10,#00,  # number of steps to throw away
+    N.SIMS = 150,#0,    # total number of simulations
+    N.CHAINS = 2,       # number of chains
+    N.THIN = 1,         # thinning rate
+    PAUSE = TRUE)
+```
+
+Define the scenario we will use for the analysis.
+
+```{r}
+RANDOM <- FALSE             # is this a random effects model?
+REFTX <- "X"                # reference treatment
+is_bin <- TRUE              # include binary data?
+is_med <- TRUE              # include median data?
+label_name <- "label_name"
+```
+
+
+### Read in datasets
+
+The trials data consist of up to 3 separate data frames.
+A main table, `subData`, and optional tables for median event time and binary data, `subDataMed` and `subDataBin` respectively.
+Lets read in the each data set separately.
+In another article we will show how to do this in one function call by including a _Reference_ file in the data folder which contains the meta data of how to read in the study data.
+If there is no binary or median data used in the NMA then the variables `subDataBin` and `subDataMed` are assigned `NA`.
+
+```{r}
+file_name <- here::here(file.path("raw_data", "survdata_"))
+
+subData <-
+  read.csv(paste0(file_name, "main_test.csv"),
+           header = TRUE,
+           as.is = TRUE)
+
+subDataBin <-
+  if (is_bin) {
+    read.csv(paste0(file_name, "bin_test.csv"),
+             header = TRUE,
+             as.is = TRUE)
+  } else {NA}
+
+subDataMed <-
+  if (is_med) {
+    read.csv(paste0(file_name, "med_test.csv"),
+             header = TRUE,
+             as.is = TRUE) %>% 
+      mutate(medR = floor(medR))
+  } else {NA}
+```
+
+
+### Build model
+
+Now we can create the NMA object to use in the modelling.
+The workflow is to first create this separately to actually doing the fitting.
+This then means that we can perform modified fits but we don't have to redo any of the preparatory work.
+
+```{r warning=FALSE, message=FALSE}
+nma_model <-
+  new_NMA(subData = subData,
+          subDataMed = subDataMed,
+          subDataBin = subDataBin,
+          bugs_params = bugs_params,
+          is_random = RANDOM,
+          refTx = REFTX ,
+          effectParam = "beta",
+          modelParams = "totresdev",
+          label = "",
+          endpoint = "")
+
+nma_model
+```
+
+We can view the network graph.
+
+```{r, warning=FALSE, message=FALSE, fig.width=6, fig.height=6}
+library(sna)
+plotNetwork(nma_model)
+```
+
+
+### Run MCMC
+
+The NMA MCMC function calls the appropriate BUGS model.
+
+```{r warning=FALSE, message=FALSE}
+nma_res <- NMA_run(nma_model, save = FALSE)
+
+nma_res
+```
+
+### Reconfigure model
+
+It is simple to modify an existing analysis without repeating the previous steps.
+For example, we can run the NMA for a random effects rather than a fixed effects model version of the same model.
+
+```{r warning=FALSE, message=FALSE}
+nma_model2 <-
+  NMA_update(nma_model,
+             is_random = TRUE)
+
+nma_res2 <- NMA_run(nma_model2, save = FALSE)
+
+nma_res2
+```
+
+
+### Plot and tables
+
+BUGS plots are available for diagnosing the performance.
+
+```{r eval=FALSE}
+diagnostics(nma_res2, save = TRUE)
+```
+
+Different NMA tables can be created. They can provide a record of the analysis.
+
+```{r eval=FALSE}
+write_data_to_file(nma_model)
+write_results_table(nma_model, nma_res)
+```
+
+```{r}
+pairwiseTable(nma_model, nma_res)
+```
+
+Currently available NMA plots are a treatment effect forest plot of posterior samples and a rank probability grid.
+
+```{r, fig.height=8, fig.width=8}
+txEffectPlot(nma_model, nma_res)
+rankProbPlot(nma_model, nma_res)
+```
+
+It's also possible to create all of the BUGS and output plots and table functions together and write to an analysis folder.
+
+```{r eval=FALSE}
+nma_outputs(nma_res2, save = TRUE)
+```
+

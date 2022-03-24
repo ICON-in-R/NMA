@@ -5,3 +5,7 @@
 ^codecov\.yml$
 ^\.github$
 ^LICENSE\.md$
+^vignettes/run_multiple_nma.Rmd$
+^vignettes/reference_file.Rmd$
+^vignettes/how-to-use-nma.Rmd$
+^vignettes/dont-build$

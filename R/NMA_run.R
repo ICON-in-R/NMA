@@ -45,7 +45,7 @@ NMA_run.nma <- function(nma,
                      ~dat$inits())
     
     cat("====== RUNNING BUGS MODEL\n")
-
+    
     res_bugs <-
       nma$bugs_fn(
         data = dat$bugsData,
@@ -61,16 +61,17 @@ NMA_run.nma <- function(nma,
     if (bugs_params$PROG == "JAGS")
       res_bugs <- res_bugs$BUGSoutput
   } else {
-    file_name <- paste0("bugsObject_", label, ".RData")
-    dir_name <- file.path(output_dir, "model", file_name)
+    ##TODO: what goes here?
   }
-
-  createFolders(folder = output_dir, 
-                "results", "model", "sims", "data")
-  save_bugs_files(res_bugs, bugs_params, run_bugs, labels, output_dir)
   
-  file_name <- paste0("bugsObject_", label, ".RData")
-  save(res_bugs, file.path(output_dir, "model", file_name))
+  if (save) {
+    createFolders(folder = output_dir, 
+                  "results", "model", "sims", "data")
+    save_bugs_files(res_bugs, bugs_params, run_bugs, labels, output_dir)
+    
+    file_name <- paste0("bugsObject_", labels$short, ".RData")
+    save(res_bugs, file = here::here(file.path(output_dir, "model", file_name)))
+  }
   
   res_bugs
 }

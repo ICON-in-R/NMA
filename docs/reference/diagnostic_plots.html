@@ -17,16 +17,17 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-3">
+    <div id="navbar" class="collapse navbar-collapse ms-2">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/how-to-use-nma.html">How to use NMA: Introduction</a>
-    <a class="dropdown-item" href="../articles/reference_file.html">Running an NMA with a Reference file</a>
-    <a class="dropdown-item" href="../articles/run_multiple_nma.html">Run multiple NMA</a>
+    <a class="dropdown-item" href="../articles/dont-build/how-to-use-nma.html">How to use NMA: Introduction</a>
+    <a class="dropdown-item" href="../articles/dont-build/reference_file.html">Running an NMA with a Reference file</a>
+    <a class="dropdown-item" href="../articles/dont-build/run_multiple_nma.html">Run multiple NMA</a>
+    <a class="dropdown-item" href="../articles/how-to-use-nma-test-data.html">How to use NMA: Introduction with test data</a>
   </div>
 </li>
 <li class="nav-item">
@@ -59,19 +60,17 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">diagnostic_plots</span><span class="op">(</span><span class="va">res_bugs</span>, <span class="va">labels</span>, folder <span class="op">=</span> <span class="st">"output"</span>, fileSep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">diagnostic_plots</span><span class="op">(</span><span class="va">res_bugs</span>, labels_short <span class="op">=</span> <span class="st">""</span>, folder <span class="op">=</span> <span class="st">"output"</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>res_bugs</dt>
 <dd><p>Output from a BUGS run</p></dd>
-<dt>labels</dt>
-<dd><p>$short is used in file name save</p></dd>
 <dt>folder</dt>
 <dd><p>Text string name</p></dd>
-<dt>fileSep</dt>
-<dd><p>File separator; default forward slash</p></dd>
+<dt>labels</dt>
+<dd><p>$short is used in file name save</p></dd>
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -84,7 +83,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+2.0.1.</p>
 </div>
 
     </footer></div>

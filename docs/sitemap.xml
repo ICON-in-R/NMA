@@ -4,19 +4,19 @@
     <loc>/404.html</loc>
   </url>
   <url>
-    <loc>/articles/how-to-use-nma.html</loc>
+    <loc>/articles/dont-build/how-to-use-nma.html</loc>
   </url>
   <url>
-    <loc>/articles/how-to-use-S3.html</loc>
+    <loc>/articles/dont-build/reference_file.html</loc>
+  </url>
+  <url>
+    <loc>/articles/dont-build/run_multiple_nma.html</loc>
+  </url>
+  <url>
+    <loc>/articles/how-to-use-nma-test-data.html</loc>
   </url>
   <url>
     <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/reference_file.html</loc>
-  </url>
-  <url>
-    <loc>/articles/run_multiple_nma.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
@@ -58,7 +58,10 @@
     <loc>/reference/new_NMA.html</loc>
   </url>
   <url>
-    <loc>/reference/NMA.html</loc>
+    <loc>/reference/new_NMA_dir.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nma.html</loc>
   </url>
   <url>
     <loc>/reference/nma_outputs.html</loc>
@@ -67,19 +70,10 @@
     <loc>/reference/NMA_run.html</loc>
   </url>
   <url>
-    <loc>/reference/NMA_run.nma.html</loc>
-  </url>
-  <url>
     <loc>/reference/NMA_update.html</loc>
   </url>
   <url>
-    <loc>/reference/NMA_update.nma.html</loc>
-  </url>
-  <url>
     <loc>/reference/pairwiseTable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plotNetwork.default.html</loc>
   </url>
   <url>
     <loc>/reference/plotNetwork.html</loc>
@@ -110,5 +104,11 @@
   </url>
   <url>
     <loc>/reference/varPlot.html</loc>
+  </url>
+  <url>
+    <loc>/reference/write_data_to_file.html</loc>
+  </url>
+  <url>
+    <loc>/reference/write_results_table.html</loc>
   </url>
 </urlset>

@@ -1,9 +1,10 @@
 pandoc: 2.17.1.1
-pkgdown: 2.0.2
+pkgdown: 2.0.1
 pkgdown_sha: ~
 articles:
-  how-to-use-nma: how-to-use-nma.html
-  reference_file: reference_file.html
-  run_multiple_nma: run_multiple_nma.html
-last_built: 2022-03-16T16:12Z
+  how-to-use-nma: dont-build/how-to-use-nma.html
+  reference_file: dont-build/reference_file.html
+  run_multiple_nma: dont-build/run_multiple_nma.html
+  how-to-use-nma-test-data: how-to-use-nma-test-data.html
+last_built: 2022-03-24T15:33Z
 
