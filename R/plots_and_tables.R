@@ -8,7 +8,6 @@
 #' @param labels Labels
 #' @param endpoint End point names; string
 #' @param folder Output folder name; string
-#' @param fileSep File separator; default forward slash
 #'
 #' @return res_bugs
 #' @export
@@ -20,8 +19,7 @@ plots_and_tables <- function(dat,
                                            refe = "",
                                            orig = ""),
                              endpoint = NULL,
-                             folder = "output",
-                             fileSep = "/") {
+                             folder = "output") {
   
   if (all(!is.na(effectParam))) {
     
@@ -32,8 +30,8 @@ plots_and_tables <- function(dat,
     
     # rank probability plot
     
-    rankFileLoc <-
-      paste0(folder, fileSep, "graphs", fileSep, "ranking_", labels$short, ".pdf")
+    file_name <- paste0("ranking_", label, ".pdf")
+    rankFileLoc <- file.path(folder, "graphs", file_name)
     
     rankProbPlot(sims, labels)
     
@@ -43,9 +41,9 @@ plots_and_tables <- function(dat,
     
     # forest plot
     
-    forestFileLoc <-
-      paste0(folder, fileSep, "graphs", fileSep, "forest_", labels$short, ".pdf")
-
+    file_name <- paste0("forest_", label, ".pdf")
+    forestFileLoc <- file.path(folder, "graphs", file_name)
+    
     txEffectPlot(dat, sims, labels, endpoint)
 
     pdf(file = forestFileLoc)
@@ -55,8 +53,9 @@ plots_and_tables <- function(dat,
     # pairwise table
     
     pairTable <- pairwiseTable(sims = sims)
-    pairFileLoc <-
-      paste0(folder, fileSep, "results", fileSep, "Pairwise_results_", labels$short, ".csv")
+    
+    file_name <- paste0("Pairwise_results_", label, ".csv")
+    pairFileLoc <- file.path(folder, "results", file_name)
     
     write.table(
       paste("Pairwise Treatment Coefficients;",
@@ -86,9 +85,8 @@ plots_and_tables <- function(dat,
   }
 
   # data table
-  
-  dataFileLoc <-
-    paste0(folder, fileSep, "data", fileSep, "data_", labels$refe, ".csv")
+  file_name <- paste0("data_", label, ".csv")
+  dataFileLoc <- file.path(folder, "data", file_name)
   
   write.table(
     paste0(
@@ -114,8 +112,8 @@ plots_and_tables <- function(dat,
   
   if (all(!is.na(dat$subDataBin))) {
     
-    dataFileLocBin <-
-      paste0(folder, fileSep, "data", fileSep, "data_", labels$refe, "_bin.csv")
+    file_name <- paste0("data_", label, "_bin.csv")
+    dataFileLocBin <- file.path(folder, "data", file_name)
     
     write.table(
       paste0(
@@ -140,8 +138,8 @@ plots_and_tables <- function(dat,
   
   if (all(!is.na(dat$subDataMed))) {
     
-    dataFileLocMed <-
-      paste0(folder, fileSep, "data", fileSep, "data_", labels$refe, "_med.csv")
+    file_name <- paste0("data_", label, "_med.csv")
+    dataFileLocMed <- file.path(folder, "data", file_name)
     
     write.table(
       paste0("Key: ..."),
@@ -164,9 +162,8 @@ plots_and_tables <- function(dat,
   }
   
   # results table
-  
-  resultsFileLoc <-
-    paste0(folder, fileSep, "results", fileSep, "nmaResults_", labels$short, ".csv")
+  file_name <- paste0("nmaResults_", label, ".csv")
+  resultsFileLoc <- file.path(folder, "results", file_name)
   
   write.table(
     paste(

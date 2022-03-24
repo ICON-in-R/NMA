@@ -4,12 +4,12 @@
 \alias{rankProbPlot}
 \title{Rank probability plot}
 \usage{
-rankProbPlot(sims, labels)
+rankProbPlot(nma, res_bugs, folder = "output", label = "", save = FALSE, ...)
 }
 \arguments{
-\item{sims}{sims.matrix bugs output}
+\item{save}{Logical}
 
-\item{labels}{Labels}
+\item{...}{Additional arguments}
 }
 \value{
 

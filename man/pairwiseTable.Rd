@@ -4,13 +4,23 @@
 \alias{pairwiseTable}
 \title{Pairwise table}
 \usage{
-pairwiseTable(sims)
+pairwiseTable(
+  nma,
+  res_bugs,
+  folder = "output",
+  probs = c(0.025, 0.975),
+  label = "",
+  save = FALSE,
+  ...
+)
 }
 \arguments{
-\item{sims}{Simulations of different treatments}
+\item{save}{Logical}
+
+\item{...}{Additional arguments}
 }
 \value{
-
+table
 }
 \description{
 Pairwise table

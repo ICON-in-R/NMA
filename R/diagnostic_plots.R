@@ -4,7 +4,6 @@
 #' @param res_bugs Output from a BUGS run
 #' @param labels $short is used in file name save
 #' @param folder Text string name
-#' @param fileSep  File separator; default forward slash
 #'
 #' @importFrom glue glue
 #' @importFrom here here
@@ -14,8 +13,7 @@
 #' 
 diagnostic_plots <- function(res_bugs,
                              labels_short = "",
-                             folder = "output",
-                             fileSep = "/") {
+                             folder = "output") {
   
   curr_mcmc <- as.mcmc.list(res_bugs)
   
@@ -23,8 +21,10 @@ diagnostic_plots <- function(res_bugs,
   nc <- ncol(curr_mcmc[[1]])
   
   if(nc <= 30) {
+    file_name <- paste0("trace_", labels_short, ".png")
     trace_plot_name <-
-      here(glue("{folder}{fileSep}diagnostics{fileSep}trace_{labels_short}.png"))
+      file.path(folder, "diagnostics", file_name)
+    
     png(
       filename = trace_plot_name,
       # start png (smaller file size than pdf)
@@ -57,10 +57,13 @@ diagnostic_plots <- function(res_bugs,
   } else {
     # if too many variables for a high resolution
     
+    file_name1 <- paste0("trace_", labels_short, "_part1.png")
     trace_plot_name1 <-
-      paste(folder, fileSep, "diagnostics", fileSep, "trace_", labels_short, "_part1.png", sep = "")
+      file.path(folder, "diagnostics", file_name1)
+
+    file_name2 <- paste0("trace_", labels_short, "_part2.png")
     trace_plot_name2 <-
-      paste(folder, fileSep, "diagnostics", fileSep, "trace_", labels_short, "_part2.png", sep = "")
+      file.path(folder, "diagnostics", file_name2)
     
     # same as above but plot one half at a time
     nc1 <- ceiling(nc / 2)
@@ -114,22 +117,32 @@ diagnostic_plots <- function(res_bugs,
     dev.off()
   }
   
+  # trace
+  
+  file_name <- paste0("trace_", labels_short, ".pdf")
   traceFileLoc <-
-    paste(folder, fileSep, "diagnostics", fileSep, "trace_", labels_short, ".pdf", sep = "")
+    file.path(folder, "diagnostics", file_name)
   
   pdf(file = traceFileLoc)
   plot(as.mcmc.list(res_bugs), ask = FALSE)
   dev.off()
   
+  # autocorrelation
+  
+  file_name <- paste0("autocorr_", labels_short, ".pdf")
   autocorrFileLoc <-
-    glue::glue("{folder}{fileSep}{diagnostics}{fileSep}{autocorr}_{labels_short}.pdf")
+    file.path(folder, "diagnostics", file_name)
   
   pdf(file = autocorrFileLoc)
   autocorr.plot(as.mcmc.list(res_bugs), ask = FALSE)
   dev.off()
   
+  # gelman-rubin
+  
+  file_name <- paste0("gelman_", labels_short, ".pdf")
   gelmanFileLoc <-
-    paste(folder, fileSep, "diagnostics", fileSep, "gelman_", labels_short, ".pdf", sep = "")
+    file.path(folder, "diagnostics", file_name)
+  
   pdf(file = gelmanFileLoc)
   gelman.plot(as.mcmc.list(res_bugs), ask = FALSE)
   dev.off()

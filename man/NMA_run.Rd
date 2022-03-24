@@ -5,14 +5,12 @@
 \alias{NMA_run.nma}
 \title{Run network meta-analysis}
 \usage{
-NMA_run(nma, fileSep = "/", output_dir = "output", save = TRUE)
+NMA_run(nma, output_dir = "output", save = TRUE)
 
-\method{NMA_run}{nma}(nma, fileSep = "/", output_dir = "output", save = TRUE)
+\method{NMA_run}{nma}(nma, output_dir = "output", save = TRUE)
 }
 \arguments{
 \item{nma}{Object of class \code{nma}}
-
-\item{fileSep}{File separator; string}
 
 \item{output_dir}{Output folder name; string}
 

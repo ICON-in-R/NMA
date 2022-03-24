@@ -13,7 +13,6 @@
 #' #' @param random Random effects model?
 #' #' @param run_bugs Logical
 #' #' @param DIAGNOSTICS Produce diagnostic plots; logical
-#' #' @param fileSep File separator; string
 #' #' 
 #' #' @importFrom glue glue
 #' #' @importFrom purrr map
@@ -33,8 +32,7 @@
 #'                 preRefTx = NA,
 #'                 random = FALSE,
 #'                 run_bugs = TRUE,
-#'                 DIAGNOSTICS = TRUE,
-#'                 fileSep = "/") {
+#'                 DIAGNOSTICS = TRUE) {
 #'   
 #'   params_to_save <- c(effectParam, modelParams)
 #'   params_to_save <- params_to_save[!is.na(params_to_save)]
@@ -68,14 +66,15 @@
 #'     if (bugs_params$PROG == "JAGS")
 #'       res_bugs <- res_bugs$BUGSoutput
 #'   } else {
-#'     load(file = here(glue("{output_dir}{fileSep}model{fileSep}bugsObject_{labels$short}")))
+#'       file_name <- paste0("bugsObject_", label, ".pdf")
+#'        load(file.path(output_dir, "model", file_name))
 #'   }
 #'   
 #'   ## process output ----
 #' 
-#'   createFolders(folder = output_dir, fileSep,
+#'   createFolders(folder = output_dir,
 #'                 "results", "graphs", "model", "sims", "data", "diagnostics")
-#'   save_bugs_files(res_bugs, bugs_params, run_bugs, labels, output_dir, fileSep)
+#'   save_bugs_files(res_bugs, bugs_params, run_bugs, labels, output_dir)
 #'   
 #'   if (DIAGNOSTICS)
 #'      diagnostic_plots(res_bugs, labels)
@@ -84,9 +83,9 @@
 #'   
 #'   plots_and_tables(dat, res_bugs, effectParam, labels, endpoint)
 #'   
-#'   save(res_bugs,
-#'        file = glue("{output_dir}{fileSep}model{fileSep}bugsObject_{labels$short}.RData"))
-#'   
+#'   file_name <- paste0("bugsObject_", label, ".RData")
+#'   save(res_bugs, file.path(output_dir, "model", file_name))
+#'        
 #'   return(res_bugs)
 #' }
 #' 

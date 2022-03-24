@@ -3,11 +3,9 @@
 #' 
 diagnostics <- function(res_bugs,
                         labels_short = "",
-                        output_dir = "output",
-                        fileSep = "/") {
+                        output_dir = "output") {
   
-  browser()
-  createFolders(folder = output_dir, fileSep, "diagnostics")
+  createFolders(folder = output_dir, "diagnostics")
   diagnostic_plots(res_bugs, labels_short)
   
   invisible(res_bugs)
@@ -19,10 +17,9 @@ diagnostics <- function(res_bugs,
 #' 
 nma_outputs <- function(nma,
                         nma_model,
-                        output_dir = "output",
-                        fileSep = "/") {
+                        output_dir = "output") {
  
-  createFolders(folder = output_dir, fileSep, "graphs")
+  createFolders(folder = output_dir, "graphs")
   
   bugs_stats(nma_model$dat, nma, nma_model$effectParam, nma_model$is_random)
   

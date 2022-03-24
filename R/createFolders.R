@@ -1,21 +1,15 @@
 
 #' Create output folders
 #' 
-#' @param folder Text string name
-#' @param fileSep File separate; default forward slash
+#' @param folder Output folder. Text string
 #' @param ... Additional arguments
-#' 
-#' @importFrom glue glue
 #' 
 #' @return 
 #' @export
 #' 
 createFolders <- function(folder = "output",
-                          fileSep = "/",
                           ...) {
-  
   sub_dir <- list(...)
-  
   SYS <- .Platform$OS.type
   
   if (SYS == "windows") {
@@ -23,7 +17,7 @@ createFolders <- function(folder = "output",
       dir.create(path = here(folder))
     
     for (dir in sub_dir) {
-      new_dir <- here(glue("{folder}{fileSep}{dir}"))
+      new_dir <- file.path(folder, dir)
       
       if (!file.exists(new_dir))
         dir.create(path = new_dir)
@@ -32,10 +26,13 @@ createFolders <- function(folder = "output",
   
   if (SYS == "MAC") {
     if (!file.exists(folder))
-      system(paste("mkdir ", folder, sep = ""))
+      system(paste("mkdir", folder))
+    
     for (dir in sub_dir) {
-      if (!file.exists(paste(folder, fileSep, dir, sep = "")))
-        system(paste("mkdir ", folder, fileSep, dir, sep = ""))
+      dir_name <- file.path(folder, dir)
+      
+      if (!file.exists(dir_name))
+        system(paste("mkdir", dir_name))
     }
   }
 }
