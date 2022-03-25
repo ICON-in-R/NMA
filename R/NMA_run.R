@@ -2,7 +2,7 @@
 #' Run network meta-analysis
 #' 
 #' @param nma Object of class \code{nma}
-#' @param output_dir Output folder name; string
+#' @param folder Output folder name; string
 #' @param save Save BUGS output to file? Logical
 #'
 #' @return \code{res_bugs}
@@ -11,7 +11,7 @@
 #' @seealso \code{\link{new_NMA}}, \code{\link{NMA_update}}
 #' 
 NMA_run <- function(nma,
-                    output_dir = "output",
+                    folder = "output",
                     save = TRUE) {
   UseMethod("NMA_run", nma)
 }
@@ -26,7 +26,7 @@ NMA_run <- function(nma,
 #' @export
 #' 
 NMA_run.nma <- function(nma,
-                        output_dir = "output",
+                        folder = "output",
                         save = TRUE) {
   dat <- nma$dat
   bugs_params <- nma$bugs_params
@@ -65,12 +65,12 @@ NMA_run.nma <- function(nma,
   }
   
   if (save) {
-    createFolders(folder = output_dir, 
-                  "results", "model", "sims", "data")
-    save_bugs_files(res_bugs, bugs_params, run_bugs, labels, output_dir)
+    new_nma_output_dir(nma_model, folder)
+  
+    save_bugs_files(res_bugs, bugs_params, run_bugs, labels, folder)
     
     file_name <- paste0("bugsObject_", labels$short, ".RData")
-    save(res_bugs, file = here::here(file.path(output_dir, "model", file_name)))
+    save(res_bugs, file = here::here(fs::path(folder, "model", file_name)))
   }
   
   res_bugs

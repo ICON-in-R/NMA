@@ -3,12 +3,13 @@
 #'
 #' @param data_dir folder location; string
 #' @return \code{nma} object
+#' @import fs
 #' 
 #' @export
 #' 
 new_NMA_dir <- function(data_dir = ".") {
   
-  reference <- read.csv(file.path(data_dir, "REFERENCE.csv"))
+  reference <- read.csv(fs::path(data_dir, "REFERENCE", ext = "csv"))
   
   analysis_filename <- reference$file[reference$type == "analysis"]
   bugs_filename <- reference$file[reference$type == "bugs"]
@@ -17,20 +18,20 @@ new_NMA_dir <- function(data_dir = ".") {
   subDataMed_filename <- reference$file[reference$type == "subDataMed"]
   
   subData <-
-    read.csv(file.path(data_dir, subData_filename),
+    read.csv(fs::path(data_dir, subData_filename),
              stringsAsFactors = FALSE,
              header = TRUE,
              as.is = TRUE)
   
   bugs_params <-
-    read.csv(file.path(data_dir, bugs_filename),
+    read.csv(fs::path(data_dir, bugs_filename),
              stringsAsFactors = FALSE,
              header = FALSE) %>% 
     keyval_as_list %>% 
     validate_bugs_param
   
   analysis_params <-
-    read.csv(file.path(data_dir, analysis_filename),
+    read.csv(fs::path(data_dir, analysis_filename),
              stringsAsFactors = FALSE,
              header = FALSE) %>% 
     keyval_as_list %>% 
@@ -38,7 +39,7 @@ new_NMA_dir <- function(data_dir = ".") {
   
   subDataBin <-
     if (length(subDataBin_filename) != 0) {
-      read.csv(file.path(data_dir, subDataBin_filename),
+      read.csv(fs::path(data_dir, subDataBin_filename),
                stringsAsFactors = FALSE,
                header = TRUE,
                as.is = TRUE)
@@ -46,7 +47,7 @@ new_NMA_dir <- function(data_dir = ".") {
   
   subDataMed <-
     if (length(subDataMed_filename) != 0) {
-      read.csv(file.path(data_dir, subDataMed_filename),
+      read.csv(fs::path(data_dir, subDataMed_filename),
                stringsAsFactors = FALSE,
                header = TRUE,
                as.is = TRUE) %>% 

@@ -6,6 +6,7 @@
 #' @param run_bugs Run BUGS? Logical
 #' @param labels Labels
 #' @param folder output folder name; string
+#' @param overwrite Logical
 #' @importFrom glue glue
 #' 
 #' @return res_bugs
@@ -15,7 +16,8 @@ save_bugs_files <- function(res_bugs,
                             bugs_params,
                             run_bugs,
                             labels,
-                            folder = "output") {
+                            folder = "output",
+                            overwrite = TRUE) {
   
   SYS <- .Platform$OS.type
   
@@ -24,19 +26,21 @@ save_bugs_files <- function(res_bugs,
       for (ii in seq_len(bugs_params$N.CHAINS)) {
         
         from_file <- paste0("inits", ii, ".txt")
-        from_dir <- file.path(tempdir(), from_file)
+        from_dir <- fs::path(tempdir(), from_file)
         
-        to_file <- paste0(labels$short, "_inits", ii, ".txt")
-        to_dir <- file.path(folder, "model", to_file)
+        to_file <- paste0(labels$short, "_", from_file)
+        to_dir <- fs::path(folder, "model", to_file)
         
-        file.copy(from = from_dir, to = to_dir)
+        fs::file_copy(path = from_dir, new_path = to_dir,
+                      overwrite = overwrite)
       }
       
       to_file <- paste0(labels$short, "_data.txt")
-      to_dir <- file.path(folder, "model", to_file)
+      to_dir <- fs::path(folder, "model", to_file)
       
-      file.copy(from = file.path(tempdir(), "data.txt"),
-                to = to_dir)
+      fs::file_copy(path = fs::path(tempdir(), "data", ext = "txt"),
+                    new_path = to_dir,
+                    overwrite = overwrite)
     }
   }
   

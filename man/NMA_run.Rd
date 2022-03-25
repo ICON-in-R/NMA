@@ -5,14 +5,14 @@
 \alias{NMA_run.nma}
 \title{Run network meta-analysis}
 \usage{
-NMA_run(nma, output_dir = "output", save = TRUE)
+NMA_run(nma, folder = "output", save = TRUE)
 
-\method{NMA_run}{nma}(nma, output_dir = "output", save = TRUE)
+\method{NMA_run}{nma}(nma, folder = "output", save = TRUE)
 }
 \arguments{
 \item{nma}{Object of class \code{nma}}
 
-\item{output_dir}{Output folder name; string}
+\item{folder}{Output folder name; string}
 
 \item{save}{Save BUGS output to file? Logical}
 }

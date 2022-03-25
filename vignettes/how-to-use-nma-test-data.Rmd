@@ -139,7 +139,9 @@ For example, we can run the NMA for a random effects rather than a fixed effects
 nma_model2 <-
   NMA_update(nma_model,
              is_random = TRUE)
+```
 
+```{r}
 nma_res2 <- NMA_run(nma_model2, save = FALSE)
 
 nma_res2
