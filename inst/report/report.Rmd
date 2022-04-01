@@ -1,0 +1,45 @@
+---
+title: "Auto-generated report from NMA"
+header-includes: \usepackage{graphicx} \usepackage{bm}
+date: "Version: `r format(Sys.time(), '%d %B, %Y')`"
+output:
+  word_document: default
+  pdf_document:
+    fontsize: 11pt
+params:
+  ext: "pdf"
+  filename: "Report.pdf"
+  show.tab: FALSE
+  echo: FALSE
+  nma_model: NA
+geometry: margin=1cm
+bibliography: biblio.bib
+---
+  
+```{r, echo=FALSE, warning=FALSE, message=FALSE, comment=NA}
+options(scipen = 999)
+
+align <- 
+  if (params$ext == "pdf") {
+    "center"
+  } else {
+    "default"
+  }
+```
+
+## Introuction
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, comment=FALSE, results='hide'}
+nma_res <- NMA_run(params$nma_model, save = FALSE)
+```
+
+This is a report of a NMA using the package `NMA`.
+
+```{r child = 'section-model.Rmd'}
+```
+
+```{r child = 'section-plots.Rmd'}
+```
+
+
+## References

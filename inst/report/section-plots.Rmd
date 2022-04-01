@@ -1,0 +1,33 @@
+
+## Plots
+
+The network graph is
+
+```{r, echo=params$echo, fig.width=4.6, fig.height=4.6, fig.align=align, warning=FALSE, message=FALSE, comment=NA}
+library(sna)
+plotNetwork(nma_model)
+```
+
+```{r eval=FALSE, echo=params$echo, fig.align=align}
+write_data_to_file(params$nma_model)
+write_results_table(params$nma_model, nma_res)
+```
+
+The pair-wise table is
+
+```{r, fig.height=5, fig.width=5, echo=params$echo, fig.align=align}
+knitr::kable(pairwiseTable(params$nma_model, nma_res))
+```
+
+The treatment effect forest plot of posterior samples is
+
+```{r, fig.height=5, fig.width=10, echo=params$echo, fig.align=align}
+txEffectPlot(params$nma_model, nma_res)
+```
+
+The rank probability grid is
+
+```{r, fig.height=5, fig.width=5, echo=params$echo, fig.align=align}
+rankProbPlot(params$nma_model, nma_res)
+```
+

@@ -1,0 +1,9 @@
+
+## Model description
+
+The NMA is a `r if(nma_model$is_random) "Random Effects (RE)" else "Fixed Effects (FE)"` model.
+
+$$
+y \sim \beta X
+$$
+
