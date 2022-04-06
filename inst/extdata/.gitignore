@@ -1,0 +1,6 @@
+*
+*/
+!.gitignore
+!survdata_main_test.csv
+!survdata_med_test.csv
+!survdata_bin_test.csv
