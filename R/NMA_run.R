@@ -1,7 +1,7 @@
 
 #' Run network meta-analysis
 #' 
-#' @param nma Object of class \code{nma}
+#' @template args-nma
 #' @param folder Output folder name; string
 #' @param save Save BUGS output to file? Logical
 #'

@@ -4,7 +4,7 @@
 #' Forest plot of 2.5, median and 07.5% quantiles of
 #' posterior distributions for each treatment.
 #'
-#' @param nma Study input data; list
+#' @template args-nma
 #' @param res_bugs Simulations
 #' @param label Label
 #' @param folder String

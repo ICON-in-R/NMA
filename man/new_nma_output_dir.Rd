@@ -7,6 +7,8 @@
 new_nma_output_dir(nma, folder = "output", ...)
 }
 \arguments{
+\item{nma}{Object of class \code{nma}}
+
 \item{folder}{Output folder. Text string}
 
 \item{...}{Additional arguments}
@@ -16,4 +18,7 @@ new_nma_output_dir(nma, folder = "output", ...)
 }
 \description{
 Create output folders
+}
+\seealso{
+new_NMA
 }

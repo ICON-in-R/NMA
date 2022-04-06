@@ -21,6 +21,7 @@ Depends:
 Imports:
     coda,
     dplyr (>= 0.7.0),
+    fs,
     glue (>= 1.3.0),
     gplots,
     here,
@@ -30,10 +31,10 @@ Imports:
     R2jags,
     sna
 Suggests:
+    covr,
     knitr,
     qpdf,
     rmarkdown,
-    covr,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3

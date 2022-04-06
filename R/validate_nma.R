@@ -1,11 +1,11 @@
 
 #' nma validator
 #'
-#' @param nma object
+#' @template args-nma
 #'
 #' @return
 #' @export
-#' @keyword internal
+#' @keywords internal
 #' 
 validate_nma <- function(nma) {
   

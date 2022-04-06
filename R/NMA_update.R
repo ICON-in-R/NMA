@@ -3,7 +3,7 @@
 #' 
 #' Take an existing analysis and modify it.
 #' 
-#' @param nma Object of class \code{nma} 
+#' @template args-nma
 #' @param ... Additional arguments
 #'
 #' @return

@@ -1,0 +1,1 @@
+#' @param nma Object of class \code{nma}

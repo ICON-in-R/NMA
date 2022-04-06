@@ -16,7 +16,7 @@ txEffectPlot(
 )
 }
 \arguments{
-\item{nma}{Study input data; list}
+\item{nma}{Object of class \code{nma}}
 
 \item{res_bugs}{Simulations}
 

@@ -1,7 +1,7 @@
 
 #' Write to file multiple NMA plots and tables
 #'
-#' @param nma
+#' @template args-nma
 #' @param res_bugs BUGS output
 #' @param effectParam Effect parameter names; string
 #' @param label Label

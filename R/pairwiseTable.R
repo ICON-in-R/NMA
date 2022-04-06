@@ -1,11 +1,11 @@
 
 #' Pairwise table
 #'
-#' @param nma
-#' @param res_bugs
-#' @param folder
-#' @param probs
-#' @param label
+#' @template args-nma
+#' @param res_bugs Output from running BUGS model
+#' @param folder Folder name; string
+#' @param probs Vector of probabilities
+#' @param label string
 #' @param save Logical
 #' @param ... Additional arguments
 #'

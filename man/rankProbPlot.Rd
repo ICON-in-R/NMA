@@ -7,6 +7,14 @@
 rankProbPlot(nma, res_bugs, folder = "output", label = "", save = FALSE, ...)
 }
 \arguments{
+\item{nma}{Object of class \code{nma}}
+
+\item{res_bugs}{Output from running BUGS model}
+
+\item{folder}{Folder name; string}
+
+\item{label}{string}
+
 \item{save}{Logical}
 
 \item{...}{Additional arguments}

@@ -1,12 +1,13 @@
 
 #' Create output folders
 #' 
-#' @param nma
+#' @template args-nma
 #' @param folder Output folder. Text string
 #' @param ... Additional arguments
 #' @import fs
 #' 
 #' @return 
+#' @seealso new_NMA
 #' @export
 #' 
 new_nma_output_dir <- function(nma,

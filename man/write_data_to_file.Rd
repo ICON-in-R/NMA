@@ -10,7 +10,11 @@ write_data_to_file(nma, label = "", folder = "output", ...)
 \method{write_data_to_file}{nma}(nma, label = "", folder = "output", ...)
 }
 \arguments{
-\item{nma}{Result of \code{new_NMA}}
+\item{nma}{Object of class \code{nma}}
+
+\item{label}{string}
+
+\item{folder}{Name of folder; string}
 
 \item{...}{Additional arguments}
 }

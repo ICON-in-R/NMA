@@ -7,7 +7,7 @@
 validate_nma(nma)
 }
 \arguments{
-\item{nma}{object}
+\item{nma}{Object of class \code{nma}}
 }
 \value{
 
@@ -15,3 +15,4 @@ validate_nma(nma)
 \description{
 nma validator
 }
+\keyword{internal}

@@ -25,6 +25,8 @@ plots_and_tables(
 )
 }
 \arguments{
+\item{nma}{Object of class \code{nma}}
+
 \item{res_bugs}{BUGS output}
 
 \item{effectParam}{Effect parameter names; string}

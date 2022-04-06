@@ -7,6 +7,8 @@
 write_results_table(nma, res_bugs, folder = "output", label = "", ...)
 }
 \arguments{
+\item{nma}{Object of class \code{nma}}
+
 \item{...}{Additional arguments}
 }
 \description{

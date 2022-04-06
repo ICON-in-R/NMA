@@ -1,9 +1,9 @@
 
 #' Write study data to file
 #' 
-#' @param nma Result of \code{new_NMA}
-#' @param label
-#' @param folder
+#' @template args-nma
+#' @param label string
+#' @param folder Name of folder; string
 #' @param ... Additional arguments
 #' @export
 #' 

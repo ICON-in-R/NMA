@@ -1,7 +1,7 @@
 
 #' Write results table
 #' 
-#' @param nma
+#' @template args-nma
 #' @param ... Additional arguments
 #' @export
 #'
