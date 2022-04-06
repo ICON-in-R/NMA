@@ -64,7 +64,7 @@ In another article we will show how to do this in one function call by including
 If there is no binary or median data used in the NMA then the variables `subDataBin` and `subDataMed` are assigned `NA`.
 
 ```{r}
-file_name <- paste0(here::here("raw_data"), "/survdata_", endpoint, "_")
+file_name <- paste0(here::here("inst", "extdata"), "/survdata_", endpoint, "_")
 
 subData <-
   read.csv(paste0(file_name, analysis_type, ".csv"),
