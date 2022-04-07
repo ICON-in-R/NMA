@@ -38,7 +38,12 @@ reference:
   - print
   - setupData
   - validate_nma
-
+- title: Data
+  contents:
+  - subData
+  - subDataBin
+  - subDataMed
+  
 navbar:
  components:
    articles:

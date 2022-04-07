@@ -1,5 +1,5 @@
 pandoc: 2.17.1.1
-pkgdown: 2.0.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   how-to-use-nma: dont-build/how-to-use-nma.html
@@ -7,7 +7,7 @@ articles:
   run_multiple_nma: dont-build/run_multiple_nma.html
   how-to-use-nma-test-data: how-to-use-nma-test-data.html
   reference-file-test-data: reference-file-test-data.html
-last_built: 2022-04-06T15:35Z
+last_built: 2022-04-07T11:35Z
 urls:
   reference: https://icon-in-r.github.io/NMA/reference
   article: https://icon-in-r.github.io/NMA/articles

@@ -11,8 +11,8 @@ A data frame with 6 variables:
 \item{base}{Reference treatment name}
 \item{tx}{Comparison treatment name}
 \item{median}{Median time}
-\item{medN}{Total sample size}
-\item{medR}{}
+\item{medN}{Sample size}
+\item{medR}{Sample size/2 as estimated number of events}
 }
 }
 \usage{

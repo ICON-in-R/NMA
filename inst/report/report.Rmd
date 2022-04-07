@@ -27,7 +27,7 @@ align <-
   }
 ```
 
-## Introuction
+## Introduction
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE, comment=FALSE, results='hide'}
 nma_res <- NMA_run(params$nma_model, save = FALSE)

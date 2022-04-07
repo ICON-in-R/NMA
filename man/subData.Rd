@@ -3,15 +3,15 @@
 \docType{data}
 \name{subData}
 \alias{subData}
-\title{Study mean and standard error treatment difference}
+\title{Study log hazard ratios and standard errors}
 \format{
 A data frame with 6 variables:
 \describe{
 \item{study}{Study name}
 \item{base}{Reference treatment name}
 \item{tx}{Comparison treatment name}
-\item{Lmean}{Mean difference}
-\item{Lse}{Standard error of difference}
+\item{Lmean}{Log hazard ratio}
+\item{Lse}{Standard error of log hazard ratio}
 \item{multi_arm}{Multi-arm trial indicator: 0/1}
 }
 }
@@ -20,5 +20,6 @@ subData
 }
 \description{
 A dataset containing the pair comparisons for studies.
+Woods NMA allows data on HR on the log scale.
 }
 \keyword{datasets}

@@ -1,15 +1,16 @@
 
-#' Study mean and standard error treatment difference
+#' Study log hazard ratios and standard errors
 #'
 #' A dataset containing the pair comparisons for studies.
-#'
+#' Woods NMA allows data on HR on the log scale.
+#' 
 #' @format A data frame with 6 variables:
 #' \describe{
 #'   \item{study}{Study name}
 #'   \item{base}{Reference treatment name}
 #'   \item{tx}{Comparison treatment name}
-#'   \item{Lmean}{Mean difference}
-#'   \item{Lse}{Standard error of difference}
+#'   \item{Lmean}{Log hazard ratio}
+#'   \item{Lse}{Standard error of log hazard ratio}
 #'   \item{multi_arm}{Multi-arm trial indicator: 0/1}
 #' }
 "subData"
@@ -40,8 +41,8 @@
 #'   \item{base}{Reference treatment name}
 #'   \item{tx}{Comparison treatment name}
 #'   \item{median}{Median time}
-#'   \item{medN}{Total sample size}
-#'   \item{medR}{}
+#'   \item{medN}{Sample size}
+#'   \item{medR}{Sample size/2 as estimated number of events}
 #' }
 "subDataMed"
 
