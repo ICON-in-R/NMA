@@ -41,7 +41,7 @@ new_NMA <- function(subData,
                     N.THIN = 1,
                     PAUSE = TRUE,
                     run_bugs = TRUE),
-               bugs_params,)
+               bugs_params)
   
   bugs_fn <- customBugs(bugs_params$PROG)
   

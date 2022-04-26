@@ -89,6 +89,27 @@ subDataMed <-
   } else {NA}
 ```
 
+The format of the data should be fairly self-explanatory and looks like the following.
+For the hazard ratio data
+
+```{r echo=FALSE}
+knitr::kable(subData)
+```
+
+For the binary data
+
+```{r echo=FALSE}
+knitr::kable(subDataBin)
+```
+
+and for the median time data
+
+```{r echo=FALSE}
+knitr::kable(subDataMed)
+```
+
+More information about these data is available in the help documentation which can be accessed with e.g. `help(subData)`.
+
 
 ### Build model
 
