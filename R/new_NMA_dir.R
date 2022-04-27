@@ -3,7 +3,7 @@
 #'
 #' @param data_dir folder location; string
 #' @return \code{nma} object
-#' @import fs
+#' @importFrom fs path
 #' 
 #' @export
 #' 

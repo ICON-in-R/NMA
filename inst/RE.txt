@@ -23,7 +23,7 @@ model {
 # Define random effect
   for (ss in 1:nStudies) {
     for(tt in 1:nTx) {
-      re[ss,tt] ~ dnorm(0, reTau)
+      re[ss, tt] ~ dnorm(0, reTau)
     }
   }
 
@@ -34,7 +34,9 @@ model {
                re[Lstudy[ii], Lbase[ii]] + beta[Ltx[ii]] - beta[Lbase[ii]] 
     Lprec[ii] <- 1/pow(Lse[ii], 2)
     Lmean[ii] ~ dnorm(Lmu[ii], Lprec[ii])
-	Ldev[ii] <- pow((Lmean[ii] - Lmu[ii]), 2)/pow(Lse[ii], 2)
+    
+    # Residual deviance for hazard ratio reporting studies
+  	Ldev[ii] <- pow((Lmean[ii] - Lmu[ii]), 2)/pow(Lse[ii], 2)
   }
 	
 totresdev <- sum(Ldev[1:LnObs])

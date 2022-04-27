@@ -2,13 +2,14 @@
 # intended for use on survival data to estimate hazard ratios but can
 # be used for synthesising any constant treatment effects
 
-model{
+model {
+
 # Define Prior Distributions
 # On tx effect mean
   
   beta[1] <- 0
   for (tt in 2:nTx) {
-    beta[tt]~dnorm(mu_beta, prec_beta)
+    beta[tt] ~ dnorm(mu_beta, prec_beta)
   }
 
 # On individual study baseline effect

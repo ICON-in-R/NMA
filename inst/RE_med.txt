@@ -2,7 +2,7 @@
 # intended for use on survival data to estimate hazard ratios but can be
 # used for synthesising any constant treatment effects
 
-model{
+model {
 
 # Define Prior Distributions
 # on random tx effect variance
@@ -31,12 +31,12 @@ model{
 # For hazard ratio reporting studies
   for(ii in 1:LnObs) {
     Lmu[ii] <- alpha[Lstudy[ii]]*multi[ii] + re[Lstudy[ii], Ltx[ii]] -
-              re[Lstudy[ii], Lbase[ii]] + beta[Ltx[ii]] - beta[Lbase[ii]] 
+               re[Lstudy[ii], Lbase[ii]] + beta[Ltx[ii]] - beta[Lbase[ii]] 
     Lprec[ii] <- 1/pow(Lse[ii], 2)
     Lmean[ii] ~ dnorm(Lmu[ii], Lprec[ii])
 	
-  # Residual deviance for hazard ratio reporting studies
-	Ldev[ii] <- (Lmean[ii] - Lmu[ii])*(Lmean[ii] - Lmu[ii])*Lprec[ii] 
+    # Residual deviance for hazard ratio reporting studies
+	  Ldev[ii] <- pow((Lmean[ii] - Lmu[ii]), 2)*Lprec[ii]
   }
 
 # For data reported as median survival times
