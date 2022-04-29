@@ -7,7 +7,7 @@ articles:
   run_multiple_nma: dont-build/run_multiple_nma.html
   how-to-use-nma-test-data: how-to-use-nma-test-data.html
   reference-file-test-data: reference-file-test-data.html
-last_built: 2022-04-07T11:35Z
+last_built: 2022-04-29T16:24Z
 urls:
   reference: https://icon-in-r.github.io/NMA/reference
   article: https://icon-in-r.github.io/NMA/articles

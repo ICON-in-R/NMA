@@ -5,7 +5,6 @@
 #' #' @param dat Result of \code{setupData}
 #' #' @param bugs_params List of BUGS parameters
 #' #' @param effectParam Effect parameters. Optional
-#' #' @param modelParams Model parameters. Optional
 #' #' @param output_dir Name of output folder; string
 #' #' @param label
 #' #' @param endpoint Name of end point; string
@@ -25,7 +24,6 @@
 #' NMA <- function(dat,
 #'                 bugs_params,
 #'                 effectParam = NA,
-#'                 modelParams = NA,
 #'                 output_dir = "output",
 #'                 label,
 #'                 endpoint = NULL,

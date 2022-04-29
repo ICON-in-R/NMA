@@ -10,6 +10,7 @@ reference:
   - NMA_run
   - NMA_update
   - new_NMA
+  - new_NMA_dir
 - title: BUGS functions
   contents:
   - bugs_stats
