@@ -7,6 +7,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
+bibliography: references.bib
 ---
 
 ```{r, include = FALSE}
@@ -112,6 +113,36 @@ More information about these data is available in the help documentation which c
 
 
 ### Build model
+
+The package uses the model in @Woods2010 for NMA combining count and hazard ratio statistics in multi-arm trials.
+For count data, the cumulative count of subjects who have experienced an event in arm $k$ of study $s$
+
+$$
+r_{s,k} \sim Bin(F_{s,k}, n_{s,k})
+$$
+
+A log cumulative hazard for each trial arm
+
+$$
+\ln (H_{s,k}) = \ln ( - \ln (1 - F_{s,k})))
+$$
+
+where
+
+$$
+\ln (H_{s,k}) = \alpha_s + \beta_k - \beta_b
+$$
+
+Under an assumption of proportional hazards, the $\beta_k$ coefficient is equal to the log hazard ratio.
+
+The counts and hazard ratio data can then be used together, placing a normal distribution error on the log HR.
+
+A random effect is included in the model as follows.
+
+$$
+\ln (H_{s,k}) = \alpha_s + \beta_k - \beta_b + re_{s,k} - re_{s,b}
+$$
+
 
 Now we can create the NMA object to use in the modelling.
 The workflow is to first create this separately to actually doing the fitting.
