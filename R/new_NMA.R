@@ -12,8 +12,6 @@
 #' @param hyperparams List of hyperparameters
 #' @param refTx Reference treatment; string
 #' @param effectParam Effect parameter
-#' @param modelParams Parameter to save other than the effect parameters;
-#'                    usually the deviances.
 #' @param label Label
 #' @param endpoint End point name; string
 #' @seealso \code{\link{NMA_run}}, \code{\link{NMA_update}}
@@ -29,13 +27,20 @@ new_NMA <- function(subDataHR,
                     hyperparams = list(),
                     refTx = NA ,
                     effectParam,
-                    modelParams,
                     label,
                     endpoint) {
-  
+
   data_type <-
     match.arg(data_type, c("hr_data", "bin_data", "med_data"),
-              several.ok = FALSE)
+              several.ok = TRUE)
+  
+  model_params_lookup <-
+    c(hr_data = "totLdev", bin_data = NA, med_data = "totmediandev")
+  
+  modelParams <- model_params_lookup[data_type]
+  modelParams <- modelParams[!is.na(modelParams)]
+  
+  if (length(modelParams) > 1) modelParams <- c(modelParams, "totresdev") 
   
   bugs_params <- 
     modifyList(list(PROG = "openBugs",

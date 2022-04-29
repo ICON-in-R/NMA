@@ -59,14 +59,13 @@ For example,
     N.THIN, 1
     PAUSE, TRUE
     
-and `analysis.csv` includes: whether a random effects model, `RANDOM`; the reference treatment, `REFTX`; `effectParam`, `modelParams`, `label` and `endpoint`.
+and `analysis.csv` includes: whether a random effects model, `is_random`; the type of survival data, `data_type`the reference treatment, `REFTX`; `effectParam`, `label` and `endpoint`.
 For example,
 
     is_random, FALSE
     data_type, hr_data
     refTx, X
     effectParam, beta
-    modelParams, totresdev
     label, my_label
     endpoint, my_endpoint
     

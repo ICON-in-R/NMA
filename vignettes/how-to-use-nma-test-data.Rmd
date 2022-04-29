@@ -69,7 +69,7 @@ If there is no binary or median data used in the NMA then the variables `subData
 file_name <- here::here(file.path("inst", "extdata", "survdata_"))
 
 subDataHR <-
-  read.csv(paste0(file_name, "main_test.csv"),
+  read.csv(paste0(file_name, "hr_test.csv"),
            header = TRUE,
            as.is = TRUE)
 
@@ -157,7 +157,6 @@ nma_model <-
           data_type = data_type,
           refTx = REFTX ,
           effectParam = "beta",
-          modelParams = "totLdev",
           label = "",
           endpoint = "")
 
