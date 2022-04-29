@@ -13,12 +13,12 @@ new_NMA_dir <- function(data_dir = ".") {
   
   analysis_filename <- reference$file[reference$type == "analysis"]
   bugs_filename <- reference$file[reference$type == "bugs"]
-  subData_filename <- reference$file[reference$type == "subData"]
+  subDataHR_filename <- reference$file[reference$type == "subData"]
   subDataBin_filename <- reference$file[reference$type == "subDataBin"]
   subDataMed_filename <- reference$file[reference$type == "subDataMed"]
   
   subData <-
-    read.csv(fs::path(data_dir, subData_filename),
+    read.csv(fs::path(data_dir, subDataHR_filename),
              stringsAsFactors = FALSE,
              header = TRUE,
              as.is = TRUE)

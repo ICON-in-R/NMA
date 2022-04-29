@@ -63,6 +63,7 @@ and `analysis.csv` includes: whether a random effects model, `RANDOM`; the refer
 For example,
 
     is_random, FALSE
+    data_type, hr_data
     refTx, X
     effectParam, beta
     modelParams, totresdev
@@ -74,7 +75,7 @@ For example,
 
 A single call sets-up the NMA represented by the contents of the folder.
 
-```{r}
+```{r setup-model}
 nma_model <- new_NMA_dir(data_dir = here::here("inst/analysis_folder_test"))
 ```
 
@@ -83,7 +84,7 @@ nma_model <- new_NMA_dir(data_dir = here::here("inst/analysis_folder_test"))
 
 The NMA MCMC function calls the appropriate BUGS model in the usual way.
 
-```{r}
+```{r run-model}
 nma_res <- NMA_run(nma_model, save = FALSE)
 
 nma_res

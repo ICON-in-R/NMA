@@ -3,26 +3,29 @@
 #' 
 #' Create an \code{nma} class object to use in an analysis.
 #' 
-#' @param subData Main input data frame. Mandatory
+#' @param subDataHR Hazard ratio input data frame. Mandatory
 #' @param subDataMed Median time input data frame. Optional
 #' @param subDataBin Binary data input data frame. Optional
 #' @param bugs_params List of BUGS parameters. Optional
 #' @param is_random Random effects model? Logical
+#' @param data_type Vector of names of data formats from "hr_data", "bin_data", "med_data"
 #' @param hyperparams List of hyperparameters
 #' @param refTx Reference treatment; string
 #' @param effectParam Effect parameter
-#' @param modelParams Model parameter
+#' @param modelParams Parameter to save other than the effect parameters;
+#'                    usually the deviances.
 #' @param label Label
 #' @param endpoint End point name; string
 #' @seealso \code{\link{NMA_run}}, \code{\link{NMA_update}}
 #' @return
 #' @export
 #'
-new_NMA <- function(subData,
+new_NMA <- function(subDataHR,
                     subDataMed = NA,
                     subDataBin = NA,
                     bugs_params = NA,
                     is_random = TRUE,
+                    data_type = "hr_data",
                     hyperparams = list(),
                     refTx = NA ,
                     effectParam,
@@ -30,8 +33,9 @@ new_NMA <- function(subData,
                     label,
                     endpoint) {
   
-  is_med <- ifelse(any(is.na(subDataMed)), FALSE, TRUE)
-  is_bin <- ifelse(any(is.na(subDataBin)), FALSE, TRUE)
+  data_type <-
+    match.arg(data_type, c("hr_data", "bin_data", "med_data"),
+              several.ok = FALSE)
   
   bugs_params <- 
     modifyList(list(PROG = "openBugs",
@@ -45,10 +49,10 @@ new_NMA <- function(subData,
   
   bugs_fn <- customBugs(bugs_params$PROG)
   
-  check_study_data(subData, subDataMed, subDataBin)
+  check_study_data(subDataHR, subDataMed, subDataBin)
   
   dat <- 
-    setupData(subData = subData,
+    setupData(subData = subDataHR,
               subDataMed = subDataMed,
               subDataBin = subDataBin,
               is_random = is_random,
@@ -62,8 +66,7 @@ new_NMA <- function(subData,
                c(dat$bugsData, hyperparams))
   
   structure(list(dat = dat,
-                 is_med = is_med,
-                 is_bin = is_bin,
+                 data_type = data_type,
                  bugs_params = bugs_params,
                  bugs_fn = bugs_fn,
                  is_random = is_random,

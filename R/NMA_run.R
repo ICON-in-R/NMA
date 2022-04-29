@@ -35,7 +35,10 @@ NMA_run.nma <- function(nma,
   params_to_save <- c(nma$effectParam, nma$modelParams)
   params_to_save <- params_to_save[!is.na(params_to_save)]
   
-  bugs_filename <- make_bugs_filename(nma$is_random, dat)
+  bugs_model <- create_bugs_code(random = nma$is_random, dat = nma)
+  bugs_filename <- file.path(tempdir(), "bugs_model.txt")
+  write(bugs_model, file = bugs_filename)
+  
   labels <- make_labels(nma$label)
   
   ## run bugs model
