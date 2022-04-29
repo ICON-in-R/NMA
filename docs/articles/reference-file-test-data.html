@@ -156,13 +156,14 @@ N.CHAINS, 2
 N.THIN, 1
 PAUSE, TRUE</code></pre>
 <p>and <code>analysis.csv</code> includes: whether a random effects
-model, <code>RANDOM</code>; the reference treatment, <code>REFTX</code>;
-<code>effectParam</code>, <code>modelParams</code>, <code>label</code>
-and <code>endpoint</code>. For example,</p>
+model, <code>is_random</code>; the type of survival data,
+<code>data_type</code>the reference treatment, <code>REFTX</code>;
+<code>effectParam</code>, <code>label</code> and <code>endpoint</code>.
+For example,</p>
 <pre><code>is_random, FALSE
+data_type, hr_data
 refTx, X
 effectParam, beta
-modelParams, totresdev
 label, my_label
 endpoint, my_endpoint</code></pre>
 </div>
@@ -183,14 +184,14 @@ way.</p>
 <span class="co">#&gt; ====== RUNNING BUGS MODEL</span>
 
 <span class="va">nma_res</span>
-<span class="co">#&gt; Inference for Bugs model at "C:/Users/n8tha/Documents/R/NMA/inst/FE.txt", </span>
+<span class="co">#&gt; Inference for Bugs model at "C:\Users\n8tha\AppData\Local\Temp\RtmpmkoAgQ/bugs_model.txt", </span>
 <span class="co">#&gt;  2 chains, each with 2500 iterations (first 1000 discarded)</span>
 <span class="co">#&gt;  n.sims = 3000 iterations saved</span>
-<span class="co">#&gt;           mean  sd 2.5%  25%  50%  75% 97.5% Rhat n.eff</span>
-<span class="co">#&gt; beta[2]   -0.2 0.1 -0.4 -0.2 -0.2 -0.1   0.1    1  1200</span>
-<span class="co">#&gt; beta[3]   -0.4 0.1 -0.7 -0.5 -0.4 -0.3  -0.2    1  2300</span>
-<span class="co">#&gt; totresdev 37.0 2.1 35.0 35.6 36.4 37.8  42.7    1  3000</span>
-<span class="co">#&gt; deviance  31.0 2.1 29.1 29.6 30.4 31.8  36.8    1  3000</span>
+<span class="co">#&gt;          mean  sd 2.5%  25%  50%  75% 97.5% Rhat n.eff</span>
+<span class="co">#&gt; beta[2]  -0.2 0.1 -0.4 -0.2 -0.2 -0.1   0.1    1  1200</span>
+<span class="co">#&gt; beta[3]  -0.4 0.1 -0.7 -0.5 -0.4 -0.3  -0.2    1  2300</span>
+<span class="co">#&gt; totLdev  37.0 2.1 35.0 35.6 36.4 37.8  42.7    1  3000</span>
+<span class="co">#&gt; deviance 31.0 2.1 29.1 29.6 30.4 31.8  36.8    1  3000</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; For each parameter, n.eff is a crude measure of effective sample size,</span>
 <span class="co">#&gt; and Rhat is the potential scale reduction factor (at convergence, Rhat=1).</span>
