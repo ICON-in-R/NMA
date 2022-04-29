@@ -8,9 +8,9 @@ create_bugs_code <- function(random, dat) {
   bin <- ifelse(any(is.na(dat$subDataBin)) | length(dat$subDataBin) == 0, NA, "bin")
 
   data_code <- create_data_code(effect, med, bin)
-  parameter_code <- create_parameter_code(effect, med, bin)
+  param_code <- create_parameter_code(effect, med, bin)
   model_code <- create_model_code(effect, med, bin)
-  gq_code <- create_generated_quantities_code(effect, med, bin)
+  gen_quant_code <- create_generated_quantities_code(effect, med, bin)
   
   script <- list()
   
@@ -21,10 +21,10 @@ create_bugs_code <- function(random, dat) {
   
   # combine all elements into a complete BUGS model
   paste0(
-    scode$data,
-    scode$parameters,
-    scode$model,
-    scode$generated_quantities)
+    script$data,
+    script$parameters,
+    script$model,
+    script$generated_quantities)
 }
 
 #
