@@ -1,6 +1,6 @@
 is_random,FALSE
+data_type,hr_data
 refTx,X
 effectParam,beta
-modelParams,totresdev
 label,my_label
 endpoint,my_endpoint

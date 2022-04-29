@@ -1,6 +1,6 @@
 is_random,FALSE
+data_type,hr_data
 refTx,ERL/GEF
 effectParam,beta
-modelParams,totresdev
 label,BC_PFS_mFE
 endpoint,PFS
