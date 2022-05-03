@@ -1,4 +1,9 @@
 
+#' summStat
+#' 
+#' @param x x
+#' @param probs Probabilities
+#'
 #' @export
 #' 
 summStat <- function(x, probs = c(0.5, 0.025, 0.975)) {

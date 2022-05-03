@@ -1,0 +1,49 @@
+# Binomial likelihood, logit link
+# Fixed effects model
+
+model {
+
+   ## priors
+   for (i in 1:ns) {   # studies
+        mu[i] ~ dnorm(0, 0.0001)
+   }
+
+   d[1] <- 0    # treatment effect is zero for reference treatment
+   rr[1] <- prob[1]/prob[refTx]
+   rd[1] <- prob[1] - prob[refTx]
+   logit(prob[1]) <- baseLod - d[baseTx]
+
+   # vague priors for treatment effects
+   for (k in 2:nt) {
+        d[k] ~ dnorm(0, 0.0001) 
+        lor[k-1] <- d[k]
+	logit(prob[k]) <- baseLod + d[k] - d[baseTx]
+	rr[k] <- prob[k]/prob[refTx]
+	rd[k] <- prob[k] - prob[refTx]
+   }
+
+   baseLod ~ dnorm(0, 0.002)
+   logit(baseProb) <- baseLod
+
+   ## likelihood
+   for (i in 1:ns) {               # studies
+        for (k in 1:na[i]) {       # arm
+           r[i,k] ~ dbin(p[i,k],n[i,k])    # binomial likelihood
+           # model for linear predictor
+           logit(p[i,k]) <- mu[i] + d[t[i,k]] - d[t[i,1]]
+           # expected value of the numerators 
+           rhat[i,k] <- p[i,k] * n[i,k]
+           # Deviance contribution
+           dev[i,k] <- 2 * (r[i,k] * (log(r[i,k]) - log(rhat[i,k]))
+             +  (n[i,k] - r[i,k]) * (log(n[i,k] - r[i,k]) - log(n[i,k] - rhat[i,k])))
+        }
+        # summed residual deviance contribution for this trial
+        resdev[i] <- sum(dev[i,1:na[i]])
+   }
+
+   for (bb in 1:nBase) {
+        baseR[bb] ~ dbin(baseProb,baseN[bb])
+   }
+
+   totresdev <- sum(resdev[])      # Total Residual Deviance
+}

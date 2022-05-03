@@ -1,6 +1,7 @@
 
 #' Analysis Meta-Data
-#'
+#' @importFrom yaml write_yaml
+#' 
 write_meta <- function(nma, folder = "output") {
   
   metadata <- c(

@@ -25,6 +25,59 @@ Constructs the automated report from the output of the NMA.
 \examples{
 
 \dontrun{
+bugs_params <-
+list(
+  PROG = "openBugs",  # which version of BUGS to use to run the MCMC
+  N.BURNIN = 10,#00,  # number of steps to throw away
+  N.SIMS = 150,#0,    # total number of simulations
+  N.CHAINS = 2,       # number of chains
+  N.THIN = 1,         # thinning rate
+  PAUSE = TRUE)
+
+RANDOM <- FALSE             # is this a random effects model?
+REFTX <- "X"                # reference treatment
+data_type <- c("hr_data", "bin_data", "med_data") # which type of data to use
+label_name <- "label_name"
+
+file_name <- here::here(file.path("inst", "extdata", "survdata_"))
+
+subDataHR <-
+  read.csv(paste0(file_name, "hr_test.csv"),
+           header = TRUE,
+           as.is = TRUE)
+
+subDataBin <-
+  tryCatch(
+    read.csv(paste0(file_name, "bin_test.csv"),
+             header = TRUE,
+             as.is = TRUE),
+    error = function(e) NA)
+
+subDataMed <-
+  tryCatch(
+    read.csv(paste0(file_name, "med_test.csv"),
+             header = TRUE,
+             as.is = TRUE) \%>\% 
+      mutate(medR = floor(medR)),
+    error = function(e) NA)
+
+nma_model <-
+  new_NMA(subDataHR = subDataHR,
+          subDataMed = subDataMed,
+          subDataBin = subDataBin,
+          bugs_params = bugs_params,
+          is_random = RANDOM,
+          data_type = data_type,
+          refTx = REFTX ,
+          effectParam = "beta",
+          label = "",
+          endpoint = "")
+
+nma_model
+
+make_report(nma_model, ext = "docx")
+
+
 }
 
 }

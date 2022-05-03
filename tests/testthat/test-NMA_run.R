@@ -13,7 +13,8 @@ test_that("new_NMA", {
   REFTX <- "X"                # reference treatment
   label_name <- "label_name"
   
-  file_name <- here::here(file.path("inst", "extdata", "survdata_"))
+  # file_name <- here::here(file.path("inst", "extdata", "survdata_"))
+  file_name <- "C:/Users/n8tha/Documents/R/NMA/inst/extdata/survdata_"
   
   subDataHR <-
     read.csv(paste0(file_name, "hr_test.csv"),
@@ -63,19 +64,19 @@ test_that("new_NMA", {
 
 test_that("NMA_run", {
   
-  nma_res <- list()
-  
-  for (i in c(TRUE, FALSE)) {
-    
-    nma_res[[as.character(i)]] <-
-      vector(mode = "list", length = length(datasets))
-    
-    for (j in seq_along(datasets)) {
-      nma_res[[as.character(i)]][[j]] <-
-        NMA_run(nma_model[[as.character(i)]][[j]], save = FALSE)
-      # print(nma_res[[as.character(i)]][[j]])
-    }
-  }
+  # nma_res <- list()
+  # 
+  # for (i in c(TRUE, FALSE)) {
+  #   
+  #   nma_res[[as.character(i)]] <-
+  #     vector(mode = "list", length = length(datasets))
+  #   
+  #   for (j in seq_along(datasets)) {
+  #     nma_res[[as.character(i)]][[j]] <-
+  #       NMA_run(nma_model[[as.character(i)]][[j]], save = FALSE)
+  #     # print(nma_res[[as.character(i)]][[j]])
+  #   }
+  # }
 })
 
 

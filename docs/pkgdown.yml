@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   how-to-use-nma-test-data: how-to-use-nma-test-data.html
   reference-file-test-data: reference-file-test-data.html
-last_built: 2022-04-29T16:59Z
+last_built: 2022-05-03T12:22Z
 urls:
   reference: https://icon-in-r.github.io/NMA/reference
   article: https://icon-in-r.github.io/NMA/articles

@@ -1,0 +1,52 @@
+### Random effects model for continuous endpoint ###
+### Normal likelihood and indentity link ###
+
+# Code from TSD DSU document 2: Program 5(a) Normal likelihood, identity link, Random Effects
+# Meta-regression based on TSD DSU document 3: Program 4(a) meta-regression with a continuous covariate, Random Effects
+
+model { 
+
+  ## priors
+  for (i in 1:ns) {    # studies
+	mu[i] ~ dnorm(0, 0.0001)
+  }
+
+  d[1] <- 0 						# treatment effect is zero for reference treatment
+  beta[1] <- 0 						# covariate effect is zero for reference treatment
+  for (k in 2:nt) { 
+	d[k] ~ dnorm(0, 0.0001)
+	beta[k] <- B 					# common covariate effect 
+	tx[k-1] <- d[k] 				# vague priors for treatment effects
+  }
+
+  B ~ dnorm(0,0.1)			# vague prior for covariate effect
+  sd ~ dunif(0,5) 			# vague prior for between-trial SD.
+  tau <- pow(sd,-2) 		# between-trial precision
+
+  ## likelihood
+  for (i in 1:ns) {    # studies
+	w[i,1] <- 0 		# adjustment for multi-arm trials is zero for control arm
+	delta[i,1] <- 0 	# treatment effect is zero for control arm
+
+	for (k in 1:na[i]) {  # arms
+		var[i,k] <- pow(se[i,k],2) 		      # calculate variances
+		prec[i,k] <- 1/var[i,k] 		      # set precisions
+		y[i,k] ~ dnorm(theta[i,k],prec[i,k])  # normal likelihood
+		theta[i,k] <- mu[i] + delta[i,k] + (beta[t[i,k]] - beta[t[i,1]])*(x[i] - mx)  # model for linear predictor
+		dev[i,k] <- (y[i,k] - theta[i,k])*(y[i,k] - theta[i,k])*prec[i,k] 			  # Deviance contribution
+	}
+
+	# Residual deviance
+	resdev[i] <- sum(dev[i,1:na[i]]) 				# summed residual deviance contribution for this trial
+	
+  for (k in 2:na[i]) {    # arms
+	delta[i,k] ~ dnorm(md[i,k],taud[i,k]) 			# trial-specific LOR distributions
+	md[i,k] <- d[t[i,k]] - d[t[i,1]] + sw[i,k] 		# mean of treat effects distributions (with multi-arm trial correction)
+	taud[i,k] <- tau *2*(k-1)/k 					# precision of treat effects distributions (with multi-arm trial correction)
+	w[i,k] <- (delta[i,k] - d[t[i,k]] + d[t[i,1]]) 	# adjustment for multi-arm RCTs
+	sw[i,k] <- sum(w[i,1:k-1])/(k-1) 				# cumulative adjustment for multi-arm trials
+	}
+  }
+
+  totresdev <- sum(resdev[]) 			# Total Residual Deviance
+}

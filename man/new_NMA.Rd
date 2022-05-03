@@ -5,21 +5,21 @@
 \title{NMA constructor}
 \usage{
 new_NMA(
-  subData,
+  subDataHR,
   subDataMed = NA,
   subDataBin = NA,
   bugs_params = NA,
   is_random = TRUE,
+  data_type = "hr_data",
   hyperparams = list(),
   refTx = NA,
   effectParam,
-  modelParams,
   label,
   endpoint
 )
 }
 \arguments{
-\item{subData}{Main input data frame. Mandatory}
+\item{subDataHR}{Hazard ratio input data frame. Mandatory}
 
 \item{subDataMed}{Median time input data frame. Optional}
 
@@ -29,13 +29,13 @@ new_NMA(
 
 \item{is_random}{Random effects model? Logical}
 
+\item{data_type}{Vector of names of data formats from "hr_data", "bin_data", "med_data"}
+
 \item{hyperparams}{List of hyperparameters}
 
 \item{refTx}{Reference treatment; string}
 
 \item{effectParam}{Effect parameter}
-
-\item{modelParams}{Model parameter}
 
 \item{label}{Label}
 

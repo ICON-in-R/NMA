@@ -1,0 +1,32 @@
+# Poisson likelihood, log link
+# Fixed effects model
+
+model {
+
+   ## priors
+   for(i in 1:ns) {                 # studies
+        mu[i] ~ dnorm(0, 0.0001)    # vague priors for all trial baselines
+   }
+   # vague priors for treatment effects
+   d[1] <- 0    # reference treatment
+   for (k in 2:nt) {
+        d[k] ~ dnorm(0, 0.0001) 
+        lrr[k-1] <- d[k]
+   }
+
+   ## likelihood
+   for(i in 1:ns) {               # studies
+       for (k in 1:na[i]) {       # arms
+           r[i,k] ~ dpois(theta[i,k])    # binomial likelihood
+           theta[i,k] <- lambda[i,k]*E[i,k]
+           log(lambda[i,k]) <- mu[i] + d[t[i,k]] - d[t[i,1]]
+       
+           # Deviance contribution
+           dev[i,k] <- 2*((theta[i,k] - r[i,k]) + r[i,k]*log(r[i,k]/theta[i,k]))
+        }
+        # summed residual deviance contribution for this trial
+        resdev[i] <- sum(dev[i,1:na[i]])
+     }
+
+   totresdev <- sum(resdev[])      # Total Residual Deviance
+}

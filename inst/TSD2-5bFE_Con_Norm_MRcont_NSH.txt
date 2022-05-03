@@ -1,0 +1,39 @@
+### Fixed effects model for continuous endpoint ###
+### Normal likelihood and identity link ###
+
+# Code from TSD DSU document 2: Program 5(b) Normal likelihood, identity link, Fixed Effects
+# Meta-regression based on TSD DSU document 3: Program 4(b) meta-regression with a continuous covariate, Fixed Effects
+
+model {
+
+	## priors
+	for (i in 1:ns) {   # studies
+		mu[i] ~ dnorm(0, 0.0001) 	# vague priors for all trial baselines
+	}
+	d[1] <- 0 					# treatment effect is zero for reference treatment
+	beta[1] <- 0 				# covariate effect is zero for reference treatment
+	for (k in 2:nt) { 
+		d[k] ~ dnorm(0, 0.0001)
+		beta[k] <- B 		# common covariate effect
+		tx[k-1] <- d[k]
+	}
+
+	B ~ dnorm(0,0.1) 	# vague prior for covariate effect
+
+	## likelihood
+	for (i in 1:ns) {   # studies
+		for (k in 1:na[i]) { 				# arms
+			var[i,k] <- pow(se[i,k],2) 		# calculate variances
+			prec[i,k] <- 1/var[i,k] 		# set precisions
+			y[i,k] ~ dnorm(theta[i,k],prec[i,k]) 	# normal likelihood
+			# linear predictor
+			theta[i,k] <- mu[i] + d[t[i,k]] - d[t[i,1]] + (beta[t[i,k]] - beta[t[i,1]])*(x[i] - mx)	
+			dev[i,k] <- (y[i,k] - theta[i,k])*(y[i,k] - theta[i,k])*prec[i,k] 	# Deviance contribution
+		}
+		# Residual deviance
+		resdev[i] <- sum(dev[i,1:na[i]])
+	}
+
+	totresdev <- sum(resdev[])		# Total Residual Deviance
+}		
+		

@@ -1,0 +1,66 @@
+
+# Binomial likelihood, logit link
+# Random effects model for multi-arm trials
+
+model {
+
+   ## priors
+   for (i in 1:ns) {   # studies
+        mu[i] ~ dnorm(0, 0.0001)
+   }
+
+   d[1] <- 0                        # reference treatment
+   rr[1] <- prob[1]/prob[refTx]
+   rd[1] <- prob[1] - prob[refTx]
+   logit(prob[1]) <- baseLod - d[baseTx]
+
+   # vague priors for treatment effects
+   for (k in 2:nt) {
+        d[k] ~ dnorm(0, 0.0001) 
+	lor[k-1] <- d[k]
+	logit(prob[k]) <- baseLod+d[k] - d[baseTx]
+
+	rr[k] <- prob[k]/prob[refTx]
+	rd[k] <- prob[k] - prob[refTx]
+   }	
+
+   sd ~ dunif(0,5)     # vague prior for between-trial SD
+   tau <- pow(sd,-2)   # between-trial precision = (1/between-trial variance)
+
+   baseLod ~ dnorm(0, 0.002)
+   logit(baseProb) <- baseLod
+
+   for (bb in 1:nBase) {
+        baseR[bb] ~ dbin(baseProb,baseN[bb])
+   }
+
+## likelihood
+for (i in 1:ns) {   # studies
+    w[i,1] <- 0    # adjustment for multi-arm trials is zero for control arm
+    delta[i,1] <- 0             # treatment effect is zero for control arm
+    for (k in 1:na[i]) {             # LOOP THROUGH ARMS
+        r[i,k] ~ dbin(p[i,k],n[i,k]) # binomial likelihood
+        logit(p[i,k]) <- mu[i] + delta[i,k]  # model for linear predictor
+        rhat[i,k] <- p[i,k] * n[i,k] # expected value of the numerators 
+        #Deviance contribution
+        dev[i,k] <- 2 * (r[i,k] * (log(r[i,k])-log(rhat[i,k]))  
+            +  (n[i,k]-r[i,k]) * (log(n[i,k]-r[i,k]) - log(n[i,k]-rhat[i,k])))         }
+        #  summed residual deviance contribution for this trial
+    resdev[i] <- sum(dev[i,1:na[i]])
+
+    for (k in 2:na[i]) {    # arms
+        # trial-specific LOR distributions
+        delta[i,k] ~ dnorm(md[i,k],taud[i,k])
+        # mean of LOR distributions (with multi-arm trial correction)
+        md[i,k] <-  d[t[i,k]] - d[t[i,1]] + sw[i,k]
+        # precision of LOR distributions (with multi-arm trial correction)
+        taud[i,k] <- tau *2*(k-1)/k
+        # adjustment for multi-arm RCTs
+        w[i,k] <- (delta[i,k] - d[t[i,k]] + d[t[i,1]])
+        # cumulative adjustment for multi-arm trials
+        sw[i,k] <- sum(w[i,1:k-1])/(k-1)
+      }
+  }
+
+  totresdev <- sum(resdev[])       # Total Residual Deviance
+}

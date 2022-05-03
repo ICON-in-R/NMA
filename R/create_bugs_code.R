@@ -1,6 +1,9 @@
 
 #' Create BUGS code from component parts
 #' 
+#' @param random Random effect model? Logical
+#' @param dat NMA object
+#' 
 create_bugs_code <- function(random, dat) {
   
   effect <- ifelse(random, "RE", "FE")

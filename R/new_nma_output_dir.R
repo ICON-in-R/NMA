@@ -5,6 +5,7 @@
 #' @param folder Output folder. Text string
 #' @param ... Additional arguments
 #' @import fs
+#' @importFrom ellipsis check_dots_unnamed
 #' 
 #' @return 
 #' @seealso new_NMA
