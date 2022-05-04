@@ -33,7 +33,7 @@
 #' 
 #' RANDOM <- FALSE             # is this a random effects model?
 #' REFTX <- "X"                # reference treatment
-#' data_type <- c("hr_data", "bin_data", "med_data") # which type of data to use
+#' data_type <- c("hr_data", "surv_bin_data", "med_data") # which type of data to use
 #' label_name <- "label_name"
 #' 
 #' file_name <- here::here(file.path("inst", "extdata", "survdata_"))

@@ -2,13 +2,18 @@
 #' NMA constructor
 #' 
 #' Create an \code{nma} class object to use in an analysis.
+#' All of the data types are optional but at least one needs to be
+#' passed to the function. The `data_type` must be a subset of 
+#' the passed data sets.
 #' 
-#' @param subDataHR Hazard ratio input data frame. Mandatory
+#' @param subDataHR Hazard ratio input data frame. Optional
 #' @param subDataMed Median time input data frame. Optional
-#' @param subDataBin Binary data input data frame. Optional
+#' @param subDataBin Survival binary data input data frame. Optional
+#' @param binData Binary data input data frame. Optional
 #' @param bugs_params List of BUGS parameters. Optional
 #' @param is_random Random effects model? Logical
-#' @param data_type Vector of names of data formats from "hr_data", "bin_data", "med_data"
+#' @param data_type Vector of names of data formats from
+#'                  "hr_data", "surv_bin_data", "med_data", "bin_data"
 #' @param hyperparams List of hyperparameters
 #' @param refTx Reference treatment; string
 #' @param effectParam Effect parameter
@@ -18,9 +23,10 @@
 #' @return
 #' @export
 #'
-new_NMA <- function(subDataHR,
+new_NMA <- function(subDataHR = NA,
                     subDataMed = NA,
                     subDataBin = NA,
+                    binData = NA,
                     bugs_params = NA,
                     is_random = TRUE,
                     data_type = "hr_data",
@@ -31,11 +37,14 @@ new_NMA <- function(subDataHR,
                     endpoint) {
 
   data_type <-
-    match.arg(data_type, c("hr_data", "bin_data", "med_data"),
+    match.arg(data_type, c("hr_data", "surv_bin_data", "med_data", "bin_data"),
               several.ok = TRUE)
   
   model_params_lookup <-
-    c(hr_data = "totLdev", bin_data = NA, med_data = "totmediandev")
+    c(hr_data = "totLdev",
+      surv_bin_data = NA,
+      med_data = "totmediandev",
+      bin_data = "totresdev")
   
   modelParams <- model_params_lookup[data_type]
   modelParams <- modelParams[!is.na(modelParams)]
@@ -54,12 +63,16 @@ new_NMA <- function(subDataHR,
   
   bugs_fn <- customBugs(bugs_params$PROG)
   
-  check_study_data(subDataHR, subDataMed, subDataBin)
+  nma_datasets <- list(subDataHR, subDataMed, subDataBin,
+                       binData, countData, contsData)
+  do.call(check_study_data, nma_datasets)
   
   dat <- 
     setupData(subData = subDataHR,
               subDataMed = subDataMed,
               subDataBin = subDataBin,
+              bin_data = binData,
+              data_type = data_type,
               is_random = is_random,
               refTx = refTx)
   

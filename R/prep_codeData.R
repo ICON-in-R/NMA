@@ -5,8 +5,8 @@
 #' Renames the study, base and other fields with appended letter
 #' depending on type of data.
 #' 
-#' @param subData Main data frame
-#' @param subDataBin Optional data frame. Binary data
+#' @param subDataHR Hazard ratio data frame
+#' @param subDataBin Optional data frame. Survival binary data
 #' @param subDataMed Optional data frame. Median times
 #' @param refTx Reference treatment name; string
 #' @importFrom purrr map map_if
@@ -16,10 +16,12 @@
 #'         If no binary of median data empty sub-lists.
 #' @export
 #'
-prep_codeData <- function(subData,
+prep_codeData <- function(subDataHR = NA,
                           subDataBin = NA,
                           subDataMed = NA,
                           refTx = NA) {
+  
+  if (all(is.na(subDataHR))) return()
   
   is_med <- all(!is.na(subDataMed))
   is_bin <- all(!is.na(subDataBin))
@@ -28,7 +30,7 @@ prep_codeData <- function(subData,
   bin_list <- list()
   med_list <- list()
   
-  dat <- list(subData,
+  dat <- list(subDataHR,
               subDataMed,
               subDataBin)
   
@@ -50,14 +52,14 @@ prep_codeData <- function(subData,
   study_names <- unique(unlist(map(dat, "study")))
   
   dat_list$dat <-
-    subData %>%
+    subDataHR %>%
     mutate(Ltx = match(tx, tx_names),
            Lbase = match(base, tx_names),
            Lstudy = match(study, study_names)) %>%
     arrange(study, tx) %>% 
     as.data.frame()
   
-  dat_list$LnObs <- nrow(subData)
+  dat_list$LnObs <- nrow(subDataHR)
   
   nStudies <- max(dat_list$dat$Lstudy, 2)
   
@@ -90,7 +92,7 @@ prep_codeData <- function(subData,
   }
   
   return(list(
-    subData = dat_list,
+    subDataHR = dat_list,
     subDataMed = med_list,
     subDataBin = bin_list,
     nStudies = nStudies,

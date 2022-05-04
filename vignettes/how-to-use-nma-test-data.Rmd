@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-This document describes how to use the main functions of `NMA` to run a single network meta-analysis.
+This document describes how to use the main functions of `NMA` to run a single network meta-analysis with survival data.
 
 ## Example
 
@@ -52,7 +52,7 @@ Define the scenario we will use for the analysis.
 ```{r}
 RANDOM <- FALSE             # is this a random effects model?
 REFTX <- "X"                # reference treatment
-data_type <- c("hr_data", "bin_data", "med_data") # which type of data to use
+data_type <- c("hr_data", "surv_bin_data", "med_data") # which type of data to use
 label_name <- "label_name"
 ```
 

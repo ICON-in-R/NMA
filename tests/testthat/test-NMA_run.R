@@ -32,7 +32,7 @@ test_that("new_NMA", {
              as.is = TRUE) %>% 
     mutate(medR = floor(medR))
   
-  data_types <- c("hr_data", "bin_data", "med_data")
+  data_types <- c("hr_data", "surv_bin_data", "med_data")
   
   nma_model <- list()
   
@@ -59,24 +59,35 @@ test_that("new_NMA", {
                 endpoint = "")
     }
   }
+  
+  model_ref <-
+    readRDS(here::here(
+      file.path("NMA", "tests", "testthat", "nma_model.RDS")))
+  
+  expect_length(nma_model, length(model_ref))
 })
 
 
 test_that("NMA_run", {
   
-  # nma_res <- list()
-  # 
-  # for (i in c(TRUE, FALSE)) {
-  #   
-  #   nma_res[[as.character(i)]] <-
-  #     vector(mode = "list", length = length(datasets))
-  #   
-  #   for (j in seq_along(datasets)) {
-  #     nma_res[[as.character(i)]][[j]] <-
-  #       NMA_run(nma_model[[as.character(i)]][[j]], save = FALSE)
-  #     # print(nma_res[[as.character(i)]][[j]])
-  #   }
-  # }
+  model_ref <-
+    readRDS(here::here(
+      file.path("NMA", "tests", "testthat", "nma_model.RDS")))
+  
+  nma_res <- list()
+
+  for (i in c(TRUE, FALSE)) {
+
+    nma_res[[as.character(i)]] <-
+      vector(mode = "list", length = length(model_ref[[1]]))
+
+    for (j in seq_along(model_ref[[1]])) {
+      nma_res[[as.character(i)]][[j]] <-
+        NMA_run(model_ref[[as.character(i)]][[j]], save = FALSE)
+    }
+  }
+  
+  expect_length(nma_res, length(model_ref))
 })
 
 

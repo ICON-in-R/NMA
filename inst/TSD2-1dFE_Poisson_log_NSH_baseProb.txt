@@ -15,7 +15,7 @@ model {
    }
 
    ## likelihood
-   for(i in 1:ns) {               # studies
+   for (i in 1:ns) {               # studies
        for (k in 1:na[i]) {       # arms
            r[i,k] ~ dpois(theta[i,k])    # binomial likelihood
            theta[i,k] <- lambda[i,k]*E[i,k]

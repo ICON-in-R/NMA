@@ -46,3 +46,19 @@
 #' }
 "subDataMed"
 
+
+#' Binary data
+#'
+#' A dataset containing the pair comparisons for studies.
+#'
+#' @format A data frame with 7 variables:
+#' \describe{
+#'   \item{studyID}{Study name}
+#'   \item{Intervention}{Reference treatment name}
+#'   \item{multi_arm}{Multi-arm trial indicator: 0/1}
+#'   \item{Population_analysed}{}
+#'   \item{ORR_N}{Total number}
+#'   \item{ORR_n}{Number of sucesses}
+#'   \item{ORR_perc}{Percentage successes}
+#' }
+"binData"

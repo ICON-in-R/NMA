@@ -1,8 +1,9 @@
 
 #
-check_study_data <- function(subDataHR,
+check_study_data <- function(subDataHR = NA,
                              subDataMed = NA,
-                             subDataBin = NA) {
+                             subDataBin = NA,
+                             binData = NA) {
   
   main_col_names <- c("tx", "base", "study", "Lmean", "Lse", "multi_arm")
   main_missing_cols <- !all(main_col_names %in% names(subDataHR))

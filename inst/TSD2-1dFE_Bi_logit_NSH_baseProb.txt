@@ -8,16 +8,16 @@ model {
         mu[i] ~ dnorm(0, 0.0001)
    }
 
-   d[1] <- 0    # treatment effect is zero for reference treatment
+   d[1] <- 0    # treatment effect for reference treatment
    rr[1] <- prob[1]/prob[refTx]
    rd[1] <- prob[1] - prob[refTx]
    logit(prob[1]) <- baseLod - d[baseTx]
 
    # vague priors for treatment effects
    for (k in 2:nt) {
-        d[k] ~ dnorm(0, 0.0001) 
-        lor[k-1] <- d[k]
-	logit(prob[k]) <- baseLod + d[k] - d[baseTx]
+     d[k] ~ dnorm(0, 0.0001) 
+     lor[k-1] <- d[k]
+     logit(prob[k]) <- baseLod + d[k] - d[baseTx]
 	rr[k] <- prob[k]/prob[refTx]
 	rd[k] <- prob[k] - prob[refTx]
    }
@@ -34,8 +34,8 @@ model {
            # expected value of the numerators 
            rhat[i,k] <- p[i,k] * n[i,k]
            # Deviance contribution
-           dev[i,k] <- 2 * (r[i,k] * (log(r[i,k]) - log(rhat[i,k]))
-             +  (n[i,k] - r[i,k]) * (log(n[i,k] - r[i,k]) - log(n[i,k] - rhat[i,k])))
+           dev[i,k] <- 2 * (r[i,k] * (log(r[i,k]) - log(rhat[i,k])) +
+             (n[i,k] - r[i,k]) * (log(n[i,k] - r[i,k]) - log(n[i,k] - rhat[i,k])))
         }
         # summed residual deviance contribution for this trial
         resdev[i] <- sum(dev[i,1:na[i]])

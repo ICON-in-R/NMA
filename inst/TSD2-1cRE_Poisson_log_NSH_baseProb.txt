@@ -11,7 +11,7 @@ model {
    d[1] <- 0       # reference treatment
    for (k in 2:nt) {           # treatment effects
         d[k] ~ dnorm(0, 0.0001) 
-	lrr[k-1] <- d[k]
+        lrr[k-1] <- d[k]
    }	
 
    sd ~ dunif(0,5)     # vague prior for between-trial SD
@@ -23,8 +23,8 @@ model {
         delta[i,1] <- 0             # treatment effect is zero for control arm
         for (k in 1:na[i]) {             # arms
                 r[i,k] ~ dpois(theta[i,k])   # binomial likelihood
-                theta[i,k]<-lambda[i,k]*E[i,k]
-	        log(lambda[i,k]) <- mu[i] + delta[i,k]
+                theta[i,k] <- lambda[i,k]*E[i,k]
+	           log(lambda[i,k]) <- mu[i] + delta[i,k]
                 # Deviance contribution
                 dev[i,k] <- 2*((theta[i,k] - r[i,k]) + r[i,k]*log(r[i,k]/theta[i,k]))
         }
@@ -38,7 +38,7 @@ model {
         # mean of LOR distributions (with multi-arm trial correction)
         md[i,k] <-  d[t[i,k]] - d[t[i,1]] + sw[i,k]
         # precision of LOR distributions (with multi-arm trial correction)
-        taud[i,k] <- tau *2*(k-1)/k
+        taud[i,k] <- tau*2*(k-1)/k
         # adjustment for multi-arm RCTs
         w[i,k] <- (delta[i,k] - d[t[i,k]] + d[t[i,1]])
         # cumulative adjustment for multi-arm trials

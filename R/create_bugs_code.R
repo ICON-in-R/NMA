@@ -108,7 +108,7 @@ create_model_code <- function(effect, type) {
   }
   
   # binary outcome data
-  if ("bin_data" %in% type) {
+  if ("surv_bin_data" %in% type) {
     
     re_term <- 
       if (effect == "RE") {
