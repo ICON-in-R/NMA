@@ -5,21 +5,33 @@
 \title{Set-up study data}
 \usage{
 setupData(
-  subData,
-  refTx = NA,
+  subDataHR = NA,
   subDataBin = NA,
   subDataMed = NA,
+  binData = NA,
+  countData = NA,
+  contsData = NA,
+  data_type = NA,
+  refTx = NA,
   is_random = TRUE
 )
 }
 \arguments{
-\item{subData}{Main data. Mandatory}
+\item{subDataHR}{Hazard ratio data. Optional}
 
-\item{refTx}{Reference treatment name}
-
-\item{subDataBin}{Binary data. Optional}
+\item{subDataBin}{Survival binary data. Optional}
 
 \item{subDataMed}{Median time data. Optional}
+
+\item{binData}{Binary data. Optional}
+
+\item{countData}{Count data. Optional}
+
+\item{contsData}{Continuous data. Optional}
+
+\item{data_type}{Data type}
+
+\item{refTx}{Reference treatment name}
 
 \item{is_random}{Is this a random effects model? Logical}
 }

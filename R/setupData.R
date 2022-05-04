@@ -50,14 +50,14 @@ setupData <- function(subDataHR = NA,
                       refTx = NA,
                       is_random = TRUE) {
   
-  is_surv_bin <- all(!is.na(subDataBin))
-  is_med <- all(!is.na(subDataMed))
-  is_bin <- all(!is.na(binData))
-  is_count <- all(!is.na(countData))
-  is_conts <- all(!is.na(contsData))
+  is_data <- 
+    list(surv_bin = all(!is.na(subDataBin)),
+         med = all(!is.na(subDataMed)),
+         bin = all(!is.na(binData)),
+         count = all(!is.na(countData)),
+         conts = all(!is.na(contsData)))
   
-  param_names <-
-    get_param_names(is_bin, is_count, is_conts, is_random)
+  param_names <- do.call(get_param_names, is_data)
   
   input <-
     prep_codeData(subDataHR,
@@ -65,10 +65,10 @@ setupData <- function(subDataHR = NA,
                   subDataMed,
                   refTx)
   
-  if (is_bin) {
-  
+  if (is_data$bin) {
+    
     input <- prep_bin_data(binData, refTx)  
-  
+    
     bugsData <-
       list(t = input$tAt,
            r = input$tAr,
@@ -89,7 +89,7 @@ setupData <- function(subDataHR = NA,
       txList = input$txList))
   }
   
-  if (is_count) {
+  if (is_data$count) {
     
     input <- prep_count_data(countData, refTx)  
     
@@ -108,7 +108,7 @@ setupData <- function(subDataHR = NA,
       txList = input$txList))
   }
   
-  if (is_conts) {
+  if (is_data$conts) {
     
     input <- prep_conts_data(contsData, refTx)  
     
@@ -129,7 +129,7 @@ setupData <- function(subDataHR = NA,
       txList = input$txList))
   }
   
-  if (!is_surv_bin & !is_med) {
+  if (!is_data$surv_bin & !is_data$med) {
     
     bugsData <-
       list(
@@ -150,7 +150,7 @@ setupData <- function(subDataHR = NA,
       txList = input$txList))
   }
   
-  if (is_surv_bin & !is_med) {
+  if (is_data$surv_bin & !is_data$med) {
     
     bugsData <-
       list(
@@ -178,7 +178,7 @@ setupData <- function(subDataHR = NA,
       txList = input$txList))
   }
   
-  if (!is_surv_bin & is_med) {
+  if (!is_data$surv_bin & is_data$med) {
     
     bugsData <-
       list(
@@ -207,7 +207,7 @@ setupData <- function(subDataHR = NA,
       txList = input$txList))
   }
   
-  if (is_surv_bin & is_med) {
+  if (is_data$surv_bin & is_data$med) {
     
     bugsData <-
       list(

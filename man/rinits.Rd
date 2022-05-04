@@ -11,7 +11,7 @@ rinits(nTx, nStudies, param_names)
 
 \item{nStudies}{Number of studies}
 
-\item{param_names}{Parameter names}
+\item{param_names}{Parameter names for specific model and data}
 }
 \value{
 closure

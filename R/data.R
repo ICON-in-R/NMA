@@ -16,7 +16,7 @@
 "subData"
 
 
-#' Study binary outcome data
+#' Study survival binary outcome data
 #'
 #' A dataset containing the pair comparisons for studies.
 #'
@@ -51,14 +51,43 @@
 #'
 #' A dataset containing the pair comparisons for studies.
 #'
-#' @format A data frame with 7 variables:
+#' @format A data frame with 5 variables:
 #' \describe{
-#'   \item{studyID}{Study name}
-#'   \item{Intervention}{Reference treatment name}
-#'   \item{multi_arm}{Multi-arm trial indicator: 0/1}
-#'   \item{Population_analysed}{}
-#'   \item{ORR_N}{Total number}
-#'   \item{ORR_n}{Number of sucesses}
-#'   \item{ORR_perc}{Percentage successes}
+#'   \item{study}{Study name}
+#'   \item{treatment}{Reference treatment name}
+#'   \item{n}{Total number}
+#'   \item{r}{Number of sucesses}
+#'   \item{prob}{Percentage successes}
 #' }
 "binData"
+
+
+#' Counts data
+#'
+#' A dataset containing the pair comparisons for studies.
+#'
+#' @format A data frame with 4 variables:
+#' \describe{
+#'   \item{study}{Study name}
+#'   \item{treatment}{Reference treatment name}
+#'   \item{E}{Total time at risk}
+#'   \item{r}{Number of counts}
+#' }
+"countData"
+
+
+#' Continuous data
+#'
+#' A dataset containing the pair comparisons for studies.
+#'
+#' @format A data frame with 6 variables:
+#' \describe{
+#'   \item{study}{Study name}
+#'   \item{treatment}{Reference treatment name}
+#'   \item{dur}{Duration}
+#'   \item{se}{Standard error}
+#'   \item{n}{Total number}
+#'   \item{y}{Outcome measurement}
+#' }
+"contsData"
+

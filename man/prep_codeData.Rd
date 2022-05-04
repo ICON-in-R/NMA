@@ -4,12 +4,12 @@
 \alias{prep_codeData}
 \title{Prepare data used in computation}
 \usage{
-prep_codeData(subData, subDataBin = NA, subDataMed = NA, refTx = NA)
+prep_codeData(subDataHR = NA, subDataBin = NA, subDataMed = NA, refTx = NA)
 }
 \arguments{
-\item{subData}{Main data frame}
+\item{subDataHR}{Hazard ratio data frame}
 
-\item{subDataBin}{Optional data frame. Binary data}
+\item{subDataBin}{Optional data frame. Survival binary data}
 
 \item{subDataMed}{Optional data frame. Median times}
 

@@ -10,10 +10,13 @@
 #' @param subDataMed Median time input data frame. Optional
 #' @param subDataBin Survival binary data input data frame. Optional
 #' @param binData Binary data input data frame. Optional
+#' @param countData Count data input data frame. Optional
+#' @param contsData Continuous data input data frame. Optional
 #' @param bugs_params List of BUGS parameters. Optional
 #' @param is_random Random effects model? Logical
 #' @param data_type Vector of names of data formats from
-#'                  "hr_data", "surv_bin_data", "med_data", "bin_data"
+#'                  "hr_data", "surv_bin_data", "med_data", "bin_data",
+#'                  "count_data", "conts_data"
 #' @param hyperparams List of hyperparameters
 #' @param refTx Reference treatment; string
 #' @param effectParam Effect parameter
@@ -27,6 +30,8 @@ new_NMA <- function(subDataHR = NA,
                     subDataMed = NA,
                     subDataBin = NA,
                     binData = NA,
+                    countData = NA,
+                    contsData = NA,
                     bugs_params = NA,
                     is_random = TRUE,
                     data_type = "hr_data",
@@ -37,7 +42,8 @@ new_NMA <- function(subDataHR = NA,
                     endpoint) {
 
   data_type <-
-    match.arg(data_type, c("hr_data", "surv_bin_data", "med_data", "bin_data"),
+    match.arg(data_type, c("hr_data", "surv_bin_data", "med_data",
+                           "bin_data", "count_data", "conts_data"),
               several.ok = TRUE)
   
   model_params_lookup <-
@@ -63,15 +69,18 @@ new_NMA <- function(subDataHR = NA,
   
   bugs_fn <- customBugs(bugs_params$PROG)
   
-  nma_datasets <- list(subDataHR, subDataMed, subDataBin,
-                       binData, countData, contsData)
+  nma_datasets <-
+    tibble::lst(subDataHR, subDataMed, subDataBin,
+                binData, countData, contsData)
   do.call(check_study_data, nma_datasets)
   
   dat <- 
-    setupData(subData = subDataHR,
+    setupData(subDataHR = subDataHR,
               subDataMed = subDataMed,
               subDataBin = subDataBin,
-              bin_data = binData,
+              binData = binData,
+              countData = countData,
+              contsData = contsData,
               data_type = data_type,
               is_random = is_random,
               refTx = refTx)

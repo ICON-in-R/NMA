@@ -6,6 +6,11 @@
 \usage{
 create_bugs_code(random, dat)
 }
+\arguments{
+\item{random}{Random effect model? Logical}
+
+\item{dat}{NMA object}
+}
 \description{
 Create BUGS code from component parts
 }

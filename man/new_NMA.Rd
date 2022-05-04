@@ -5,9 +5,10 @@
 \title{NMA constructor}
 \usage{
 new_NMA(
-  subDataHR,
+  subDataHR = NA,
   subDataMed = NA,
   subDataBin = NA,
+  binData = NA,
   bugs_params = NA,
   is_random = TRUE,
   data_type = "hr_data",
@@ -19,17 +20,21 @@ new_NMA(
 )
 }
 \arguments{
-\item{subDataHR}{Hazard ratio input data frame. Mandatory}
+\item{subDataHR}{Hazard ratio input data frame. Optional}
 
 \item{subDataMed}{Median time input data frame. Optional}
 
-\item{subDataBin}{Binary data input data frame. Optional}
+\item{subDataBin}{Survival binary data input data frame. Optional}
+
+\item{binData}{Binary data input data frame. Optional}
 
 \item{bugs_params}{List of BUGS parameters. Optional}
 
 \item{is_random}{Random effects model? Logical}
 
-\item{data_type}{Vector of names of data formats from "hr_data", "bin_data", "med_data"}
+\item{data_type}{Vector of names of data formats from
+"hr_data", "surv_bin_data", "med_data", "bin_data",
+"count_data", "conts_data"}
 
 \item{hyperparams}{List of hyperparameters}
 
@@ -46,6 +51,9 @@ new_NMA(
 }
 \description{
 Create an \code{nma} class object to use in an analysis.
+All of the data types are optional but at least one needs to be
+passed to the function. The \code{data_type} must be a subset of
+the passed data sets.
 }
 \seealso{
 \code{\link{NMA_run}}, \code{\link{NMA_update}}
