@@ -35,9 +35,15 @@ NMA_run.nma <- function(nma,
   params_to_save <- c(nma$effectParam, nma$modelParams)
   params_to_save <- params_to_save[!is.na(params_to_save)]
   
-  bugs_model <- create_bugs_code(random = nma$is_random, dat = nma)
-  bugs_filename <- file.path(tempdir(), "bugs_model.txt")
-  write(bugs_model, file = bugs_filename)
+  surv_data_types <- c("hr_data", "surv_bin_data", "med_data") 
+  
+  if (surv_data_types %in% nma$data_types) {
+    bugs_model <- create_bugs_code(random = nma$is_random, dat = nma)
+    bugs_filename <- file.path(tempdir(), "bugs_model.txt")
+    write(bugs_model, file = bugs_filename)
+  } else {
+    bugs_filename <- make_bugs_filename(nma$random, nma$data_type)
+  }
   
   labels <- make_labels(nma$label)
   
@@ -69,7 +75,7 @@ NMA_run.nma <- function(nma,
   
   if (save) {
     new_nma_output_dir(nma_model, folder)
-  
+    
     save_bugs_files(res_bugs, bugs_params, run_bugs, labels, folder)
     
     file_name <- paste0("bugsObject_", labels$short, ".RData")

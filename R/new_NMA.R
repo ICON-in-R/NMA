@@ -34,17 +34,34 @@ new_NMA <- function(subDataHR = NA,
                     contsData = NA,
                     bugs_params = NA,
                     is_random = TRUE,
-                    data_type = "hr_data",
+                    data_type = NA,
                     hyperparams = list(),
                     refTx = NA ,
                     effectParam,
                     label,
                     endpoint) {
 
+  data_lookup <-
+    c(subDataHR = "hr_data",
+      subDataMed = "surv_bin_data",
+      subDataBin = "med_data",
+      binData = "bin_data",
+      countData = "count_data",
+      contsData = "conts_data")
+  
   data_type <-
-    match.arg(data_type, c("hr_data", "surv_bin_data", "med_data",
-                           "bin_data", "count_data", "conts_data"),
+    match.arg(data_type, unname(data_lookup),
               several.ok = TRUE)
+  
+  nma_datasets <-
+    tibble::lst(subDataHR, subDataMed, subDataBin,
+                binData, countData, contsData)
+  
+  # use all provided data
+  if (is.na(data_type)) {
+    avail_datasets <- nma_datasets[!is.na(nma_datasets)]
+    data_type <- data_lookup[names(avail_datasets)]
+  }
   
   model_params_lookup <-
     c(hr_data = "totLdev",
@@ -69,18 +86,11 @@ new_NMA <- function(subDataHR = NA,
   
   bugs_fn <- customBugs(bugs_params$PROG)
   
-  nma_datasets <-
-    tibble::lst(subDataHR, subDataMed, subDataBin,
-                binData, countData, contsData)
+
   do.call(check_study_data, nma_datasets)
   
   dat <- 
-    setupData(subDataHR = subDataHR,
-              subDataMed = subDataMed,
-              subDataBin = subDataBin,
-              binData = binData,
-              countData = countData,
-              contsData = contsData,
+    setupData(nma_datasets,
               data_type = data_type,
               is_random = is_random,
               refTx = refTx)

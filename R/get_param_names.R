@@ -1,22 +1,22 @@
 
 #
-get_param_names <- function(is_bin,
-                            is_count,
-                            is_conts,
-                            is_random) {
+get_param_names <- function(bin_data = FALSE,
+                            count_data = FALSE,
+                            conts_data = FALSE,
+                            is_random = FALSE) {
   out <- 
-    if (is_bin) {
+    if (bin_data) {
       if (is_random) {
         c("d", "mu", "sd", "baseLod")
       } else {
         c("d", "mu", "baseLod")}
-    } else if (is_count) {
+    } else if (count_data) {
       if (is_random) {
         c("mu", "d", "sd")
       } else {
         c("mu", "d")
       }
-    } else if (is_conts) {
+    } else if (conts_data) {
       if (is_random) {
         c("d", "mu", "sd", "B")
       } else {

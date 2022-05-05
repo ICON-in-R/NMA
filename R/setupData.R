@@ -28,46 +28,38 @@ rinits <- function(nTx, nStudies, param_names) {
 #' 
 #' Arrange input data for NMA.
 #' 
-#' @param subDataHR Hazard ratio data. Optional
-#' @param subDataBin Survival binary data. Optional
-#' @param subDataMed Median time data. Optional
-#' @param binData Binary data. Optional
-#' @param countData Count data. Optional
-#' @param contsData Continuous data. Optional
+#' @param nma_datasets subDataHR: Hazard ratio data. Optional; subDataBin: Survival binary data. Optional;
+#'  subDataMed: Median time data. Optional; binData: Binary data. Optional; countData: Count data. Optional;
+#'  contsData: Continuous data. Optional
 #' @param data_type Data type
 #' @param refTx Reference treatment name
 #' @param is_random Is this a random effects model? Logical
 #' @export
 #' @return list
 #' 
-setupData <- function(subDataHR = NA,
-                      subDataBin = NA,
-                      subDataMed = NA,
-                      binData = NA,
-                      countData = NA,
-                      contsData = NA,
+setupData <- function(nma_datasets,
                       data_type = NA,
                       refTx = NA,
                       is_random = TRUE) {
   
-  is_data <- 
-    list(surv_bin = all(!is.na(subDataBin)),
-         med = all(!is.na(subDataMed)),
-         bin = all(!is.na(binData)),
-         count = all(!is.na(countData)),
-         conts = all(!is.na(contsData)))
+  data_type_names <-
+    c("hr_data",
+      "surv_bin_data",
+      "med_data",
+      "bin_data",
+      "count_data",
+      "conts_data")
   
-  param_names <- do.call(get_param_names, is_data)
+  use_data <- data_type_names %in% data_type
+  names(use_data) <- data_type_names
   
-  input <-
-    prep_codeData(subDataHR,
-                  subDataBin,
-                  subDataMed,
-                  refTx)
+  param_names <- get_param_names(data_types)
   
-  if (is_data$bin) {
+  input <- do.call(prep_codeData, c(nma_datasets, refTx))
+  
+  if (use_data$bin_data) {
     
-    input <- prep_bin_data(binData, refTx)  
+    input <- prep_bin_data(nma_datasets$binData, refTx)  
     
     bugsData <-
       list(t = input$tAt,
@@ -89,9 +81,9 @@ setupData <- function(subDataHR = NA,
       txList = input$txList))
   }
   
-  if (is_data$count) {
+  if (use_data$count_data) {
     
-    input <- prep_count_data(countData, refTx)  
+    input <- prep_count_data(nma_datasets$countData, refTx)  
     
     bugsData <-
       list(t = input$tAt,
@@ -108,9 +100,9 @@ setupData <- function(subDataHR = NA,
       txList = input$txList))
   }
   
-  if (is_data$conts) {
+  if (use_data$conts_data) {
     
-    input <- prep_conts_data(contsData, refTx)  
+    input <- prep_conts_data(nma_datasets$contsData, refTx)  
     
     bugsData <-
       list(t = input$tAt,
@@ -129,7 +121,7 @@ setupData <- function(subDataHR = NA,
       txList = input$txList))
   }
   
-  if (!is_data$surv_bin & !is_data$med) {
+  if (!use_data$surv_bin_data & !use_data$med_data) {
     
     bugsData <-
       list(
@@ -150,7 +142,7 @@ setupData <- function(subDataHR = NA,
       txList = input$txList))
   }
   
-  if (is_data$surv_bin & !is_data$med) {
+  if (use_data$surv_bin_data & !use_data$med_data) {
     
     bugsData <-
       list(
@@ -178,7 +170,7 @@ setupData <- function(subDataHR = NA,
       txList = input$txList))
   }
   
-  if (!is_data$surv_bin & is_data$med) {
+  if (!use_data$surv_bin_data & use_data$med_data) {
     
     bugsData <-
       list(
@@ -207,7 +199,7 @@ setupData <- function(subDataHR = NA,
       txList = input$txList))
   }
   
-  if (is_data$surv_bin & is_data$med) {
+  if (use_data$surv_bin_data & use_data$med_data) {
     
     bugsData <-
       list(

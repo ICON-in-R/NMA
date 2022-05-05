@@ -2,18 +2,17 @@
 #' Make BUGS model file name
 #'
 #' @param random Type of model, RE or FE; logical
-#' @param dat List of data frames. Possible from subData/Med/Bin
+#' @param data_type Data type
 #'
 #' @return string
 #' @export
 #'
-make_bugs_filename <- function(random, dat) {
+make_bugs_filename <- function(random, data_type) {
   
   effect <- ifelse(random, "RE", "FE")
-  med <- ifelse(any(is.na(dat$subDataMed)) | length(dat$subDataMed) == 0, NA, "med")
-  bin <- ifelse(any(is.na(dat$subDataBin)) | length(dat$subDataBin) == 0, NA, "bin")
-  fname <- c(effect, med, bin)
+  data_name <- gsub(pattern = "_data", replacement = "", data_type)
+  fname <- c(effect, data_name)
   
-  here::here("inst", paste0(paste(fname[!is.na(fname)], collapse = "_"), ".txt"))
+  here::here("inst", paste0(paste(fname, collapse = "_"), ".txt"))
 }
 
