@@ -37,7 +37,7 @@ NMA_run.nma <- function(nma,
   
   surv_data_types <- c("hr_data", "surv_bin_data", "med_data") 
   
-  if (surv_data_types %in% nma$data_types) {
+  if (any(surv_data_types %in% nma$data_type)) {
     bugs_model <- create_bugs_code(random = nma$is_random, dat = nma)
     bugs_filename <- file.path(tempdir(), "bugs_model.txt")
     write(bugs_model, file = bugs_filename)

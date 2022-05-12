@@ -28,9 +28,12 @@ rinits <- function(nTx, nStudies, param_names) {
 #' 
 #' Arrange input data for NMA.
 #' 
-#' @param nma_datasets subDataHR: Hazard ratio data. Optional; subDataBin: Survival binary data. Optional;
-#'  subDataMed: Median time data. Optional; binData: Binary data. Optional; countData: Count data. Optional;
-#'  contsData: Continuous data. Optional
+#' @param nma_datasets subDataHR: Hazard ratio data. Optional;
+#'                     subDataBin: Survival binary data. Optional;
+#'                     subDataMed: Median time data. Optional;
+#'                     binData: Binary data. Optional;
+#'                     countData: Count data. Optional;
+#'                     contsData: Continuous data. Optional
 #' @param data_type Data type
 #' @param refTx Reference treatment name
 #' @param is_random Is this a random effects model? Logical
@@ -41,7 +44,6 @@ setupData <- function(nma_datasets,
                       data_type = NA,
                       refTx = NA,
                       is_random = TRUE) {
-  
   data_type_names <-
     c("hr_data",
       "surv_bin_data",
@@ -50,13 +52,13 @@ setupData <- function(nma_datasets,
       "count_data",
       "conts_data")
   
-  use_data <- data_type_names %in% data_type
+  use_data <- as.list(data_type_names %in% data_type)
   names(use_data) <- data_type_names
   
-  param_names <- get_param_names(data_types)
+  param_names <- get_param_names(data_type, is_random)
   
-  input <- do.call(prep_codeData, c(nma_datasets, refTx))
-  
+  input <- do.call(prep_codeData, c(nma_datasets, refTx = refTx))
+
   if (use_data$bin_data) {
     
     input <- prep_bin_data(nma_datasets$binData, refTx)  

@@ -58,7 +58,7 @@ new_NMA <- function(subDataHR = NA,
                 binData, countData, contsData)
   
   # use all provided data
-  if (is.na(data_type)) {
+  if (any(is.na(data_type))) {
     avail_datasets <- nma_datasets[!is.na(nma_datasets)]
     data_type <- data_lookup[names(avail_datasets)]
   }
@@ -86,7 +86,6 @@ new_NMA <- function(subDataHR = NA,
   
   bugs_fn <- customBugs(bugs_params$PROG)
   
-
   do.call(check_study_data, nma_datasets)
   
   dat <- 

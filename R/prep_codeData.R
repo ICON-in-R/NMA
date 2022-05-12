@@ -19,8 +19,11 @@
 prep_codeData <- function(subDataHR = NA,
                           subDataBin = NA,
                           subDataMed = NA,
+                          binData = NA,
+                          countData = NA,
+                          contsData = NA,
                           refTx = NA) {
-  
+
   if (all(is.na(subDataHR))) return()
   
   is_med <- all(!is.na(subDataMed))

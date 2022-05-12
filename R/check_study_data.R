@@ -3,6 +3,8 @@
 check_study_data <- function(subDataHR = NA,
                              subDataMed = NA,
                              subDataBin = NA,
+                             countData  = NA,
+                             contsData  = NA,
                              binData = NA) {
   
   main_col_names <- c("tx", "base", "study", "Lmean", "Lse", "multi_arm")
