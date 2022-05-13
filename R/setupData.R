@@ -44,6 +44,7 @@ setupData <- function(nma_datasets,
                       data_type = NA,
                       refTx = NA,
                       is_random = TRUE) {
+  
   data_type_names <-
     c("hr_data",
       "surv_bin_data",
@@ -60,7 +61,7 @@ setupData <- function(nma_datasets,
   input <- do.call(prep_codeData, c(nma_datasets, refTx = refTx))
 
   if (use_data$bin_data) {
-    
+
     input <- prep_bin_data(nma_datasets$binData, refTx)  
     
     bugsData <-

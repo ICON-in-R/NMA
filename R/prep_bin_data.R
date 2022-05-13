@@ -1,19 +1,28 @@
 
-#
+#' prep_bin_data
+#'
+#' @param binData 
+#' @param refTx 
+#' @param preRefTx 
+#'
+#' @return
+#' @export
+#'
 prep_bin_data <- function(binData, refTx = NA, preRefTx = NA) {
   
   ##TODO: what is this doing? remove SQL
   idBase <- function(idVar, byVar) {
     idData <- data.frame(idVar = idVar, byVar = byVar) 
     baseVar <-
-      sqldf("select baseVar from idData as a inner join (select byVar, min(idVar)
+      sqldf::sqldf(
+        "select baseVar from idData as a inner join (select byVar, min(idVar)
           as baseVar from idData group by byVar) as b on a.byVar=b.byVar")
-    return(unlist(baseVar))
+    unlist(baseVar)
   }
   
   txList <- unique(sort(binData$treatment))
   
-  subData$prop <- paste(subData$r,"\\",subData$E, sep=" ")   
+  binData$prop <- paste(binData$r,"\\",binData$E, sep=" ")   
   
   if(refTx %in% txList && !is.na(refTx)) {
     txList <- unique(c(refTx, sort(binData$treatment)))
@@ -33,7 +42,8 @@ prep_bin_data <- function(binData, refTx = NA, preRefTx = NA) {
   
   # identify baseline treatment
   ##TODO: remove function
-  binData$baseTx <- idBase(idVar = binData$tx, byVar = binData$study)
+  binData$baseTx <- idBase(idVar = binData$tx,
+                           byVar = binData$study)
   
   # code studies
   studyList <- unique(binData$study)
@@ -49,7 +59,8 @@ prep_bin_data <- function(binData, refTx = NA, preRefTx = NA) {
   
   long_data <- reshape2::melt(binData, id.vars = c("study","treatment"))
   
-  y <- reshape2::dcast(long_data[long_data$variable == "prop", ], study ~ treatment)
+  y <- reshape2::dcast(long_data[long_data$variable == "prop", ],
+                       study ~ treatment)
   
   wide_data <- NULL
   s_names_rev <- rev(unique(binData$study))

@@ -40,7 +40,7 @@ new_NMA <- function(subDataHR = NA,
                     effectParam,
                     label,
                     endpoint) {
-
+  
   data_lookup <-
     c(subDataHR = "hr_data",
       subDataMed = "surv_bin_data",

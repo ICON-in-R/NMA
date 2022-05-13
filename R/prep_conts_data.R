@@ -1,11 +1,34 @@
 
-#
-prep_conts_data <- function(contsData) {
+#' prep_conts_data
+#'
+#' @param contsData 
+#' @param refTx
+#' @importFrom sqldf sqldf
+#' @importFrom plyr ddply
+#'
+#' @return
+#' @export
+#'
+prep_conts_data <- function(contsData, refTx = NA, covars = NA) {
+  browser()
+  ##TODO: what is this doing? remove SQL
+  idBase <- function(idVar, byVar) {
+    idData <- data.frame(idVar = idVar, byVar = byVar) 
+    baseVar <-
+      sqldf::sqldf(
+        "select baseVar from idData as a inner join (select byVar, min(idVar)
+          as baseVar from idData group by byVar) as b on a.byVar=b.byVar")
+    unlist(baseVar)
+  }
   
-  studyMean <- ddply(contsData, .(study),
-                     function(x) data.frame(Study_covar = weighted.mean(x$covars,x$n)))
-  
-  contsData <- merge(contsData,studyMean, by = "study")
+  if(all(!is.na(covars))) {
+    
+    studyMean <-
+      plyr::ddply(subData, .(study),
+                  function(x) data.frame(Study_covar = weighted.mean(x$covars, x$n)))
+    contsData <- merge(contsData, studyMean, by = "study")
+    
+  }
   
   armCount <- table(contsData$study)
   oneArmStudies <- names(armCount[armCount == 1])
@@ -22,59 +45,54 @@ prep_conts_data <- function(contsData) {
                          durName = "dur")
   
   ## codeData()
-  ##TODO: what is this doing? remove SQL
-  idBase <- function(idVar, byVar) {
-    idData <- data.frame(idVar = idVar, byVar = byVar) 
-    baseVar <-
-      sqldf("select baseVar from idData as a inner join (select byVar, min(idVar)
-          as baseVar from idData group by byVar) as b on a.byVar=b.byVar")
-    return(unlist(baseVar))
-  }
   
-  txList <- unique(sort(binData$treatment))
+  txList <- unique(sort(contsData$treatment))
   
-  subData$prop <- paste(subData$r,"\\",subData$E, sep=" ")   
+  contsData$prop <- paste(contsData$r, "\\", contsData$E, sep = " ")   
   
   if(refTx %in% txList && !is.na(refTx)) {
-    txList <- unique(c(refTx, sort(binData$treatment)))
+    txList <- unique(c(refTx, sort(contsData$treatment)))
   } else {
     refTx <- txList[1]
   }
   
-  binData$tx <- match(binData$treatment, table = txList)
+  contsData$tx <- match(contsData$treatment, table = txList)
   nTx <- length(txList)
   
-  for (i in seq_len(nrow(binData))) {
-    tx_in_s <- binData[binData$study == binData$study[i], ]$tx
-    binData$numTx[i] <- length(unique(tx_in_s))
+  for (i in seq_len(nrow(contsData))) {
+    tx_in_s <- contsData[contsData$study == contsData$study[i], ]$tx
+    contsData$numTx[i] <- length(unique(tx_in_s))
   }
   
-  binData <- binData[order(binData$numTx, binData$study, binData$tx), ]
+  contsData <- contsData[order(contsData$numTx, contsData$study, contsData$tx), ]
   
   # identify baseline treatment
   ##TODO: remove function
-  binData$baseTx <- idBase(idVar = binData$tx, byVar = binData$study)
+  contsData$baseTx <- idBase(idVar = contsData$tx,
+                             byVar = contsData$study)
   
   # code studies
-  studyList <- unique(binData$study)
-  binData$studyCode <- match(binData$study, table = studyList)
-  nStudies <- max(binData$studyCode, 2)
-  nObs <- length(binData$studyCode)
+  studyList <- unique(contsData$study)
+  contsData$studyCode <- match(contsData$study, table = studyList)
+  nStudies <- max(contsData$studyCode, 2)
+  nObs <- length(contsData$studyCode)
   
   ###
   
   
   long_data <- reshape2::melt(contsData, id.vars = c("study","treatment"))
-  y <- reshape2::dcast(long_data[long_data$variable == "meanSE", ], study ~ treatment)
+  
+  y <- reshape2::dcast(long_data[long_data$variable == "meanSE", ],
+                       study ~ treatment)
   
   wide_data <- NULL
-  s_names_rev <- rev(unique(binData$study))
+  s_names_rev <- rev(unique(contsData$study))
   
   for (i in s_names_rev) {
     wide_data <- rbind(wide_data, y[y$study == i, ])
   }
   
-  mx <- mean(subData$covars, na.rm = TRUE)
+  mx <- mean(contsData$covars, na.rm = TRUE)
   
   maxArms <- max(table(contsData$study))
   tAna <- rep(NA, nStudies)
@@ -84,10 +102,10 @@ prep_conts_data <- function(contsData) {
   if (!is.na(covars)) tAx <- rep(NA, nStudies)
   
   for (i in seq_len(nStudies)) {
-    tAna[i] <- length(contsData$studyCode[subData$studyCode == i])    
-    tAy[i,1:tAna[i]] <- contsData$y[subData$studyCode == i]
-    tAse[i,1:tAna[i]] <- contsData$se[subData$studyCode == i]
-    tAt[i,1:tAna[i]] <- contsData$tx[subData$studyCode == i]
+    tAna[i] <- length(contsData$studyCode[contsData$studyCode == i])    
+    tAy[i,1:tAna[i]] <- contsData$y[contsData$studyCode == i]
+    tAse[i,1:tAna[i]] <- contsData$se[contsData$studyCode == i]
+    tAt[i,1:tAna[i]] <- contsData$tx[contsData$studyCode == i]
     
     if (!is.na(covars)) {
       if (covType == "Cont") {
