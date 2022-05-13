@@ -19,7 +19,7 @@ rinits <- function(nTx, nStudies, param_names) {
       d = c(NA, rnorm(nTx - 1, 0, 2)),  ##TODO: can we remove duplication?
       mu = rnorm(nStudies),
       baseLod = 0) %>% 
-      .[param_names]  # filter
+      .[param_names]  # filter redundant
   }
 }
 
@@ -55,13 +55,12 @@ setupData <- function(nma_datasets,
   
   use_data <- as.list(data_type_names %in% data_type)
   names(use_data) <- data_type_names
-  
   param_names <- get_param_names(data_type, is_random)
   
   input <- do.call(prep_codeData, c(nma_datasets, refTx = refTx))
 
   if (use_data$bin_data) {
-
+    
     input <- prep_bin_data(nma_datasets$binData, refTx)  
     
     bugsData <-
@@ -75,7 +74,7 @@ setupData <- function(nma_datasets,
            baseN = c(input$baseData$n, 1),
            nBase = (length(input$baseData$n) + 1),
            baseTx = input$baseProbTx,
-           refTx = input$preRefTxCode)
+           refTx = input$refTx)
     
     return(list(
       inits = rinits(input$nTx, input$nStudies, param_names),

@@ -66,6 +66,8 @@ new_NMA <- function(subDataHR = NA,
   model_params_lookup <-
     c(hr_data = "totLdev",
       surv_bin_data = NA,
+      count_data = "totresdev",
+      conts_data = "totresdev",
       med_data = "totmediandev",
       bin_data = "totresdev")
   

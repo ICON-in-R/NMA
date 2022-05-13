@@ -42,7 +42,7 @@ NMA_run.nma <- function(nma,
     bugs_filename <- file.path(tempdir(), "bugs_model.txt")
     write(bugs_model, file = bugs_filename)
   } else {
-    bugs_filename <- make_bugs_filename(nma$random, nma$data_type)
+    bugs_filename <- make_bugs_filename(nma$is_random, nma$data_type)
   }
   
   labels <- make_labels(nma$label)

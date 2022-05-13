@@ -10,16 +10,6 @@
 #'
 prep_bin_data <- function(binData, refTx = NA, preRefTx = NA) {
   
-  ##TODO: what is this doing? remove SQL
-  idBase <- function(idVar, byVar) {
-    idData <- data.frame(idVar = idVar, byVar = byVar) 
-    baseVar <-
-      sqldf::sqldf(
-        "select baseVar from idData as a inner join (select byVar, min(idVar)
-          as baseVar from idData group by byVar) as b on a.byVar=b.byVar")
-    unlist(baseVar)
-  }
-  
   txList <- unique(sort(binData$treatment))
   
   binData$prop <- paste(binData$r,"\\",binData$E, sep=" ")   
@@ -40,22 +30,23 @@ prep_bin_data <- function(binData, refTx = NA, preRefTx = NA) {
   
   binData <- binData[order(binData$numTx, binData$study, binData$tx), ]
   
-  # identify baseline treatment
-  ##TODO: remove function
-  binData$baseTx <- idBase(idVar = binData$tx,
-                           byVar = binData$study)
+  # base treatment for each study
+  tx_lup <- binData |> 
+    transmute(base_treatment = treatment,
+              baseTx = tx) |> 
+    unique()
+  
+  binData <- 
+    binData |> 
+    group_by(study) |> 
+    mutate(base_treatment = min(treatment)) |> 
+    inner_join(tx_lup, by = "base_treatment") 
   
   # code studies
   studyList <- unique(binData$study)
   binData$studyCode <- match(binData$study, table = studyList)
   nStudies <- max(binData$studyCode, 2)
   nObs <- length(binData$studyCode)
-  
-  if (is.na(preRefTx)) {
-    preRefTxCode <- 1
-  } else {
-    preRefTxCode <- which(txList == preRefTx)
-  }
   
   long_data <- reshape2::melt(binData, id.vars = c("study","treatment"))
   
@@ -84,12 +75,12 @@ prep_bin_data <- function(binData, refTx = NA, preRefTx = NA) {
   
   baseProbTx <- 1
   baseData <- binData[binData$tx == baseProbTx, ]
-  TxList <- unique(sort(binData$treatment))
   
   list(baseData = baseData,
        baseProbTx = baseProbTx,
-       preRefTxCode,
-       TxList = TxList,
+       txList = txList,
+       refTx_name = refTx,
+       refTx = which(txList == refTx),
        tAt = tAt,
        tAr = tAr,
        tAn = tAn,

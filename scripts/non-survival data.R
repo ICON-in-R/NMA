@@ -10,14 +10,14 @@ bugs_params <-
     N.THIN = 1,         # thinning rate
     PAUSE = TRUE)
 
-RANDOM <- FALSE             # is this a random effects model?
+RANDOM <- FALSE              # is this a random effects model?
 REFTX <- "X"                # reference treatment
 label_name <- "label_name"
 
 # which type of data to use
-# data_type <- "count_data"
+data_type <- "count_data"
 # data_type <- "bin_data"
-data_type <- "conts_data"
+# data_type <- "conts_data"
 
 file_name <- paste0(data_type, "_test.csv")
 
@@ -28,14 +28,15 @@ nma_data <-
 
 nma_model <-
   new_NMA(
-    # countData = nma_data,
+    countData = nma_data,
     # binData = nma_data,
-    contsData = nma_data,
+    # contsData = nma_data,
     bugs_params = bugs_params,
     is_random = RANDOM,
     data_type = data_type,
-    refTx = REFTX ,
-    effectParam = "beta",
+    refTx = REFTX,
+    effectParam = NA,
+    # effectParam = "beta",
     label = "",
     endpoint = "")
 

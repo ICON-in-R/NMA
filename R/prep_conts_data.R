@@ -10,17 +10,7 @@
 #' @export
 #'
 prep_conts_data <- function(contsData, refTx = NA, covars = NA) {
-  browser()
-  ##TODO: what is this doing? remove SQL
-  idBase <- function(idVar, byVar) {
-    idData <- data.frame(idVar = idVar, byVar = byVar) 
-    baseVar <-
-      sqldf::sqldf(
-        "select baseVar from idData as a inner join (select byVar, min(idVar)
-          as baseVar from idData group by byVar) as b on a.byVar=b.byVar")
-    unlist(baseVar)
-  }
-  
+
   if(all(!is.na(covars))) {
     
     studyMean <-
@@ -66,10 +56,17 @@ prep_conts_data <- function(contsData, refTx = NA, covars = NA) {
   
   contsData <- contsData[order(contsData$numTx, contsData$study, contsData$tx), ]
   
-  # identify baseline treatment
-  ##TODO: remove function
-  contsData$baseTx <- idBase(idVar = contsData$tx,
-                             byVar = contsData$study)
+  # base treatment for each study
+  tx_lup <- contsData |> 
+    transmute(base_treatment = treatment,
+              baseTx = tx) |> 
+    unique()
+  
+  contsData <- 
+    contsData |> 
+    group_by(study) |> 
+    mutate(base_treatment = min(treatment)) |> 
+    inner_join(tx_lup, by = "base_treatment") 
   
   # code studies
   studyList <- unique(contsData$study)

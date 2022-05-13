@@ -10,19 +10,9 @@
 #'
 prep_count_data <- function(count_dat, refTx, preRefTx = NA) {
   
-  ##TODO: what is this doing? remove SQL
-  idBase <- function(idVar, byVar) {
-    idData <- data.frame(idVar = idVar, byVar = byVar) 
-    baseVar <-
-      sqldf::sqldf(
-        "select baseVar from idData as a inner join (select byVar, min(idVar)
-          as baseVar from idData group by byVar) as b on a.byVar=b.byVar")
-    unlist(baseVar)
-  }
-  
   txList <- unique(sort(count_dat$treatment))
   
-  count_dat$prop <- paste(count_dat$r,"\\",count_dat$E, sep = " ")   
+  count_dat$prop <- paste(count_dat$r, "\\", count_dat$E, sep = " ")   
   
   if(refTx %in% txList && !is.na(refTx)) {
     txList <- unique(c(refTx, sort(count_dat$treatment)))
@@ -38,25 +28,25 @@ prep_count_data <- function(count_dat, refTx, preRefTx = NA) {
     count_dat$numTx[i] <- length(unique(tx_in_s))
   }
   
-  count_dat <- count_dat[order(count_dat$numTx, count_dat$study, count_dat$tx), ]
+  count_dat <- count_dat |> arrange(numTx, study, tx)
   
-  # identify baseline treatment
-  ##TODO: remove function and SQL
-  count_dat$baseTx <- idBase(idVar = count_dat$tx,
-                            byVar = count_dat$study)
+  # base treatment for each study
+  tx_lup <- count_dat |> 
+    transmute(base_treatment = treatment,
+              baseTx = tx) |> 
+    unique()
+  
+  count_dat <- 
+    count_dat |> 
+    group_by(study) |> 
+    mutate(base_treatment = min(treatment)) |> 
+    inner_join(tx_lup, by = "base_treatment") 
   
   # code studies
   studyList <- unique(count_dat$study)
   count_dat$studyCode <- match(count_dat$study, table = studyList)
   nStudies <- max(count_dat$studyCode, 2)
   nObs <- length(count_dat$studyCode)
-  
-  ##TODO: what is this?...
-  if (is.na(preRefTx)) {
-    preRefTxCode <- 1
-  } else {
-    preRefTxCode <- which(txList == preRefTx)
-  }
   
   long_data <- reshape2::melt(count_dat, id.vars = c("study","treatment"))
   
@@ -92,5 +82,8 @@ prep_count_data <- function(count_dat, refTx, preRefTx = NA) {
        tAE = tAE,
        nTx = nTx,
        tAna = tAna,
+       txList = txList,
+       refTx_name = refTx,
+       refTx = which(txList == refTx),
        nStudies = nStudies)  
 }
