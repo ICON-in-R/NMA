@@ -1,0 +1,152 @@
+---
+title: "Continuous data analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{continuous-data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This document describes how to use the main functions of `NMA` to run a single network meta-analysis with non-survival data.
+
+## Example
+
+First load the required packages.
+
+```{r setup, warning=FALSE, message=FALSE}
+library(NMA)
+library(dplyr)
+library(purrr)
+```
+
+### Settings
+
+Define the BUGS parameters for MCMC.
+This is not necessary, but recommended, because there are default values for these.
+
+```{r}
+bugs_params <-
+  list(
+    PROG = "openBugs",  # which version of BUGS to use to run the MCMC
+    N.BURNIN = 10,#00,  # number of steps to throw away
+    N.SIMS = 150,#0,    # total number of simulations
+    N.CHAINS = 2,       # number of chains
+    N.THIN = 1,         # thinning rate
+    PAUSE = TRUE)
+```
+
+Define the scenario we will use for the analysis.
+
+```{r}
+RANDOM <- FALSE             # is this a random effects model?
+REFTX <- "X"                # reference treatment
+data_type <- "conts_data"     # which type of data to use
+label_name <- "label_name"
+```
+
+
+### Read in datasets
+
+Lets read in the each data set.
+In another article we will show how to do this in one function call by including a _Reference_ file in the data folder which contains the meta data of how to read in the study data.
+
+```{r}
+file_name <- here::here(file.path("inst", "extdata"))
+
+contsData <-
+  read.csv(paste0(file_name, "/conts_data_test.csv"),
+           header = TRUE,
+           as.is = TRUE)
+```
+
+The format of the data should be fairly self-explanatory and looks like the following.
+For the hazard ratio data
+
+```{r echo=FALSE}
+knitr::kable(contsData)
+```
+
+More information about these data is available in the help documentation which can be accessed with e.g. `help(contsData)`.
+
+### Build model
+
+Now we can create the NMA object to use in the modelling.
+The workflow is to first create this separately to actually doing the fitting.
+This then means that we can perform modified fits but we don't have to redo any of the preparatory work.
+
+```{r warning=FALSE, message=FALSE}
+nma_model <-
+  new_NMA(contsData = contsData,
+          bugs_params = bugs_params,
+          is_random = RANDOM,
+          data_type = data_type,
+          refTx = REFTX ,
+          hyperparams = NA,
+          effectParam = NA,
+          label = "",
+          endpoint = "")
+
+nma_model
+```
+
+We can view the network graph.
+
+```{r, warning=FALSE, message=FALSE, fig.width=6, fig.height=6, eval=FALSE}
+library(sna)
+plotNetwork(nma_model)
+```
+
+
+### Run MCMC
+
+The NMA MCMC function calls the appropriate BUGS model.
+
+```{r warning=FALSE, message=FALSE}
+nma_res <- NMA_run(nma_model, save = FALSE)
+
+nma_res
+```
+
+
+### Plot and tables
+
+BUGS plots are available for diagnosing the performance.
+
+```{r eval=FALSE}
+diagnostics(nma_res2, save = TRUE)
+```
+
+Different NMA tables can be created. They can provide a record of the analysis.
+
+```{r eval=FALSE}
+write_data_to_file(nma_model)
+write_results_table(nma_model, nma_res)
+```
+
+```{r eval=FALSE}
+pairwiseTable(nma_model, nma_res)
+```
+
+Currently available NMA plots are a treatment effect forest plot of posterior samples and a rank probability grid.
+
+```{r, fig.height=8, fig.width=8, eval=FALSE}
+txEffectPlot(nma_model, nma_res)
+rankProbPlot(nma_model, nma_res)
+```
+
+It's also possible to create all of the BUGS and output plots and table functions together and write to an analysis folder.
+
+```{r eval=FALSE}
+nma_outputs(nma_res2, save = TRUE)
+```
+
+## References

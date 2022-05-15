@@ -9,7 +9,7 @@ check_study_data <- function(subDataHR = NA,
   
   if (any(!is.na(subDataHR))) {
     hr_col_names <- c("tx", "base", "study", "Lmean", "Lse", "multi_arm")
-    hr_missing_cols <- !all(main_col_names %in% names(subDataHR))
+    hr_missing_cols <- !all(hr_col_names %in% names(subDataHR))
     
     if (hr_missing_cols)
       stop("HR data set is missing columns", call. = FALSE)
