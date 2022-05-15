@@ -1,8 +1,8 @@
 
 #' prep_conts_data
 #'
-#' @param contsData 
-#' @param refTx
+#' @param contsData Counts data
+#' @param refTx Reference treatment
 #' @importFrom sqldf sqldf
 #' @importFrom plyr ddply
 #'
@@ -10,9 +10,8 @@
 #' @export
 #'
 prep_conts_data <- function(contsData, refTx = NA, covars = NA) {
-
+  
   if(all(!is.na(covars))) {
-    
     studyMean <-
       plyr::ddply(subData, .(study),
                   function(x) data.frame(Study_covar = weighted.mean(x$covars, x$n)))
@@ -137,39 +136,39 @@ removeDup <- function(studyData,
     targetDur <- studyDur_min
   } else {
     # else target duration is midpoint of range
-    targetDur <- round(median(c(studyDur_min,studyDur_max)))
+    targetDur <- round(median(c(studyDur_min, studyDur_max)))
   } 
   
   # Remove duplicates - keep the data closest to the target duration
   # Calculate absolute residual between target and observed duration
-  studyData[,"resTargetDur"] <- abs(targetDur - studyData[,durName])
+  studyData[, "resTargetDur"] <- abs(targetDur - studyData[,durName])
   # Sort on residual
-  studyData_sort <- studyData[order(studyData$resTargetDur,decreasing = FALSE), ]
+  studyData_sort <- studyData[order(studyData$resTargetDur, decreasing = FALSE), ]
   
   # Identify unique studies with time point nearest to target
   studyData_uniqueStudies <-
-    studyData_sort[!duplicated(studyData_sort[,c(studyName,treatName)],fromLast = FALSE), ]
+    studyData_sort[!duplicated(studyData_sort[, c(studyName,treatName)], fromLast = FALSE), ]
   
   # Where arms have been given the same name within a study#
   # keep these as long as criteria above is fulfilled
   # Identify studies with multiple treatment arm
   studyData_multTx <-
-    studyData_sort[duplicated(studyData_sort[,c(studyName,treatName,durName)],fromLast = FALSE), ]
+    studyData_sort[duplicated(studyData_sort[, c(studyName, treatName,durName)], fromLast = FALSE), ]
   
   # Create indicator for matches between the two datasets
   match_ind <-
-    as.data.frame(studyData_multTx[,studyName] %in% studyData_uniqueStudies[,studyName] &
-                    studyData_multTx[,treatName] %in% studyData_uniqueStudies[,treatName] &
-                    studyData_multTx[,durName] %in% studyData_uniqueStudies[,durName])  
+    as.data.frame(studyData_multTx[, studyName] %in% studyData_uniqueStudies[, studyName] &
+                    studyData_multTx[, treatName] %in% studyData_uniqueStudies[, treatName] &
+                    studyData_multTx[, durName] %in% studyData_uniqueStudies[, durName])  
   
   colnames(match_ind) <- "Duplicate"
   
   if (nrow(match_ind) != 0) {
     # Bind indicator column with multiple arm dataset
-    match_arm <- subset(cbind(studyData_multTx,match_ind),Duplicate == TRUE)
+    match_arm <- subset(cbind(studyData_multTx, match_ind), Duplicate == TRUE)
     match_arm$Duplicate <- NULL  # Remove duplicate indicator
     # Append unique studies dataset with matched arm dataset
-    studyData <- rbind(studyData_uniqueStudies,match_arm)
+    studyData <- rbind(studyData_uniqueStudies, match_arm)
   } else {
     studyData <- studyData_uniqueStudies
   }

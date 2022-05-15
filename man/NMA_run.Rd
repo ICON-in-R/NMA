@@ -22,7 +22,13 @@ NMA_run(nma, folder = "output", save = TRUE)
 
 }
 \description{
-Run network meta-analysis
+BUGS code is taken from DSU reports and papers.
+}
+\details{
+The survival analysis data used is from the \insertCite{Woods2010}{NMA} model.
+}
+\references{
+\insertAllCited{}
 }
 \seealso{
 \code{\link{new_NMA}}, \code{\link{NMA_update}}

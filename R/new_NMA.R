@@ -4,7 +4,8 @@
 #' Create an \code{nma} class object to use in an analysis.
 #' All of the data types are optional but at least one needs to be
 #' passed to the function. The `data_type` must be a subset of 
-#' the passed data sets.
+#' the passed data sets. If none given then all of the supplied
+#' data are assumed.
 #' 
 #' @param subDataHR Hazard ratio input data frame. Optional
 #' @param subDataMed Median time input data frame. Optional

@@ -4,30 +4,15 @@
 \alias{setupData}
 \title{Set-up study data}
 \usage{
-setupData(
-  subDataHR = NA,
-  subDataBin = NA,
-  subDataMed = NA,
-  binData = NA,
-  countData = NA,
-  contsData = NA,
-  data_type = NA,
-  refTx = NA,
-  is_random = TRUE
-)
+setupData(nma_datasets, data_type = NA, refTx = NA, is_random = TRUE)
 }
 \arguments{
-\item{subDataHR}{Hazard ratio data. Optional}
-
-\item{subDataBin}{Survival binary data. Optional}
-
-\item{subDataMed}{Median time data. Optional}
-
-\item{binData}{Binary data. Optional}
-
-\item{countData}{Count data. Optional}
-
-\item{contsData}{Continuous data. Optional}
+\item{nma_datasets}{subDataHR: Hazard ratio data. Optional;
+subDataBin: Survival binary data. Optional;
+subDataMed: Median time data. Optional;
+binData: Binary data. Optional;
+countData: Count data. Optional;
+contsData: Continuous data. Optional}
 
 \item{data_type}{Data type}
 

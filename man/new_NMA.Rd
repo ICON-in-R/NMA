@@ -9,9 +9,11 @@ new_NMA(
   subDataMed = NA,
   subDataBin = NA,
   binData = NA,
+  countData = NA,
+  contsData = NA,
   bugs_params = NA,
   is_random = TRUE,
-  data_type = "hr_data",
+  data_type = NA,
   hyperparams = list(),
   refTx = NA,
   effectParam,
@@ -27,6 +29,10 @@ new_NMA(
 \item{subDataBin}{Survival binary data input data frame. Optional}
 
 \item{binData}{Binary data input data frame. Optional}
+
+\item{countData}{Count data input data frame. Optional}
+
+\item{contsData}{Continuous data input data frame. Optional}
 
 \item{bugs_params}{List of BUGS parameters. Optional}
 
@@ -53,7 +59,8 @@ new_NMA(
 Create an \code{nma} class object to use in an analysis.
 All of the data types are optional but at least one needs to be
 passed to the function. The \code{data_type} must be a subset of
-the passed data sets.
+the passed data sets. If none given then all of the supplied
+data are assumed.
 }
 \seealso{
 \code{\link{NMA_run}}, \code{\link{NMA_update}}

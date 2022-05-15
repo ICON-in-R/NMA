@@ -4,7 +4,15 @@
 \alias{prep_codeData}
 \title{Prepare data used in computation}
 \usage{
-prep_codeData(subDataHR = NA, subDataBin = NA, subDataMed = NA, refTx = NA)
+prep_codeData(
+  subDataHR = NA,
+  subDataBin = NA,
+  subDataMed = NA,
+  binData = NA,
+  countData = NA,
+  contsData = NA,
+  refTx = NA
+)
 }
 \arguments{
 \item{subDataHR}{Hazard ratio data frame}

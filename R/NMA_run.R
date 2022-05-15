@@ -1,15 +1,23 @@
 
 #' Run network meta-analysis
 #' 
+#' BUGS code is taken from DSU reports and papers.
+#' 
+#' The survival analysis data used is from the \insertCite{Woods2010}{NMA} model.
+#' 
 #' @template args-nma
 #' @param folder Output folder name; string
 #' @param save Save BUGS output to file? Logical
-#'
+#' @importFrom Rdpack reprompt
+#' 
 #' @return \code{res_bugs}
 #' @export
 #' @name NMA_run
 #' @seealso \code{\link{new_NMA}}, \code{\link{NMA_update}}
 #' 
+#' @references
+#' \insertAllCited{}
+#'   
 NMA_run <- function(nma,
                     folder = "output",
                     save = TRUE) {

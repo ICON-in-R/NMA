@@ -29,7 +29,9 @@ Imports:
     R2OpenBUGS,
     R2WinBUGS,
     R2jags,
+    Rdpack,
     sna
+RdMacros: Rdpack
 Suggests:
     covr,
     knitr,

@@ -4,12 +4,12 @@
 \alias{make_bugs_filename}
 \title{Make BUGS model file name}
 \usage{
-make_bugs_filename(random, dat)
+make_bugs_filename(random, data_type)
 }
 \arguments{
 \item{random}{Type of model, RE or FE; logical}
 
-\item{dat}{List of data frames. Possible from subData/Med/Bin}
+\item{data_type}{Data type}
 }
 \value{
 string
