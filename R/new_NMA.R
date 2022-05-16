@@ -38,7 +38,7 @@ new_NMA <- function(subDataHR = NA,
                     data_type = NA,
                     hyperparams = list(),
                     refTx = NA ,
-                    effectParam,
+                    effectParam = NA,
                     label,
                     endpoint) {
   

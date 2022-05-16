@@ -13,21 +13,21 @@ test_that("new_NMA", {
   REFTX <- "X"                # reference treatment
   label_name <- "label_name"
   
-  # file_name <- here::here(file.path("inst", "extdata", "survdata_"))
-  file_name <- "C:/Users/n8tha/Documents/R/NMA/inst/extdata/survdata_"
+  file_name <- system.file("extdata", package = "NMA")
+  # file_name <- "C:/Users/n8tha/Documents/R/NMA/inst/extdata/survdata_"
   
   subDataHR <-
-    read.csv(paste0(file_name, "hr_test.csv"),
+    read.csv(file.path(file_name, "survdata_hr_test.csv"),
              header = TRUE,
              as.is = TRUE)
   
   subDataBin <-
-    read.csv(paste0(file_name, "bin_test.csv"),
+    read.csv(file.path(file_name, "survdata_bin_test.csv"),
              header = TRUE,
              as.is = TRUE)
   
   subDataMed <-
-    read.csv(paste0(file_name, "med_test.csv"),
+    read.csv(file.path(file_name, "survdata_med_test.csv"),
              header = TRUE,
              as.is = TRUE) %>% 
     mutate(medR = floor(medR))
@@ -60,9 +60,7 @@ test_that("new_NMA", {
     }
   }
   
-  model_ref <-
-    readRDS(here::here(
-      file.path("NMA", "tests", "testthat", "nma_model.RDS")))
+  model_ref <- readRDS(test_path("nma_model.RDS"))
   
   expect_length(nma_model, length(model_ref))
 })
@@ -70,9 +68,8 @@ test_that("new_NMA", {
 
 test_that("NMA_run", {
   
-  model_ref <-
-    readRDS(here::here(
-      file.path("NMA", "tests", "testthat", "nma_model.RDS")))
+  model_ref <- readRDS(test_path("nma_model.RDS"))
+
   
   nma_res <- list()
 

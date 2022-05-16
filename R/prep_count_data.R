@@ -71,14 +71,12 @@ prep_count_data <- function(count_dat, refTx, preRefTx = NA) {
   for (i in seq_len(nStudies)) {
     tAna[i] <- length(count_dat$studyCode[count_dat$studyCode == i])    
     tAr[i, 1:tAna[i]] <- count_dat$r[count_dat$studyCode == i]
-    tAn[i, 1:tAna[i]] <- count_dat$n[count_dat$studyCode == i]
     tAE[i, 1:tAna[i]] <- count_dat$E[count_dat$studyCode == i]
     tAt[i, 1:tAna[i]] <- count_dat$tx[count_dat$studyCode == i]
   }
   
   list(tAt = tAt,
        tAr = tAr,
-       tAn = tAn,
        tAE = tAE,
        nTx = nTx,
        tAna = tAna,

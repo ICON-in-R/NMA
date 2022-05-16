@@ -32,14 +32,17 @@ Two ways to obtain the repo code are
 * download git and then open git bash where you want to download the package and type `git clone https://github.com/ICON-in-R/NMA.git`.
 
 Build and attach the package to use.
-To run the analysis use the `scripts/run_analysis.R` script.
+
 
 ## Articles
 
-Examples of how use the package are given in [these articles](https://n8thangreen.github.io/NMA/articles/index.html):
+Examples of how use the package are given in [these articles](https://icon-in-r.github.io/NMA/articles/):
 
--  [Get Started](https://n8thangreen.github.io/NMA/articles/intro.html)
 
+- [Using survival data](https://icon-in-r.github.io/NMA/articles/how-to-use-nma-survival-test-data.html)
+- [Using a Reference file](https://icon-in-r.github.io/NMA/articles/reference-file-test-data.html)
+- [Using a binary data](https://icon-in-r.github.io/NMA/articles/binary-data.html)
+- [Using a count data](https://icon-in-r.github.io/NMA/articles/count-data.html)
 
 ## Code of Conduct
 

@@ -41,18 +41,25 @@ reference:
   - validate_nma
 - title: Data
   contents:
-  - subData
+  - subDataHR
   - subDataBin
   - subDataMed
+  - binData
+  - countData
+  - contsData
   
 navbar:
  components:
    articles:
     text: Articles
     menu:
-    - text: Introduction
+    - text: Using survival data
       href: articles/how-to-use-nma-test-data.html
     - text: Reference file
       href: articles/reference-file-test-data.html
-
+    - text: Using binary data
+      href: articles/count-data.html
+    - text: Using count data
+      href: articles/binary-test-data.html
+      
   

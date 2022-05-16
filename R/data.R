@@ -13,7 +13,7 @@
 #'   \item{Lse}{Standard error of log hazard ratio}
 #'   \item{multi_arm}{Multi-arm trial indicator: 0/1}
 #' }
-"subData"
+"subDataHR"
 
 
 #' Study survival binary outcome data

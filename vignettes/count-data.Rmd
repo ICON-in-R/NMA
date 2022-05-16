@@ -90,8 +90,6 @@ nma_model <-
           is_random = RANDOM,
           data_type = data_type,
           refTx = REFTX ,
-          hyperparams = NA,
-          effectParam = NA,
           label = "",
           endpoint = "")
 
