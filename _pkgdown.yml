@@ -60,6 +60,6 @@ navbar:
     - text: Using binary data
       href: articles/count-data.html
     - text: Using count data
-      href: articles/binary-test-data.html
+      href: articles/binary-data.html
       
   

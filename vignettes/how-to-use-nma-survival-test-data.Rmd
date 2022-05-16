@@ -93,7 +93,7 @@ The format of the data should be fairly self-explanatory and looks like the foll
 For the hazard ratio data
 
 ```{r echo=FALSE}
-knitr::kable(subData)
+knitr::kable(subDataHR)
 ```
 
 For the binary data

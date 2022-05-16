@@ -4,6 +4,12 @@
     <loc>https://icon-in-r.github.io/NMA/404.html</loc>
   </url>
   <url>
+    <loc>https://icon-in-r.github.io/NMA/articles/binary-data.html</loc>
+  </url>
+  <url>
+    <loc>https://icon-in-r.github.io/NMA/articles/count-data.html</loc>
+  </url>
+  <url>
     <loc>https://icon-in-r.github.io/NMA/articles/dont-build/how-to-use-nma.html</loc>
   </url>
   <url>
@@ -11,6 +17,9 @@
   </url>
   <url>
     <loc>https://icon-in-r.github.io/NMA/articles/dont-build/run_multiple_nma.html</loc>
+  </url>
+  <url>
+    <loc>https://icon-in-r.github.io/NMA/articles/how-to-use-nma-survival-test-data.html</loc>
   </url>
   <url>
     <loc>https://icon-in-r.github.io/NMA/articles/how-to-use-nma-test-data.html</loc>
@@ -37,7 +46,16 @@
     <loc>https://icon-in-r.github.io/NMA/news/index.html</loc>
   </url>
   <url>
+    <loc>https://icon-in-r.github.io/NMA/reference/binData.html</loc>
+  </url>
+  <url>
     <loc>https://icon-in-r.github.io/NMA/reference/bugs_stats.html</loc>
+  </url>
+  <url>
+    <loc>https://icon-in-r.github.io/NMA/reference/contsData.html</loc>
+  </url>
+  <url>
+    <loc>https://icon-in-r.github.io/NMA/reference/countData.html</loc>
   </url>
   <url>
     <loc>https://icon-in-r.github.io/NMA/reference/createFolders.html</loc>
@@ -97,7 +115,16 @@
     <loc>https://icon-in-r.github.io/NMA/reference/plots_and_tables.html</loc>
   </url>
   <url>
+    <loc>https://icon-in-r.github.io/NMA/reference/prep_bin_data.html</loc>
+  </url>
+  <url>
     <loc>https://icon-in-r.github.io/NMA/reference/prep_codeData.html</loc>
+  </url>
+  <url>
+    <loc>https://icon-in-r.github.io/NMA/reference/prep_conts_data.html</loc>
+  </url>
+  <url>
+    <loc>https://icon-in-r.github.io/NMA/reference/prep_count_data.html</loc>
   </url>
   <url>
     <loc>https://icon-in-r.github.io/NMA/reference/quiet.html</loc>
@@ -121,7 +148,13 @@
     <loc>https://icon-in-r.github.io/NMA/reference/subDataBin.html</loc>
   </url>
   <url>
+    <loc>https://icon-in-r.github.io/NMA/reference/subDataHR.html</loc>
+  </url>
+  <url>
     <loc>https://icon-in-r.github.io/NMA/reference/subDataMed.html</loc>
+  </url>
+  <url>
+    <loc>https://icon-in-r.github.io/NMA/reference/summStat.html</loc>
   </url>
   <url>
     <loc>https://icon-in-r.github.io/NMA/reference/txEffectPlot.html</loc>

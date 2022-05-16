@@ -36,7 +36,7 @@ Build and attach the package to use.
 
 ## Articles
 
-Examples of how use the package are given in [these articles](https://icon-in-r.github.io/NMA/articles/):
+Examples of how to use the package are given in [these articles](https://icon-in-r.github.io/NMA/articles/):
 
 
 - [Using survival data](https://icon-in-r.github.io/NMA/articles/how-to-use-nma-survival-test-data.html)

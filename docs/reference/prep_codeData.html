@@ -28,8 +28,10 @@ depending on type of data."><!-- mathjax --><script src="https://cdnjs.cloudflar
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/how-to-use-nma-test-data.html">Introduction</a>
+    <a class="dropdown-item" href="../articles/how-to-use-nma-test-data.html">Using survival data</a>
     <a class="dropdown-item" href="../articles/reference-file-test-data.html">Reference file</a>
+    <a class="dropdown-item" href="../articles/count-data.html">Using binary data</a>
+    <a class="dropdown-item" href="../articles/binary-data.html">Using count data</a>
   </div>
 </li>
 <li class="nav-item">
@@ -64,15 +66,23 @@ depending on type of data.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">prep_codeData</span><span class="op">(</span><span class="va">subData</span>, subDataBin <span class="op">=</span> <span class="cn">NA</span>, subDataMed <span class="op">=</span> <span class="cn">NA</span>, refTx <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">prep_codeData</span><span class="op">(</span>
+  subDataHR <span class="op">=</span> <span class="cn">NA</span>,
+  subDataBin <span class="op">=</span> <span class="cn">NA</span>,
+  subDataMed <span class="op">=</span> <span class="cn">NA</span>,
+  binData <span class="op">=</span> <span class="cn">NA</span>,
+  countData <span class="op">=</span> <span class="cn">NA</span>,
+  contsData <span class="op">=</span> <span class="cn">NA</span>,
+  refTx <span class="op">=</span> <span class="cn">NA</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>subData</dt>
-<dd><p>Main data frame</p></dd>
+    <dl><dt>subDataHR</dt>
+<dd><p>Hazard ratio data frame</p></dd>
 <dt>subDataBin</dt>
-<dd><p>Optional data frame. Binary data</p></dd>
+<dd><p>Optional data frame. Survival binary data</p></dd>
 <dt>subDataMed</dt>
 <dd><p>Optional data frame. Median times</p></dd>
 <dt>refTx</dt>

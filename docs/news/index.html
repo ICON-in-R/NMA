@@ -24,8 +24,10 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/how-to-use-nma-test-data.html">Introduction</a>
+    <a class="dropdown-item" href="../articles/how-to-use-nma-test-data.html">Using survival data</a>
     <a class="dropdown-item" href="../articles/reference-file-test-data.html">Reference file</a>
+    <a class="dropdown-item" href="../articles/count-data.html">Using binary data</a>
+    <a class="dropdown-item" href="../articles/binary-data.html">Using count data</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -52,9 +54,27 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9000" id="nma-0009000">NMA 0.0.0.9000<a class="anchor" aria-label="anchor" href="#nma-0009000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.1" id="nma-001">NMA 0.0.1<a class="anchor" aria-label="anchor" href="#nma-001"></a></h2>
 <ul><li>Added a <code>NEWS.md</code> file to track changes to the
 package.</li>
+<li>Original code converted to an R package</li>
+<li>HR, median, survival binary, count and binary data options</li>
+<li>Tidy and standardise BUGS code</li>
+<li>Removed all <code>fileSep</code> use and replaced with
+<code>file.path</code>
+</li>
+<li>Vignettes written for survival dummy data and drafted for binary and
+count data</li>
+<li>Option to run analyses within an R script or using a Reference file
+with all of the input parameters in</li>
+<li>Automatically generates a report in pdf or Word format
+(<a href="https://github.com/ICON-in-R/NMA/issues/282" class="external-link">#282</a>fe4d)</li>
+<li>Documented input data (#bc3f999)</li>
+<li>Builds survival analysis BUGS code on the fly as combinations of HR,
+median and binary data (<a href="https://github.com/ICON-in-R/NMA/issues/06" class="external-link">#06</a>e8df1)</li>
+<li>Started unit tests</li>
+<li>
+<code>pkgdown</code> site created (<a href="https://github.com/ICON-in-R/NMA/issues/7" class="external-link">#7</a>d319ce)</li>
 </ul></div>
   </main></div>
 

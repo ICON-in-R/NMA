@@ -16,7 +16,7 @@ new_NMA(
   data_type = NA,
   hyperparams = list(),
   refTx = NA,
-  effectParam,
+  effectParam = NA,
   label,
   endpoint
 )
