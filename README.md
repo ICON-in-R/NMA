@@ -1,4 +1,4 @@
-# NMA: Network Meta-Analysis <img src="man/figures/hexbadge.svg" style="float:right; height:200px;">
+# NMA: Network Meta-Analysis <img src="man/figures/hexbadge.svg" align="right" style="float:right; height:200px;">
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/ICON-in-R/NMA/workflows/R-CMD-check/badge.svg)](https://github.com/ICON-in-R/NMA/actions)
