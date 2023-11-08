@@ -44,8 +44,8 @@ new_NMA <- function(subDataHR = NA,
   
   data_lookup <-
     c(subDataHR = "hr_data",
-      subDataMed = "surv_bin_data",
-      subDataBin = "med_data",
+      subDataMed = "med_data",
+      subDataBin = "surv_bin_data",
       binData = "bin_data",
       countData = "count_data",
       contsData = "conts_data")

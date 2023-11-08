@@ -89,7 +89,8 @@ nma_model <-
           bugs_params = bugs_params,
           is_random = RANDOM,
           data_type = data_type,
-          refTx = REFTX ,
+          refTx = REFTX,
+          effectParam = c("d", "mu"),
           label = "",
           endpoint = "")
 

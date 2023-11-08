@@ -23,63 +23,40 @@ plotNetwork <- function(dat,
 plotNetwork.default <- function(dat,
                                 usecurve = FALSE,
                                 ...) {
+  keep_dat <- names(dat) %in% c("subDataBin", "subDataMed", "binData")  #, "subDataHR"
+  study_data <- dat[keep_dat]
   
-  is_bin <- !(any(is.na(dat$subDataBin)) || any(is.null(dat$subDataBin)))
-  is_med <- !(any(is.na(dat$subDataMed)) || any(is.null(dat$subDataMed)))
+  for (i in seq_along(study_data)) {
+    
+    # change to same column names across data types
+    names(study_data[[i]])[names(study_data[[i]]) %in% c("BinR", "medR", "r")] <- "Ltx"
+    names(study_data[[i]])[names(study_data[[i]]) %in% c("BinN", "medN", "n")] <- "Lbase"
+    
+    names(study_data[[i]])[names(study_data[[i]]) %in% "treatment"] <- "tx"
   
-  if (!is_bin & !is_med) {
-    subDataComb <- dat$subData[, c("study", "tx", "base", "Ltx", "Lbase")]
-  }
-  
-  if (is_bin & !is_med) {
-    subDataBinN <- dat$subDataBin
-    
-    names(subDataBinN)[names(subDataBinN) == "BinR"] <- "Ltx"
-    names(subDataBinN)[names(subDataBinN) == "BinN"] <- "Lbase"
-
-    subDataComb <-
-      rbind(dat$subData[, c("study", "tx", "base", "Ltx", "Lbase")],
-            subDataBinN[, c("study", "tx", "base", "Ltx", "Lbase")])
-  }
-  
-  if (!is_bin & is_med) {
-    subDataMedN <- dat$subDataMed
-    
-    names(subDataMedN)[names(subDataMedN) == "medR"] <- "Ltx"
-    names(subDataMedN)[names(subDataMedN) == "medN"] <- "Lbase"
-    
-    subDataComb <-
-      rbind(data$subData[, c("study", "tx", "base", "Ltx", "Lbase")],
-            subDataMedN[, c("study", "tx", "base", "Ltx", "Lbase")])
-  }
-  
-  if (is_bin & is_med) {
-    
-    subDataBinN <- dat$subDataBin
-    subDataMedN <- dat$subDataMed
-
-    names(subDataBinN)[names(subDataBinN) == "BinR"] <- "Ltx"
-    names(subDataMedN)[names(subDataMedN) == "medR"] <- "Ltx"
-    names(subDataBinN)[names(subDataBinN) == "BinN"] <- "Lbase"
-    names(subDataMedN)[names(subDataMedN) == "medN"] <- "Lbase"
-    
+    # missing column added
+    # assume base first treatment
+    if (!"base" %in% names(study_data[[i]])) {
+      study_data[[i]] <-
+        study_data[[i]] |> 
+        group_by(study) |> 
+        mutate(base = first(tx))
+    }
+      
     keep_cols <- c("study", "tx", "base", "Ltx", "Lbase")
-    
-    subDataComb <-
-      rbind(dat$subData[, keep_cols],
-            subDataBinN[, keep_cols],
-            subDataMedN[, keep_cols])
-  }
+    study_data[[i]] <- study_data[[i]][, keep_cols]
+  }  
+  
+  # combine to single array
+  subDataComb <- do.call(rbind, study_data)
   
   subDataCombLng <-
-    reshape(
-      subDataComb,
-      direction = "long",
-      varying = list(c("Ltx", "Lbase")),
-      timevar = "txCode")
-  
-  subDataCombLng <-
-    subDataCombLng[order(subDataCombLng$study), ]
+    melt(subDataComb,
+         id.vars = c(1,2,3),
+         variable.name = "txCode",
+         value.name = "Ltx") |> 
+    mutate(txCode = as.numeric(txCode)) |> 
+    arrange(study)
   
   ##TODO: pass as argument  
   nTx <- length(dat$txList)

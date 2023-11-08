@@ -181,6 +181,7 @@ nma_res <- NMA_run(nma_model, save = FALSE)
 nma_res
 ```
 
+http://127.0.0.1:34255/graphics/plot_zoom_png?width=1121&height=900
 
 ### Reconfigure model
 
