@@ -78,7 +78,7 @@ setupData <- function(nma_datasets,
     
     return(list(
       inits = rinits(input$nTx, input$nStudies, param_names),
-      binData = binData,
+      binData = nma_datasets$binData,
       bugsData = bugsData,
       txList = input$txList))
   }
@@ -97,7 +97,7 @@ setupData <- function(nma_datasets,
     
     return(list(
       inits = rinits(input$nTx, input$nStudies, param_names),
-      countData = countData,
+      countData = nma_datasets$countData,
       bugsData = bugsData,
       txList = input$txList))
   }
@@ -118,7 +118,7 @@ setupData <- function(nma_datasets,
     
     return(list(
       inits = rinits(input$nTx, input$nStudies, param_names),
-      binData = contsData,
+      binData = nma_datasets$contsData,
       bugsData = bugsData,
       txList = input$txList))
   }
