@@ -16,17 +16,17 @@ test_that("new_NMA", {
   file_name <- system.file("extdata", package = "NMA")
   # file_name <- "C:/Users/n8tha/Documents/R/NMA/inst/extdata/survdata_"
   
-  subDataHR <-
+  survDataHR <-
     read.csv(file.path(file_name, "survdata_hr_test.csv"),
              header = TRUE,
              as.is = TRUE)
   
-  subDataBin <-
+  survDataBin <-
     read.csv(file.path(file_name, "survdata_bin_test.csv"),
              header = TRUE,
              as.is = TRUE)
   
-  subDataMed <-
+  survDataMed <-
     read.csv(file.path(file_name, "survdata_med_test.csv"),
              header = TRUE,
              as.is = TRUE) %>% 
@@ -47,9 +47,9 @@ test_that("new_NMA", {
     for (j in seq_along(datasets)) {
       
       nma_model[[as.character(i)]][[j]] <-
-        new_NMA(subDataHR = subDataHR,
-                subDataMed = subDataMed,
-                subDataBin = subDataBin,
+        new_NMA(survDataHR = survDataHR,
+                survDataMed = survDataMed,
+                survDataBin = survDataBin,
                 bugs_params = bugs_params,
                 is_random = i,
                 data_type = datasets[[j]],

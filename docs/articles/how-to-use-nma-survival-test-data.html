@@ -124,29 +124,29 @@ recommended, because there are default values for these.</p>
 </h3>
 <p>The trials data consist of up to 3 separate data frames. A main
 table, <code>subData</code>, and optional tables for median event time
-and binary data, <code>subDataMed</code> and <code>subDataBin</code>
+and binary data, <code>survDataMed</code> and <code>survDataBin</code>
 respectively. Lets read in the each data set separately. In another
 article we will show how to do this in one function call by including a
 <em>Reference</em> file in the data folder which contains the meta data
 of how to read in the study data. If there is no binary or median data
-used in the NMA then the variables <code>subDataBin</code> and
-<code>subDataMed</code> are assigned <code>NA</code>.</p>
+used in the NMA then the variables <code>survDataBin</code> and
+<code>survDataMed</code> are assigned <code>NA</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">file_name</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"extdata"</span>, <span class="st">"survdata_"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">subDataHR</span> <span class="op">&lt;-</span>
+<span class="va">survDataHR</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">file_name</span>, <span class="st">"hr_test.csv"</span><span class="op">)</span>,
            header <span class="op">=</span> <span class="cn">TRUE</span>,
            as.is <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="va">subDataBin</span> <span class="op">&lt;-</span>
+<span class="va">survDataBin</span> <span class="op">&lt;-</span>
   <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span>
     <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">file_name</span>, <span class="st">"bin_test.csv"</span><span class="op">)</span>,
              header <span class="op">=</span> <span class="cn">TRUE</span>,
              as.is <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
     error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="cn">NA</span><span class="op">)</span>
 
-<span class="va">subDataMed</span> <span class="op">&lt;-</span>
+<span class="va">survDataMed</span> <span class="op">&lt;-</span>
   <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span>
     <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">file_name</span>, <span class="st">"med_test.csv"</span><span class="op">)</span>,
              header <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -290,9 +290,9 @@ fitting. This then means that we can perform modified fits but we don’t
 have to redo any of the preparatory work.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nma_model</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="../reference/new_NMA.html">new_NMA</a></span><span class="op">(</span>subDataHR <span class="op">=</span> <span class="va">subDataHR</span>,
-          subDataMed <span class="op">=</span> <span class="va">subDataMed</span>,
-          subDataBin <span class="op">=</span> <span class="va">subDataBin</span>,
+  <span class="fu"><a href="../reference/new_NMA.html">new_NMA</a></span><span class="op">(</span>survDataHR <span class="op">=</span> <span class="va">survDataHR</span>,
+          survDataMed <span class="op">=</span> <span class="va">survDataMed</span>,
+          survDataBin <span class="op">=</span> <span class="va">survDataBin</span>,
           bugs_params <span class="op">=</span> <span class="va">bugs_params</span>,
           is_random <span class="op">=</span> <span class="va">RANDOM</span>,
           data_type <span class="op">=</span> <span class="va">data_type</span>,
@@ -317,18 +317,18 @@ have to redo any of the preparatory work.</p>
 <span class="co">#&gt; &lt;bytecode: 0x0000000016dbfe30&gt;</span>
 <span class="co">#&gt; &lt;environment: 0x0000000016db6850&gt;</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; $dat$subDataHR</span>
+<span class="co">#&gt; $dat$survDataHR</span>
 <span class="co">#&gt;   study base tx      Lmean       Lse multi_arm Ltx Lbase Lstudy</span>
 <span class="co">#&gt; 1     A    X  Y -0.5259393 0.1275307         0   2     1      1</span>
 <span class="co">#&gt; 2     B    Y  Z -0.7133499 0.1437422         0   3     2      2</span>
 <span class="co">#&gt; 3     C    Z  X -0.3011051 0.1758496         0   1     3      3</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; $dat$subDataBin</span>
+<span class="co">#&gt; $dat$survDataBin</span>
 <span class="co">#&gt;   study base tx BinR BinN Btx Bbase Bstudy</span>
 <span class="co">#&gt; 1     A    X  X   34   38   1     1      1</span>
 <span class="co">#&gt; 2     B    X  Y   27   33   2     1      2</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; $dat$subDataMed</span>
+<span class="co">#&gt; $dat$survDataMed</span>
 <span class="co">#&gt;   study base tx median medN medR mediantx medianbase medianstudy</span>
 <span class="co">#&gt; 1     A    X  Y   14.0   45   22        2          1           1</span>
 <span class="co">#&gt; 2     B    Y  Z   18.0   45   22        3          2           2</span>
@@ -472,14 +472,14 @@ have to redo any of the preparatory work.</p>
 <span class="co">#&gt; attr(,"class")</span>
 <span class="co">#&gt; [1] "nma"</span>
 <span class="co">#&gt; attr(,"CALL")</span>
-<span class="co">#&gt; attr(,"CALL")$subDataHR</span>
-<span class="co">#&gt; subDataHR</span>
+<span class="co">#&gt; attr(,"CALL")$survDataHR</span>
+<span class="co">#&gt; survDataHR</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; attr(,"CALL")$subDataMed</span>
-<span class="co">#&gt; subDataMed</span>
+<span class="co">#&gt; attr(,"CALL")$survDataMed</span>
+<span class="co">#&gt; survDataMed</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; attr(,"CALL")$subDataBin</span>
-<span class="co">#&gt; subDataBin</span>
+<span class="co">#&gt; attr(,"CALL")$survDataBin</span>
+<span class="co">#&gt; survDataBin</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; attr(,"CALL")$bugs_params</span>
 <span class="co">#&gt; bugs_params</span>

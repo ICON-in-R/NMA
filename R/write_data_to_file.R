@@ -42,7 +42,7 @@ write_data_to_file.nma <- function(nma,
       append = TRUE,
       col.names = NA))
   
-  if (all(!is.na(dat$subDataBin))) {
+  if (all(!is.na(dat$survDataBin))) {
     
     file_name <- paste0("data_", label, "_bin.csv")
     dir_nameBin <- file.path(folder, "data", file_name)
@@ -56,14 +56,14 @@ write_data_to_file.nma <- function(nma,
     
     suppressWarnings(
       write.table(
-        dat$subDataBin,
+        dat$survDataBin,
         file = dir_nameBin,
         sep = ",",
         append = TRUE,
         col.names = NA))
   }
   
-  if (all(!is.na(dat$subDataMed))) {
+  if (all(!is.na(dat$survDataMed))) {
     
     file_name <- paste0("data_", label, "_med.csv")
     dir_nameMed <- file.path(folder, "data", file_name)
@@ -75,7 +75,7 @@ write_data_to_file.nma <- function(nma,
     
     suppressWarnings(
       write.table(
-        dat$subDataMed,
+        dat$survDataMed,
         file = dir_nameMed,
         sep = ",",
         append = TRUE,

@@ -7,9 +7,9 @@
 #' the passed data sets. If none given then all of the supplied
 #' data are assumed.
 #' 
-#' @param subDataHR Hazard ratio input data frame. Optional
-#' @param subDataMed Median time input data frame. Optional
-#' @param subDataBin Survival binary data input data frame. Optional
+#' @param survDataHR Hazard ratio input data frame. Optional
+#' @param survDataMed Median time input data frame. Optional
+#' @param survDataBin Survival binary data input data frame. Optional
 #' @param binData Binary data input data frame. Optional
 #' @param countData Count data input data frame. Optional
 #' @param contsData Continuous data input data frame. Optional
@@ -27,9 +27,9 @@
 #' @return
 #' @export
 #'
-new_NMA <- function(subDataHR = NA,
-                    subDataMed = NA,
-                    subDataBin = NA,
+new_NMA <- function(survDataHR = NA,
+                    survDataMed = NA,
+                    survDataBin = NA,
                     binData = NA,
                     countData = NA,
                     contsData = NA,
@@ -43,9 +43,9 @@ new_NMA <- function(subDataHR = NA,
                     endpoint) {
   
   data_lookup <-
-    c(subDataHR = "hr_data",
-      subDataMed = "med_data",
-      subDataBin = "surv_bin_data",
+    c(survDataHR = "hr_data",
+      survDataMed = "med_data",
+      survDataBin = "surv_bin_data",
       binData = "bin_data",
       countData = "count_data",
       contsData = "conts_data")
@@ -55,7 +55,7 @@ new_NMA <- function(subDataHR = NA,
               several.ok = TRUE)
   
   nma_datasets <-
-    tibble::lst(subDataHR, subDataMed, subDataBin,
+    tibble::lst(survDataHR, survDataMed, survDataBin,
                 binData, countData, contsData)
   
   # use all provided data

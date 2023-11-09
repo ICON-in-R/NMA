@@ -124,13 +124,13 @@ recommended, because there are default values for these.</p>
 </h3>
 <p>The trials data consist of up to 3 separate data frames. A main
 table, <code>subData</code>, and optional tables for median event time
-and binary data, <code>subDataMed</code> and <code>subDataBin</code>
+and binary data, <code>survDataMed</code> and <code>survDataBin</code>
 respectively. Lets read in the each data set separately. In another
 article we will show how to do this in one function call by including a
 Reference file in the data folder which contains the meta data of how to
 read in the study data. If there is no binary or median data used in the
-NMA then the variables <code>subDataBin</code> and
-<code>subDataMed</code> are assigned <code>NA</code>.</p>
+NMA then the variables <code>survDataBin</code> and
+<code>survDataMed</code> are assigned <code>NA</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"extdata"</span><span class="op">)</span>, <span class="st">"/survdata_"</span>, <span class="va">endpoint</span>, <span class="st">"_"</span><span class="op">)</span>
 
@@ -139,14 +139,14 @@ NMA then the variables <code>subDataBin</code> and
            header <span class="op">=</span> <span class="cn">TRUE</span>,
            as.is <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="va">subDataBin</span> <span class="op">&lt;-</span>
+<span class="va">survDataBin</span> <span class="op">&lt;-</span>
   <span class="kw">if</span> <span class="op">(</span><span class="va">is_bin</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">file_name</span>, <span class="st">"bin.csv"</span><span class="op">)</span>,
              header <span class="op">=</span> <span class="cn">TRUE</span>,
              as.is <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
   <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="cn">NA</span><span class="op">}</span>
 
-<span class="va">subDataMed</span> <span class="op">&lt;-</span>
+<span class="va">survDataMed</span> <span class="op">&lt;-</span>
   <span class="kw">if</span> <span class="op">(</span><span class="va">is_med</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">file_name</span>, <span class="st">"med.csv"</span><span class="op">)</span>,
              header <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -164,8 +164,8 @@ have to redo any of the preparatory work.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nma_model</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../../reference/new_NMA.html">new_NMA</a></span><span class="op">(</span>subData <span class="op">=</span> <span class="va">subData</span>,
-          subDataMed <span class="op">=</span> <span class="va">subDataMed</span>,
-          subDataBin <span class="op">=</span> <span class="va">subDataBin</span>,
+          survDataMed <span class="op">=</span> <span class="va">survDataMed</span>,
+          survDataBin <span class="op">=</span> <span class="va">survDataBin</span>,
           bugs_params <span class="op">=</span> <span class="va">bugs_params</span>,
           is_random <span class="op">=</span> <span class="va">RANDOM</span>,
           refTx <span class="op">=</span> <span class="va">REFTX</span> ,
@@ -173,9 +173,9 @@ have to redo any of the preparatory work.</p>
           modelParams <span class="op">=</span> <span class="st">"totresdev"</span>,
           label <span class="op">=</span> <span class="va">label_name</span>,
           endpoint <span class="op">=</span> <span class="va">endpoint</span><span class="op">)</span>
-<span class="co">#&gt; Warning in if (!is.na(subDataBin)) {: the condition has length &gt; 1 and only the</span>
+<span class="co">#&gt; Warning in if (!is.na(survDataBin)) {: the condition has length &gt; 1 and only the</span>
 <span class="co">#&gt; first element will be used</span>
-<span class="co">#&gt; Warning in if (!is.na(subDataMed)) {: the condition has length &gt; 1 and only the</span>
+<span class="co">#&gt; Warning in if (!is.na(survDataMed)) {: the condition has length &gt; 1 and only the</span>
 <span class="co">#&gt; first element will be used</span>
 
 <span class="va">nma_model</span>
@@ -251,12 +251,12 @@ have to redo any of the preparatory work.</p>
 <span class="co">#&gt; 27  0.15700375 0.1967513         0   3     2     12</span>
 <span class="co">#&gt; 28 -0.51082562 0.3536465         0   1    18     21</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; $dat$subDataBin</span>
+<span class="co">#&gt; $dat$survDataBin</span>
 <span class="co">#&gt;                     study    base      tx BinR BinN Btx Bbase Bstudy</span>
 <span class="co">#&gt; 1 NCT01039948 (Mok, 2016) ERL/GEF ERL/GEF   34   38   1     1     33</span>
 <span class="co">#&gt; 2 NCT01039948 (Mok, 2016) ERL/GEF GEF+FIC   27   33  14     1     33</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; $dat$subDataMed</span>
+<span class="co">#&gt; $dat$survDataMed</span>
 <span class="co">#&gt;                                     study          base            tx median</span>
 <span class="co">#&gt; 1                                 An 2016       ERL/GEF       ERL/GEF   14.0</span>
 <span class="co">#&gt; 2                                 An 2016       ERL/GEF       GEF+PEM   18.0</span>
@@ -444,11 +444,11 @@ have to redo any of the preparatory work.</p>
 <span class="co">#&gt; attr(,"CALL")$subData</span>
 <span class="co">#&gt; subData</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; attr(,"CALL")$subDataMed</span>
-<span class="co">#&gt; subDataMed</span>
+<span class="co">#&gt; attr(,"CALL")$survDataMed</span>
+<span class="co">#&gt; survDataMed</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; attr(,"CALL")$subDataBin</span>
-<span class="co">#&gt; subDataBin</span>
+<span class="co">#&gt; attr(,"CALL")$survDataBin</span>
+<span class="co">#&gt; survDataBin</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; attr(,"CALL")$bugs_params</span>
 <span class="co">#&gt; bugs_params</span>
@@ -532,9 +532,9 @@ rather than a fixed effects model version of the same model.</p>
 <code class="sourceCode R"><span class="va">nma_model2</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../../reference/NMA_update.html">NMA_update</a></span><span class="op">(</span><span class="va">nma_model</span>,
              is_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Warning in if (!is.na(subDataBin)) {: the condition has length &gt; 1 and only the</span>
+<span class="co">#&gt; Warning in if (!is.na(survDataBin)) {: the condition has length &gt; 1 and only the</span>
 <span class="co">#&gt; first element will be used</span>
-<span class="co">#&gt; Warning in if (!is.na(subDataMed)) {: the condition has length &gt; 1 and only the</span>
+<span class="co">#&gt; Warning in if (!is.na(survDataMed)) {: the condition has length &gt; 1 and only the</span>
 <span class="co">#&gt; first element will be used</span>
 
 <span class="va">nma_res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/NMA_run.html">NMA_run</a></span><span class="op">(</span><span class="va">nma_model2</span>, save <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>

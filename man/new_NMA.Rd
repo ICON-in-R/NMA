@@ -5,9 +5,9 @@
 \title{NMA constructor}
 \usage{
 new_NMA(
-  subDataHR = NA,
-  subDataMed = NA,
-  subDataBin = NA,
+  survDataHR = NA,
+  survDataMed = NA,
+  survDataBin = NA,
   binData = NA,
   countData = NA,
   contsData = NA,
@@ -22,11 +22,11 @@ new_NMA(
 )
 }
 \arguments{
-\item{subDataHR}{Hazard ratio input data frame. Optional}
+\item{survDataHR}{Hazard ratio input data frame. Optional}
 
-\item{subDataMed}{Median time input data frame. Optional}
+\item{survDataMed}{Median time input data frame. Optional}
 
-\item{subDataBin}{Survival binary data input data frame. Optional}
+\item{survDataBin}{Survival binary data input data frame. Optional}
 
 \item{binData}{Binary data input data frame. Optional}
 

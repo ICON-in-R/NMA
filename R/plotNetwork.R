@@ -2,7 +2,7 @@
 #' Plot network diagram
 #'
 #' @param dat List of study data, including subData
-#'  and possibly subDataBin and subDataMed
+#'  and possibly survDataBin and survDataMed
 #' @param usecurve Which line to use? Logical 
 #' @param ... Additional arguments
 #' @export
@@ -23,7 +23,7 @@ plotNetwork <- function(dat,
 plotNetwork.default <- function(dat,
                                 usecurve = FALSE,
                                 ...) {
-  keep_dat <- names(dat) %in% c("subDataBin", "subDataMed", "binData")  #, "subDataHR"
+  keep_dat <- names(dat) %in% c("survDataBin", "survDataMed", "binData")  #, "survDataHR"
   study_data <- dat[keep_dat]
   
   for (i in seq_along(study_data)) {

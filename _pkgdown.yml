@@ -41,9 +41,9 @@ reference:
   - validate_nma
 - title: Data
   contents:
-  - subDataHR
-  - subDataBin
-  - subDataMed
+  - survDataHR
+  - survDataBin
+  - survDataMed
   - binData
   - countData
   - contsData

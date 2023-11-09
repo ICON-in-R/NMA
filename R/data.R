@@ -13,7 +13,7 @@
 #'   \item{Lse}{Standard error of log hazard ratio}
 #'   \item{multi_arm}{Multi-arm trial indicator: 0/1}
 #' }
-"subDataHR"
+"survDataHR"
 
 
 #' Study survival binary outcome data
@@ -28,7 +28,7 @@
 #'   \item{BinR}{Count of number of events}
 #'   \item{BinN}{Total sample size}
 #' }
-"subDataBin"
+"survDataBin"
 
 
 #' Study median time to event
@@ -44,7 +44,7 @@
 #'   \item{medN}{Sample size}
 #'   \item{medR}{Sample size/2 as estimated number of events}
 #' }
-"subDataMed"
+"survDataMed"
 
 
 #' Binary data

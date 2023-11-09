@@ -2,7 +2,7 @@
 #' Write to file multiple NMA plots and tables
 #'
 #' @param dat ist of study data, including subData
-#'  and possibly subDataBin and subDataMed
+#'  and possibly survDataBin and survDataMed
 #' @param res_bugs BUGS output
 #' @param effectParam Effect parameter names; string
 #' @param labels Labels
@@ -110,7 +110,7 @@ plots_and_tables <- function(dat,
     append = TRUE,
     col.names = NA)
   
-  if (all(!is.na(dat$subDataBin))) {
+  if (all(!is.na(dat$survDataBin))) {
     
     file_name <- paste0("data_", label, "_bin.csv")
     dataFileLocBin <- file.path(folder, "data", file_name)
@@ -129,14 +129,14 @@ plots_and_tables <- function(dat,
       col.names = NA)
     
     write.table(
-      dat$subDataBin,
+      dat$survDataBin,
       file = dataFileLocBin,
       sep = ",",
       append = TRUE,
       col.names = NA)
   }
   
-  if (all(!is.na(dat$subDataMed))) {
+  if (all(!is.na(dat$survDataMed))) {
     
     file_name <- paste0("data_", label, "_med.csv")
     dataFileLocMed <- file.path(folder, "data", file_name)
@@ -154,7 +154,7 @@ plots_and_tables <- function(dat,
       col.names = NA)
     
     write.table(
-      dat$subDataMed,
+      dat$survDataMed,
       file = dataFileLocMed,
       sep = ",",
       append = TRUE,

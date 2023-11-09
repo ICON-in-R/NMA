@@ -37,8 +37,8 @@ Rows in the `type` column must contain one of the following keywords:
 * `bugs`: File containing the BUGS input parameters for MCMC
 * `analysis`: File containing the scenario information
 * `subData`: Mandatory NMA data. Required column headings of `tx`, `base`, `study`, `Lmean`, `Lse`, `multi_arm`
-* `subDataBin`: Optional binary data. Required column headings of `tx`, `base`, `study`, `BinN`, `BinR`
-* `subDataMed`: Optional median time data. Required column headings of `tx`, `base`, `study`, `medN`, `medR`, `median`
+* `survDataBin`: Optional binary data. Required column headings of `tx`, `base`, `study`, `BinN`, `BinR`
+* `survDataMed`: Optional median time data. Required column headings of `tx`, `base`, `study`, `medN`, `medR`, `median`
 
 `type` | `file`
 -----|------

@@ -7,9 +7,9 @@
 setupData(nma_datasets, data_type = NA, refTx = NA, is_random = TRUE)
 }
 \arguments{
-\item{nma_datasets}{subDataHR: Hazard ratio data. Optional;
-subDataBin: Survival binary data. Optional;
-subDataMed: Median time data. Optional;
+\item{nma_datasets}{survDataHR: Hazard ratio data. Optional;
+survDataBin: Survival binary data. Optional;
+survDataMed: Median time data. Optional;
 binData: Binary data. Optional;
 countData: Count data. Optional;
 contsData: Continuous data. Optional}

@@ -121,20 +121,20 @@
 <!-- ``` -->
 <!-- ### Read in datasets -->
 <!-- The trials data consist of up to 3 separate dataframes. -->
-<!-- A main table, `subData`, and optional tables for median event time and binary data, `subDataMed` and `subDataBin` respectively. -->
+<!-- A main table, `subData`, and optional tables for median event time and binary data, `survDataMed` and `survDataBin` respectively. -->
 <!-- ```{r} -->
 <!-- file_name <- paste0(here::here("raw_data"), "/survdata_", endpoint, "_") -->
 <!-- subData <- -->
 <!--   read.csv(paste0(file_name, analysis_type, ".csv"), -->
 <!--            header = TRUE, -->
 <!--            as.is = TRUE) -->
-<!-- subDataBin <- -->
+<!-- survDataBin <- -->
 <!--   if (is_bin) { -->
 <!--     read.csv(paste0(file_name, "bin.csv"), -->
 <!--              header = TRUE, -->
 <!--              as.is = TRUE) -->
 <!--   } else {NA} -->
-<!-- subDataMed <- -->
+<!-- survDataMed <- -->
 <!--   if (is_med) { -->
 <!--     read.csv(paste0(file_name, "med.csv"), -->
 <!--              header = TRUE, -->
@@ -147,8 +147,8 @@
 <!-- ```{r} -->
 <!-- nma_model <- -->
 <!--   new_NMA(subData = subData, -->
-<!--           subDataMed = subDataMed, -->
-<!--           subDataBin = subDataBin, -->
+<!--           survDataMed = survDataMed, -->
+<!--           survDataBin = survDataBin, -->
 <!--           bugs_params = bugs_params, -->
 <!--           is_random = RANDOM, -->
 <!--           refTx = REFTX , -->

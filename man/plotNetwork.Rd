@@ -14,7 +14,7 @@ plotNetwork(dat, usecurve = FALSE)
 }
 \arguments{
 \item{dat}{List of study data, including subData
-and possibly subDataBin and subDataMed}
+and possibly survDataBin and survDataMed}
 
 \item{usecurve}{Which line to use? Logical}
 

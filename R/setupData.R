@@ -28,9 +28,9 @@ rinits <- function(nTx, nStudies, param_names) {
 #' 
 #' Arrange input data for NMA.
 #' 
-#' @param nma_datasets subDataHR: Hazard ratio data. Optional;
-#'                     subDataBin: Survival binary data. Optional;
-#'                     subDataMed: Median time data. Optional;
+#' @param nma_datasets survDataHR: Hazard ratio data. Optional;
+#'                     survDataBin: Survival binary data. Optional;
+#'                     survDataMed: Median time data. Optional;
 #'                     binData: Binary data. Optional;
 #'                     countData: Count data. Optional;
 #'                     contsData: Continuous data. Optional
@@ -127,19 +127,19 @@ setupData <- function(nma_datasets,
     
     bugsData <-
       list(
-        Lstudy = input$subDataHR$dat$Lstudy,
-        Ltx = input$subDataHR$dat$Ltx,
-        Lbase = input$subDataHR$dat$Lbase,
-        Lmean = input$subDataHR$dat$Lmean,
-        Lse = input$subDataHR$dat$Lse,
-        multi = input$subDataHR$dat$multi_arm,
-        LnObs = input$subDataHR$LnObs,
+        Lstudy = input$survDataHR$dat$Lstudy,
+        Ltx = input$survDataHR$dat$Ltx,
+        Lbase = input$survDataHR$dat$Lbase,
+        Lmean = input$survDataHR$dat$Lmean,
+        Lse = input$survDataHR$dat$Lse,
+        multi = input$survDataHR$dat$multi_arm,
+        LnObs = input$survDataHR$LnObs,
         nTx = input$nTx,
         nStudies = input$nStudies)
     
     return(list(
       inits = rinits(input$nTx, input$nStudies, param_names),
-      subDataHR = input$subDataHR$dat,
+      survDataHR = input$survDataHR$dat,
       bugsData = bugsData,
       txList = input$txList))
   }
@@ -148,26 +148,26 @@ setupData <- function(nma_datasets,
     
     bugsData <-
       list(
-        Lstudy = input$subDataHR$dat$Lstudy,
-        Ltx = input$subDataHR$dat$Ltx,
-        Lbase = input$subDataHR$dat$Lbase,
-        Lmean = input$subDataHR$dat$Lmean,
-        Lse = input$subDataHR$dat$Lse,
-        multi = input$subDataHR$dat$multi,
-        LnObs = input$subDataHR$LnObs,
+        Lstudy = input$survDataHR$dat$Lstudy,
+        Ltx = input$survDataHR$dat$Ltx,
+        Lbase = input$survDataHR$dat$Lbase,
+        Lmean = input$survDataHR$dat$Lmean,
+        Lse = input$survDataHR$dat$Lse,
+        multi = input$survDataHR$dat$multi,
+        LnObs = input$survDataHR$LnObs,
         nTx = input$nTx,
         nStudies = input$nStudies,
-        Bstudy = input$subDataBin$dat$Bstudy,
-        Btx = input$subDataBin$dat$Btx,
-        Bbase = input$subDataBin$dat$Bbase,
-        Bn = input$subDataBin$dat$BinN,
-        Br = input$subDataBin$dat$BinR,
-        BnObs = input$subDataBin$BnObs)
+        Bstudy = input$survDataBin$dat$Bstudy,
+        Btx = input$survDataBin$dat$Btx,
+        Bbase = input$survDataBin$dat$Bbase,
+        Bn = input$survDataBin$dat$BinN,
+        Br = input$survDataBin$dat$BinR,
+        BnObs = input$survDataBin$BnObs)
     
     return(list(
       inits = rinits(input$nTx, input$nStudies, param_names),
-      subDataHR = input$subDataHR$dat,
-      subDataBin = input$subDataBin$dat,
+      survDataHR = input$survDataHR$dat,
+      survDataBin = input$survDataBin$dat,
       bugsData = bugsData,
       txList = input$txList))
   }
@@ -176,27 +176,27 @@ setupData <- function(nma_datasets,
     
     bugsData <-
       list(
-        Lstudy = input$subDataHR$dat$Lstudy,
-        Ltx = input$subDataHR$dat$Ltx,
-        Lbase = input$subDataHR$dat$Lbase,
-        Lmean = input$subDataHR$dat$Lmean,
-        Lse = input$subDataHR$dat$Lse,
-        multi = input$subDataHR$dat$multi_arm,
-        LnObs = input$subDataHR$LnObs,
+        Lstudy = input$survDataHR$dat$Lstudy,
+        Ltx = input$survDataHR$dat$Ltx,
+        Lbase = input$survDataHR$dat$Lbase,
+        Lmean = input$survDataHR$dat$Lmean,
+        Lse = input$survDataHR$dat$Lse,
+        multi = input$survDataHR$dat$multi_arm,
+        LnObs = input$survDataHR$LnObs,
         nTx = input$nTx,
         nStudies = input$nStudies,
-        medianStudy = input$subDataMed$dat$medianstudy,
-        medianTx = input$subDataMed$dat$mediantx ,
-        medianBase = input$subDataMed$dat$medianbase,
-        medianN = input$subDataMed$dat$medN,
-        medianR = input$subDataMed$dat$medR,
-        median = input$subDataMed$dat$median,
-        medianNObs = input$subDataMed$medianNObs)
+        medianStudy = input$survDataMed$dat$medianstudy,
+        medianTx = input$survDataMed$dat$mediantx ,
+        medianBase = input$survDataMed$dat$medianbase,
+        medianN = input$survDataMed$dat$medN,
+        medianR = input$survDataMed$dat$medR,
+        median = input$survDataMed$dat$median,
+        medianNObs = input$survDataMed$medianNObs)
     
     return(list(
       inits = rinits(input$nTx, input$nStudies, param_names),
-      subDataHR = input$subDataHR$dat,
-      subDataMed = input$subDataMed$dat,
+      survDataHR = input$survDataHR$dat,
+      survDataMed = input$survDataMed$dat,
       bugsData = bugsData,
       txList = input$txList))
   }
@@ -205,34 +205,34 @@ setupData <- function(nma_datasets,
     
     bugsData <-
       list(
-        Lstudy = input$subDataHR$dat$Lstudy,
-        Ltx = input$subDataHR$dat$Ltx,
-        Lbase = input$subDataHR$dat$Lbase,
-        Lmean = input$subDataHR$dat$Lmean,
-        Lse = input$subDataHR$dat$Lse,
-        multi = input$subDataHR$dat$multi_arm,
-        LnObs = input$subDataHR$LnObs,
+        Lstudy = input$survDataHR$dat$Lstudy,
+        Ltx = input$survDataHR$dat$Ltx,
+        Lbase = input$survDataHR$dat$Lbase,
+        Lmean = input$survDataHR$dat$Lmean,
+        Lse = input$survDataHR$dat$Lse,
+        multi = input$survDataHR$dat$multi_arm,
+        LnObs = input$survDataHR$LnObs,
         nTx = input$nTx,
         nStudies = input$nStudies,
-        medianStudy = input$subDataMed$dat$medianstudy,
-        medianTx = input$subDataMed$dat$mediantx ,
-        medianBase = input$subDataMed$dat$medianbase,
-        Bstudy = input$subDataBin$dat$Bstudy,
-        Btx = input$subDataBin$dat$Btx,
-        Bbase = input$subDataBin$dat$Bbase,
-        medianN = input$subDataMed$dat$medN,
-        medianR = input$subDataMed$dat$medR,
-        median = input$subDataMed$dat$median,
-        medianNObs = input$subDataMed$medianNObs,
-        Bn = input$subDataBin$dat$BinN,
-        Br = input$subDataBin$dat$BinR,
-        BnObs = input$subDataBin$BnObs)
+        medianStudy = input$survDataMed$dat$medianstudy,
+        medianTx = input$survDataMed$dat$mediantx ,
+        medianBase = input$survDataMed$dat$medianbase,
+        Bstudy = input$survDataBin$dat$Bstudy,
+        Btx = input$survDataBin$dat$Btx,
+        Bbase = input$survDataBin$dat$Bbase,
+        medianN = input$survDataMed$dat$medN,
+        medianR = input$survDataMed$dat$medR,
+        median = input$survDataMed$dat$median,
+        medianNObs = input$survDataMed$medianNObs,
+        Bn = input$survDataBin$dat$BinN,
+        Br = input$survDataBin$dat$BinR,
+        BnObs = input$survDataBin$BnObs)
     
     return(list(
       inits = rinits(input$nTx, input$nStudies, param_names),
-      subDataHR = input$subDataHR$dat,
-      subDataBin = input$subDataBin$dat,
-      subDataMed = input$subDataMed$dat,
+      survDataHR = input$survDataHR$dat,
+      survDataBin = input$survDataBin$dat,
+      survDataMed = input$survDataMed$dat,
       bugsData = bugsData,
       txList = input$txList))
   }

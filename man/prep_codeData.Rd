@@ -5,9 +5,9 @@
 \title{Prepare data used in computation}
 \usage{
 prep_codeData(
-  subDataHR = NA,
-  subDataBin = NA,
-  subDataMed = NA,
+  survDataHR = NA,
+  survDataBin = NA,
+  survDataMed = NA,
   binData = NA,
   countData = NA,
   contsData = NA,
@@ -15,11 +15,11 @@ prep_codeData(
 )
 }
 \arguments{
-\item{subDataHR}{Hazard ratio data frame}
+\item{survDataHR}{Hazard ratio data frame}
 
-\item{subDataBin}{Optional data frame. Survival binary data}
+\item{survDataBin}{Optional data frame. Survival binary data}
 
-\item{subDataMed}{Optional data frame. Median times}
+\item{survDataMed}{Optional data frame. Median times}
 
 \item{refTx}{Reference treatment name; string}
 }

@@ -13,12 +13,12 @@ new_NMA_dir <- function(data_dir = ".") {
   
   analysis_filename <- reference$file[reference$type == "analysis"]
   bugs_filename <- reference$file[reference$type == "bugs"]
-  subDataHR_filename <- reference$file[reference$type == "subData"]
-  subDataBin_filename <- reference$file[reference$type == "subDataBin"]
-  subDataMed_filename <- reference$file[reference$type == "subDataMed"]
+  survDataHR_filename <- reference$file[reference$type == "subData"]
+  survDataBin_filename <- reference$file[reference$type == "survDataBin"]
+  survDataMed_filename <- reference$file[reference$type == "survDataMed"]
   
   subData <-
-    read.csv(fs::path(data_dir, subDataHR_filename),
+    read.csv(fs::path(data_dir, survDataHR_filename),
              stringsAsFactors = FALSE,
              header = TRUE,
              as.is = TRUE)
@@ -37,17 +37,17 @@ new_NMA_dir <- function(data_dir = ".") {
     keyval_as_list %>% 
     validate_analysis_param
   
-  subDataBin <-
-    if (length(subDataBin_filename) != 0) {
-      read.csv(fs::path(data_dir, subDataBin_filename),
+  survDataBin <-
+    if (length(survDataBin_filename) != 0) {
+      read.csv(fs::path(data_dir, survDataBin_filename),
                stringsAsFactors = FALSE,
                header = TRUE,
                as.is = TRUE)
     } else {NA}
   
-  subDataMed <-
-    if (length(subDataMed_filename) != 0) {
-      read.csv(fs::path(data_dir, subDataMed_filename),
+  survDataMed <-
+    if (length(survDataMed_filename) != 0) {
+      read.csv(fs::path(data_dir, survDataMed_filename),
                stringsAsFactors = FALSE,
                header = TRUE,
                as.is = TRUE) %>% 
@@ -57,8 +57,8 @@ new_NMA_dir <- function(data_dir = ".") {
   NMA_params <- 
     c(analysis_params,
       list(subData = subData,
-           subDataBin = subDataBin,
-           subDataMed = subDataMed,
+           survDataBin = survDataBin,
+           survDataMed = survDataMed,
            bugs_params = bugs_params))
   
   do.call(new_NMA, NMA_params)

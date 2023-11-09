@@ -58,14 +58,14 @@ subData <-
            header = TRUE,
            as.is = TRUE)
 
-subDataBin <-
+survDataBin <-
   if (is_bin) {
     read.csv(paste0(file_name, "bin.csv"),
              header = TRUE,
              as.is = TRUE)
   } else {NA}
 
-subDataMed <-
+survDataMed <-
   if (is_med) {
     read.csv(paste0(file_name, "med.csv"),
              header = TRUE,
@@ -79,8 +79,8 @@ subDataMed <-
 ## build model
 nma_model <-
   new_NMA(subData = subData,
-          subDataMed = subDataMed,
-          subDataBin = subDataBin,
+          survDataMed = survDataMed,
+          survDataBin = survDataBin,
           bugs_params = bugs_params,
           is_random = RANDOM,
           hyperparams = hyperparams,

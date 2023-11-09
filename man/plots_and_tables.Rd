@@ -40,7 +40,7 @@ plots_and_tables(
 \item{save}{Logical}
 
 \item{dat}{ist of study data, including subData
-and possibly subDataBin and subDataMed}
+and possibly survDataBin and survDataMed}
 
 \item{labels}{Labels}
 }

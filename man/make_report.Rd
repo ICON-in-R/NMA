@@ -41,19 +41,19 @@ label_name <- "label_name"
 
 file_name <- here::here(file.path("inst", "extdata", "survdata_"))
 
-subDataHR <-
+survDataHR <-
   read.csv(paste0(file_name, "hr_test.csv"),
            header = TRUE,
            as.is = TRUE)
 
-subDataBin <-
+survDataBin <-
   tryCatch(
     read.csv(paste0(file_name, "bin_test.csv"),
              header = TRUE,
              as.is = TRUE),
     error = function(e) NA)
 
-subDataMed <-
+survDataMed <-
   tryCatch(
     read.csv(paste0(file_name, "med_test.csv"),
              header = TRUE,
@@ -62,9 +62,9 @@ subDataMed <-
     error = function(e) NA)
 
 nma_model <-
-  new_NMA(subDataHR = subDataHR,
-          subDataMed = subDataMed,
-          subDataBin = subDataBin,
+  new_NMA(survDataHR = survDataHR,
+          survDataMed = survDataMed,
+          survDataBin = survDataBin,
           bugs_params = bugs_params,
           is_random = RANDOM,
           data_type = data_type,

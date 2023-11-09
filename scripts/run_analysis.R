@@ -62,14 +62,14 @@ subData <-
            as.is = TRUE)
 
 if (is_bin) {
-  subDataBin <-
+  survDataBin <-
     read.csv(paste0(file_name, "bin.csv"),
              header = TRUE,
              as.is = TRUE)
 }
 
 if (is_med) {
-  subDataMed <-
+  survDataMed <-
     read.csv(paste0(file_name, "med.csv"),
              header = TRUE,
              as.is = TRUE) %>% 
@@ -79,8 +79,8 @@ if (is_med) {
   
 nma_res <-
   setupData(subData = subData,
-            subDataMed = subDataMed,
-            subDataBin = subDataBin,
+            survDataMed = survDataMed,
+            survDataBin = survDataBin,
             is_random = RANDOM,
             refTx = REFTX) %>% 
   NMA(dat = .,
@@ -101,8 +101,8 @@ nma_res <-
 library(sna)
 dat <- 
   setupData(subData = subData,
-            subDataMed = subDataMed,
-            subDataBin = subDataBin,
+            survDataMed = survDataMed,
+            survDataBin = survDataBin,
             is_random = RANDOM,
             refTx = REFTX) 
 
