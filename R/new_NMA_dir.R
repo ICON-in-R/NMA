@@ -1,10 +1,13 @@
 
 #' Load all input data from a folder
 #'
-#' @param data_dir folder location; string
-#' @return \code{nma} object
-#' @importFrom fs path
+#' Rather than script the prepocessing, read in data from a folder containing a
+#' `REFERENCE` file telling R what and where the different input data file are.
 #' 
+#' @param data_dir folder location; string
+#' @return `nma` object
+#' @importFrom fs path
+#'
 #' @export
 #' 
 new_NMA_dir <- function(data_dir = ".") {

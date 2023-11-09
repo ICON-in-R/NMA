@@ -1,12 +1,15 @@
 
 #' NMA constructor
+#'
+#' Create an `nma` class object to use in an analysis. All of the data
+#' types are optional but at least one needs to be passed to the function. The
+#' `data_type` must be a subset of the passed data sets. If none given then all
+#' of the supplied data are assumed.
 #' 
-#' Create an \code{nma} class object to use in an analysis.
-#' All of the data types are optional but at least one needs to be
-#' passed to the function. The `data_type` must be a subset of 
-#' the passed data sets. If none given then all of the supplied
-#' data are assumed.
+#' @section Different data types: 
 #' 
+#' The data types are split in to two: survival data and other.
+#'
 #' @param survDataHR Hazard ratio input data frame. Optional
 #' @param survDataMed Median time input data frame. Optional
 #' @param survDataBin Survival binary data input data frame. Optional
@@ -15,18 +18,17 @@
 #' @param contsData Continuous data input data frame. Optional
 #' @param bugs_params List of BUGS parameters. Optional
 #' @param is_random Random effects model? Logical
-#' @param data_type Vector of names of data formats from
-#'                  "hr_data", "surv_bin_data", "med_data", "bin_data",
-#'                  "count_data", "conts_data"
+#' @param data_type Vector of names of data formats from "hr_data",
+#'   "surv_bin_data", "med_data", "bin_data", "count_data", "conts_data"
 #' @param hyperparams List of hyperparameters
 #' @param refTx Reference treatment; string
 #' @param effectParam Effect parameter
 #' @param label Label
 #' @param endpoint End point name; string
-#' @seealso \code{\link{NMA_run}}, \code{\link{NMA_update}}
+#' @seealso [NMA_run()], [NMA_update()]
 #' @return
 #' @export
-#'
+#' 
 new_NMA <- function(survDataHR = NA,
                     survDataMed = NA,
                     survDataBin = NA,

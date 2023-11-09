@@ -6,7 +6,7 @@
 #' @param effectParam text vector of names
 #' @param random RE or FE
 #'
-#' @return
+#' @return List
 #' @export
 #'
 bugs_stats <- function(dat,

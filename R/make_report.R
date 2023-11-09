@@ -1,16 +1,15 @@
 
 #' Make Report
 #' 
-#' Constructs the automated report from the output of the NMA.
-#' 
-#' @param ext A string of text to indicate the extension of the 
-#' resulting output file. Possible options are \code{"pdf"}, \code{"docx"}.
-#' This requires the use of pandoc, knitr and rmarkdown.
-#' @param echo A string (default to \code{FALSE}) to instruct whether
-#' the report should also include the \code{BCEA} commands used to 
-#' produce the analyses. If the optional argument \code{echo} is set
-#' to \code{TRUE} (default = \code{FALSE}), then the commands are also
-#' printed.
+#' Constructs an automated report from the output of the NMA.
+#'
+#' @param ext A string of text to indicate the extension of the resulting output
+#'   file. Possible options are `"pdf"`, `"docx"`. This requires the use of
+#'   pandoc, knitr and rmarkdown.
+#' @param echo A string (default to `FALSE`) to instruct whether the report
+#'   should also include the `BCEA` commands used to produce the analyses. If
+#'   the optional argument `echo` is set to `TRUE` (default = `FALSE`), then the
+#'   commands are also printed.
 #' @param ... Additional parameters.
 #' 
 #' @importFrom fs path file_copy
@@ -130,6 +129,7 @@ make_report <- function(nma_model,
 }
 
 #' Allow disabling of the cat messages
+#' 
 #' @param x Object to quietly return
 #' @keywords internal
 #' 

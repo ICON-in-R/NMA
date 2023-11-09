@@ -1,5 +1,5 @@
 
-#' summStat
+#' Summary statistics
 #' 
 #' @param x x
 #' @param probs Probabilities

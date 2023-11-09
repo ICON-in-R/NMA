@@ -1,7 +1,7 @@
 
 #' Write to file multiple NMA plots and tables
 #'
-#' @param dat ist of study data, including subData
+#' @param dat List of study data, including subData
 #'  and possibly survDataBin and survDataMed
 #' @param res_bugs BUGS output
 #' @param effectParam Effect parameter names; string

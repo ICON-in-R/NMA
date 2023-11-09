@@ -1,7 +1,8 @@
 
 #' Run network meta-analysis
 #' 
-#' BUGS code is taken from DSU reports and papers.
+#' Calling BUGS an NMA is run using the `nma` object created by `new_NMA()`.
+#' The BUGS code is taken from DSU reports and papers.
 #' 
 #' The survival analysis data used is from the \insertCite{Woods2010}{NMA} model.
 #' 
@@ -10,10 +11,10 @@
 #' @param save Save BUGS output to file? Logical
 #' @importFrom Rdpack reprompt
 #' 
-#' @return \code{res_bugs}
+#' @return `res_bugs`
 #' @export
 #' @name NMA_run
-#' @seealso \code{\link{new_NMA}}, \code{\link{NMA_update}}
+#' @seealso `new_NMA()`, `NMA_update()`
 #' 
 #' @references
 #' \insertAllCited{}

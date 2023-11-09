@@ -1,15 +1,16 @@
 
 #' Update NMA
-#' 
-#' Take an existing analysis and modify it.
-#' 
+#'
+#' Take an existing NMA analysis created with an `nma` object, modify the input
+#' arguments and rerun it.
+#'
 #' @template args-nma
 #' @param ... Additional arguments
 #'
 #' @return
 #' @export
 #' @name NMA_update
-#' @seealso \code{\link{new_NMA}}, \code{\link{NMA_run}}
+#' @seealso `new_NMA()`, `NMA_run()`
 #' 
 NMA_update <- function(nma, ...) {
   UseMethod("NMA_update", nma)

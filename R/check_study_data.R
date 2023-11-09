@@ -1,5 +1,6 @@
 
-#
+#' Check study data
+#' 
 check_study_data <- function(survDataHR = NA,
                              survDataMed = NA,
                              survDataBin = NA,

@@ -1,5 +1,7 @@
 
-#'
+#' Make labels
+#' @return list
+#' 
 make_labels <- function(label) {
   
   # Short label without spaces

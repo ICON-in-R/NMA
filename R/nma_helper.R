@@ -1,5 +1,5 @@
 
-#' nma helper
+#' nma helper to validate NMA
 #'
 #' @return
 #' @export

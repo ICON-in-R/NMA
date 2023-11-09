@@ -1,4 +1,5 @@
 
+#' Diagnostics
 #' @keywords internal
 #' 
 diagnostics <- function(res_bugs,

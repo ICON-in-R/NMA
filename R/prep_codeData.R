@@ -1,5 +1,5 @@
 
-#' Prepare data used in computation
+#' Prepare data used in NMA computation
 #' 
 #' Create input data for NMA.
 #' Renames the study, base and other fields with appended letter
